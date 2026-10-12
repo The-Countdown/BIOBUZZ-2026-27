@@ -44,7 +44,6 @@ public class ExampleAuto extends OpMode {
         ElapsedTime pathTimer = new ElapsedTime();
         int pathNumber = 1;
 
-
     // Poses
         private final Pose startPose = poseFactory.of(24, 24, 0);
         private final Pose startToScore = poseFactory.of(48, 48, 90);
