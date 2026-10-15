@@ -121,7 +121,13 @@ public class Constants {
     }
 
     @Configurable
-    public static class Lever {
+    public static class Door {
+        public static double OPEN = 0.0;
+        public static double CLOSED = 0.0;
+    }
+
+    @Configurable
+    public static class Proboscis {
         public static double OPEN = 0.0;
         public static double CLOSED = 0.0;
     }

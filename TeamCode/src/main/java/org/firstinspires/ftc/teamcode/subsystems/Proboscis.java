@@ -5,34 +5,34 @@ import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
-public class Lever extends RobotContainer.HardwareDevices {
+public class Proboscis extends RobotContainer.HardwareDevices {
     private final RobotContainer robotContainer;
 
-    public Lever(RobotContainer robotContainer, BetterServo leverServo) {
+    public Proboscis(RobotContainer robotContainer, BetterServo proboscisServo) {
         this.robotContainer = robotContainer;
     }
 
     public void update(boolean teleop) {
         if (teleop) {
             if (robotContainer.gamepadEx1.rightBumper.isHeld() || robotContainer.gamepadEx2.rightBumper.isHeld()) {
-                robotContainer.lever.setPosition(Constants.Lever.OPEN);
-                Status.leverOpen = true;
+                robotContainer.proboscis.setPosition(Constants.Proboscis.OPEN);
+                Status.proboscisOpen = true;
             } else {
-                robotContainer.lever.setPosition(Constants.Lever.CLOSED);
-                Status.leverOpen = false;
+                robotContainer.proboscis.setPosition(Constants.Proboscis.CLOSED);
+                Status.proboscisOpen = false;
             }
         }
     }
 
     // This is for manual control
     public void setPosition(double position) {
-        leverServo.updateSetPosition(HelperFunctions.clamp(position, Constants.Lever.OPEN, Constants.Lever.CLOSED));
+        proboscisServo.updateSetPosition(HelperFunctions.clamp(position, Constants.Proboscis.OPEN, Constants.Proboscis.CLOSED));
     }
 
     public void open(){
-        robotContainer.lever.setPosition(Constants.Lever.OPEN);
+        robotContainer.proboscis.setPosition(Constants.Proboscis.OPEN);
     }
 
-    public void close() { robotContainer.lever.setPosition(Constants.Lever.CLOSED); }
+    public void close() { robotContainer.proboscis.setPosition(Constants.Proboscis.CLOSED); }
 
 }

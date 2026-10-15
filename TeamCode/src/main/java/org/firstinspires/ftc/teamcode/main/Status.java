@@ -37,5 +37,6 @@ public class Status {
     public static boolean manualControl = false;
     public static boolean parkingBrake = false;
     public static boolean parking = false;
-    public static boolean leverOpen = false;
+    public static boolean doorOpen = false;
+    public static boolean proboscisOpen = false;
 }

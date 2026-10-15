@@ -29,7 +29,7 @@ public class Intake {
     public void setPower(double power) {
         this.power = power;
         double current = getCurrent();
-        if (current > 5 && !Status.leverOpen) {
+        if (current > 5 && !Status.doorOpen) {
             this.newPower = Math.max(power - (power * ((current - 5) * 0.1)), 0);
             intakeMotors.setPower(newPower);
         } else {

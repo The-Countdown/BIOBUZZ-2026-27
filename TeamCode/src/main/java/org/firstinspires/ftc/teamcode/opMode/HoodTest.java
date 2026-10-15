@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.opMode;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "HoodTest", group = "TeleOp")
-//@Disabled
+@Configurable
 public class HoodTest extends OpMode {
     private RobotContainer robotContainer;
     private int currentPosIndex = 0;
