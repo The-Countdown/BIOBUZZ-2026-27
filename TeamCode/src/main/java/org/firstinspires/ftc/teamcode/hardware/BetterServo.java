@@ -15,17 +15,19 @@ public class BetterServo {
     private double lastPositionDegrees = 0;
     private double positionDegrees = 0;
 
-    private double minTimeBetweenUpdates = 0;
+    private int minTimeBetweenUpdates = 0;
+    private double minPosDiffBetweenUpdates = 0;
 
-    public BetterServo(ServoImplEx servo, int minTimeBetweenUpdates) {
+    public BetterServo(ServoImplEx servo, int minTimeBetweenUpdates, double minPosDiffBetweenUpdates) {
         this.servo = servo;
         this.minTimeBetweenUpdates = HelperFunctions.getRandomWithin(minTimeBetweenUpdates, 0.5);
+        this.minPosDiffBetweenUpdates = minPosDiffBetweenUpdates;
     }
 
     public void updateSetPosition(double position) {
         this.position = position;
         long currentTime = System.currentTimeMillis();
-        if (currentTime - this.lastTime >= this.minTimeBetweenUpdates && this.position != this.lastPosition) {
+        if (currentTime - this.lastTime >= this.minTimeBetweenUpdates && Math.abs(this.position - this.lastPosition) > minPosDiffBetweenUpdates) {
             servo.setPosition(this.position);
             lastTime = System.currentTimeMillis();
             this.lastPosition = this.position;
@@ -36,7 +38,7 @@ public class BetterServo {
     public void updateSetPositionDegrees(double positionDegrees) {
         this.positionDegrees = ((HelperFunctions.normalizeAngle(positionDegrees) + 180) / 322);
         long currentTime = System.currentTimeMillis();
-        if (currentTime - this.lastTimeDegrees >= this.minTimeBetweenUpdates && this.positionDegrees != this.lastPositionDegrees) {
+        if (currentTime - this.lastTimeDegrees >= this.minTimeBetweenUpdates && Math.abs(this.positionDegrees - this.lastPositionDegrees) > minPosDiffBetweenUpdates) {
             // This is where the interpolate happens
             servo.setPosition(this.positionDegrees);
             this.lastTimeDegrees = System.currentTimeMillis();

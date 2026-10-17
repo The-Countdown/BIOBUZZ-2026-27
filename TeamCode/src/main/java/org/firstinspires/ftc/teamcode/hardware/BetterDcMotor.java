@@ -18,11 +18,16 @@ public class BetterDcMotor extends Thread {
     private double lastVelocity = 0;
     private double velocity = 0;
 
-    private double minTimeBetweenUpdates = 0;
+    private int minTimeBetweenUpdates = 0;
+    private double minPowerDiffBetweenUpdates = 0;
+    private double minVelocityDiffBetweenUpdates = 0;
 
-    public BetterDcMotor(DcMotorImplEx motor, int minTimeBetweenUpdates) {
+
+    public BetterDcMotor(DcMotorImplEx motor, int minTimeBetweenUpdates, double minPowerDiffBetweenUpdates, double minVelocityDiffBetweenUpdates) {
         this.motor = motor;
         this.minTimeBetweenUpdates = HelperFunctions.getRandomWithin(minTimeBetweenUpdates, 0.5);
+        this.minPowerDiffBetweenUpdates = minPowerDiffBetweenUpdates;
+        this.minVelocityDiffBetweenUpdates = minVelocityDiffBetweenUpdates;
     }
 
     @Override
@@ -42,7 +47,7 @@ public class BetterDcMotor extends Thread {
     public void updateSetPower(double power) {
         this.power = power;
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastTimePower >= minTimeBetweenUpdates && power != lastPower) {
+        if (currentTime - lastTimePower >= minTimeBetweenUpdates && Math.abs(power - lastPower) > minPowerDiffBetweenUpdates) {
             motor.setPower(power);
             lastTimePower = System.currentTimeMillis();
             this.lastPower = power;
@@ -56,7 +61,7 @@ public class BetterDcMotor extends Thread {
     public void updateSetVelocity(double velocity) {
         this.velocity = velocity;
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastTimeVelocity >= minTimeBetweenUpdates && velocity != lastVelocity) {
+        if (currentTime - lastTimeVelocity >= minTimeBetweenUpdates && Math.abs(velocity - lastVelocity) > minVelocityDiffBetweenUpdates) {
             motor.setVelocity(velocity);
             lastTimeVelocity = System.currentTimeMillis();
             this.lastVelocity = velocity;

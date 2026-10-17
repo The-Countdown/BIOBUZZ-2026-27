@@ -112,7 +112,7 @@ public class RobotContainer {
         public static BetterDcMotor leftBack;
         public static BetterDcMotor rightBack;
 
-        // Gobilda RGB indicator light
+        // Gobuilda RGB indicator light
         public static ServoImplEx indicatorLightLeft;
         public static ServoImplEx indicatorLightRight;
 
@@ -177,10 +177,10 @@ public class RobotContainer {
 
         HardwareDevices.switchCurrentSensor = getHardwareDevice(AnalogInput.class, "switchCurrentSensor");
 
-        HardwareDevices.leftFront = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "leftFront"), Constants.Robot.MOTOR_UPDATE_TIME);
-        HardwareDevices.rightFront = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "rightFront"), Constants.Robot.MOTOR_UPDATE_TIME);
-        HardwareDevices.leftBack = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "leftBack"), Constants.Robot.MOTOR_UPDATE_TIME);
-        HardwareDevices.rightBack = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "rightBack"), Constants.Robot.MOTOR_UPDATE_TIME);
+        HardwareDevices.leftFront = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "leftFront"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
+        HardwareDevices.rightFront = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "rightFront"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
+        HardwareDevices.leftBack = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "leftBack"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
+        HardwareDevices.rightBack = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "rightBack"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
 
         HardwareDevices.leftFront.setDirection(DcMotorImplEx.Direction.REVERSE);
         HardwareDevices.rightFront.setDirection(DcMotorImplEx.Direction.FORWARD);
@@ -192,24 +192,24 @@ public class RobotContainer {
         HardwareDevices.leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         HardwareDevices.rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        HardwareDevices.turretServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoLeader"), Constants.Robot.SERVO_UPDATE_TIME);
-        HardwareDevices.turretServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoFollower"), Constants.Robot.SERVO_UPDATE_TIME);
-        HardwareDevices.hoodServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "hoodServo"), Constants.Robot.SERVO_UPDATE_TIME);
+        HardwareDevices.turretServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, 0);
+        HardwareDevices.turretServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, 0);
+        HardwareDevices.hoodServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "hoodServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
-        HardwareDevices.intakeMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotorLeader"), Constants.Robot.MOTOR_UPDATE_TIME);
-        HardwareDevices.intakeMotorFollower = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotorFollower"), Constants.Robot.MOTOR_UPDATE_TIME);
+        HardwareDevices.intakeMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotorLeader"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
+        HardwareDevices.intakeMotorFollower = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotorFollower"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
         LinkedMotors intakeMotors = new LinkedMotors(HardwareDevices.intakeMotorLeader, HardwareDevices.intakeMotorFollower);
 
-        HardwareDevices.flywheelMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorLeader"), 0);
-        HardwareDevices.flywheelMotorFollower = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorFollower"), 0);
+        HardwareDevices.flywheelMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorLeader"), 0, 0, 0);
+        HardwareDevices.flywheelMotorFollower = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorFollower"), 0, 0, 0);
 
-        HardwareDevices.brakesServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "brakesServoLeader"), Constants.Robot.SERVO_UPDATE_TIME);
-        HardwareDevices.brakesServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "brakesServoFollower"), Constants.Robot.SERVO_UPDATE_TIME);
+        HardwareDevices.brakesServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "brakesServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.brakesServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "brakesServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
         LinkedServos brakesServos = new LinkedServos(HardwareDevices.brakesServoLeader, HardwareDevices.brakesServoFollower);
 
-        HardwareDevices.doorServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "doorServo"), Constants.Robot.SERVO_UPDATE_TIME);
+        HardwareDevices.doorServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "doorServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
-        HardwareDevices.proboscisServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "proboscisServo"), Constants.Robot.SERVO_UPDATE_TIME);
+        HardwareDevices.proboscisServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "proboscisServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
         LinkedMotors flywheelMotors = new LinkedMotors(HardwareDevices.flywheelMotorLeader, HardwareDevices.flywheelMotorFollower);
         HardwareDevices.flywheelMotorFollower.setDirection(DcMotorImplEx.Direction.REVERSE);
@@ -573,7 +573,7 @@ public class RobotContainer {
         } else if (telemetryLoopTimer.milliseconds() < Constants.System.TELEMETRY_COMP_UPDATE_INTERVAL_MS && Status.competitionMode) {
             return;
         }
-        // This line is required for the logViwer to work correctly
+        // This line is required for the logViewer to work correctly
         // It also need to be at column zero and spelled exactly "Time Stamp"
         addDataLog("Time Stamp", System.currentTimeMillis() - startTimeMs, true);
         addBlankLine();

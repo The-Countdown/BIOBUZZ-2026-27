@@ -11,7 +11,7 @@ public class BetterAnalogInput {
 
     private double voltage = 0;
 
-    private double minTimeBetweenUpdates = 0;
+    private int minTimeBetweenUpdates = 0;
 
     public BetterAnalogInput(AnalogInput analog, int minTimeBetweenUpdates) {
         this.analog = analog;
