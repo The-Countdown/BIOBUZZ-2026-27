@@ -16,10 +16,10 @@ public class Door extends RobotContainer.HardwareDevices {
         if (teleop) {
             if (robotContainer.gamepadEx1.rightBumper.isHeld() || robotContainer.gamepadEx2.rightBumper.isHeld()) {
                 robotContainer.door.setPosition(Constants.Door.OPEN);
-                Status.doorOpen = true;
+                Status.tongueOpen = true;
             } else {
                 robotContainer.door.setPosition(Constants.Door.CLOSED);
-                Status.doorOpen = false;
+                Status.tongueOpen = false;
             }
         }
     }

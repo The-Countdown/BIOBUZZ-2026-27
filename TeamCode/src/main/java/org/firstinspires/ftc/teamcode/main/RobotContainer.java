@@ -34,7 +34,7 @@ import org.firstinspires.ftc.teamcode.other.LocalizationUpdater;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
-import org.firstinspires.ftc.teamcode.subsystems.Brakes;
+import org.firstinspires.ftc.teamcode.subsystems.Wings;
 import org.firstinspires.ftc.teamcode.util.DelayedActionManager;
 import org.firstinspires.ftc.teamcode.util.GamepadWrapper;
 import org.firstinspires.ftc.teamcode.hardware.LinkedMotors;
@@ -85,7 +85,7 @@ public class RobotContainer {
     public Drivetrain drivetrain;
     public Turret turret;
     public Intake intake;
-    public Brakes brakes;
+    public Wings wings;
     public Door door;
     public Proboscis proboscis;
     public double controlHubVoltage;
@@ -121,6 +121,7 @@ public class RobotContainer {
         public static BetterDcMotor flywheelMotorFollower;
         public static BetterServo turretServoLeader;
         public static BetterServo turretServoFollower;
+        public static BetterDcMotor turretMotor;
         public static BetterServo hoodServo;
         public static BetterServo doorServo;
         public static BetterServo proboscisServo;
@@ -129,9 +130,9 @@ public class RobotContainer {
         public static BetterDcMotor intakeMotorLeader;
         public static BetterDcMotor intakeMotorFollower;
 
-        // Brakes
-        public static BetterServo brakesServoLeader;
-        public static BetterServo brakesServoFollower;
+        // Wings
+        public static BetterServo wingsServoLeader;
+        public static BetterServo wingsServoFollower;
 
     }
 
@@ -194,6 +195,7 @@ public class RobotContainer {
 
         HardwareDevices.turretServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, 0);
         HardwareDevices.turretServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, 0);
+        HardwareDevices.turretMotor = new BetterDcMotor(getHardwareDevice(DcMotorImplEx.class, "turretMotor"), Constants.Robot.MOTOR_UPDATE_TIME, 0, 0);
         HardwareDevices.hoodServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "hoodServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
         HardwareDevices.intakeMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotorLeader"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
@@ -203,9 +205,9 @@ public class RobotContainer {
         HardwareDevices.flywheelMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorLeader"), 0, 0, 0);
         HardwareDevices.flywheelMotorFollower = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorFollower"), 0, 0, 0);
 
-        HardwareDevices.brakesServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "brakesServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
-        HardwareDevices.brakesServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "brakesServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
-        LinkedServos brakesServos = new LinkedServos(HardwareDevices.brakesServoLeader, HardwareDevices.brakesServoFollower);
+        HardwareDevices.wingsServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "wingsServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.wingsServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "wingsServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        LinkedServos wingsServos = new LinkedServos(HardwareDevices.wingsServoLeader, HardwareDevices.wingsServoFollower);
 
         HardwareDevices.doorServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "doorServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
@@ -218,10 +220,10 @@ public class RobotContainer {
         LinkedServos turretServos = new LinkedServos(HardwareDevices.turretServoLeader, HardwareDevices.turretServoFollower);
         positionProvider = new PositionProvider(this, HardwareDevices.pinpoint);
 
-        turret = new Turret(this, flywheelMotors, HardwareDevices.hoodServo, turretServos);
+        turret = new Turret(this, flywheelMotors, HardwareDevices.hoodServo, turretServos, HardwareDevices.turretMotor);
         HardwareDevices.intakeMotorLeader.setDirection(DcMotor.Direction.REVERSE);
         intake = new Intake(this, intakeMotors);
-        brakes = new Brakes(this, brakesServos);
+        wings = new Wings(this, wingsServos);
         door = new Door(this, HardwareDevices.doorServo);
         proboscis = new Proboscis(this, HardwareDevices.proboscisServo);
 
@@ -338,7 +340,7 @@ public class RobotContainer {
         door.update(teleop);
         proboscis.update(teleop);
         turret.update(teleop);
-        brakes.update(teleop);
+        wings.update(teleop);
         intake.update(teleop);
 
         switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
@@ -665,24 +667,25 @@ public class RobotContainer {
 
             addCaptionLine("Turret & Hood");
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
-                addDataLog("Servo Turret Leader", HardwareDevices.turretServoLeader.getPosition(), false);
-                addDataLog("Servo Turret Follower", HardwareDevices.turretServoFollower.getPosition(), false);
+                addDataLog("Servo Turret Leader Position", HardwareDevices.turretServoLeader.getPosition(), false);
+                addDataLog("Servo Turret Follower Position", HardwareDevices.turretServoFollower.getPosition(), false);
+                addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getTargetPosition(), false);
                 addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
             addBlankLine();
 
-            addCaptionLine("Brakes");
-                addDataLog("Brakes position", brakes.getPosition(), false);
-                addDataLog("Brakes angle", brakes.getPositionDegrees(), false);
-                addDataLog("Brakes Servo Leader", HardwareDevices.brakesServoLeader.getPosition(), false);
-                addDataLog("Brakes Servo Follower", HardwareDevices.brakesServoFollower.getPosition(), false);
+            addCaptionLine("Wings");
+                addDataLog("Wings position", wings.getPosition(), false);
+                addDataLog("Wings angle", wings.getPositionDegrees(), false);
+                addDataLog("Wings Servo Leader", HardwareDevices.wingsServoLeader.getPosition(), false);
+                addDataLog("Wings Servo Follower", HardwareDevices.wingsServoFollower.getPosition(), false);
             addBlankLine();
 
             addCaptionLine("Door");
-                addDataLog("Door Open", Status.doorOpen, false);
+                addDataLog("Door Open", Status.tongueOpen, false);
             addBlankLine();
 
             addCaptionLine("Proboscis");
-            addDataLog("Proboscis Open", Status.proboscisOpen, false);
+            addDataLog("Proboscis Open", Status.proboscisDown, false);
             addBlankLine();
 
             addCaptionLine("Individual Power Draw");

@@ -4,6 +4,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
@@ -18,6 +19,7 @@ public class Turret extends RobotContainer.HardwareDevices {
     private final RobotContainer robotContainer;
     private final LinkedMotors flyWheelMotors;
     private final LinkedServos turretServos;
+    private final BetterDcMotor turretMotor;
     public final BetterServo hoodServo;
     private FlywheelPDF flywheelPDF;
     private double targetPosition;
@@ -31,13 +33,13 @@ public class Turret extends RobotContainer.HardwareDevices {
     private double goalAngle;
     public double goalOrientedVelocityX;
     public double goalOrientedVelocityY;
-    private GamepadWrapper.ButtonReader backFieldButton = new GamepadWrapper.ButtonReader();
 
-    public Turret(RobotContainer robotContainer, LinkedMotors flyWheelMotors, BetterServo hoodServo, LinkedServos turretServos) {
+    public Turret(RobotContainer robotContainer, LinkedMotors flyWheelMotors, BetterServo hoodServo, LinkedServos turretServos, BetterDcMotor turretMotor) {
         this.robotContainer = robotContainer;
         this.flyWheelMotors = flyWheelMotors;
         this.hoodServo = hoodServo;
         this.turretServos = turretServos;
+        this.turretMotor = turretMotor;
         this.flywheelPDF = new FlywheelPDF(robotContainer, flyWheelMotors);
         this.targetPosition = 0;
         this.manualTurretPos = 0;
@@ -113,11 +115,11 @@ public class Turret extends RobotContainer.HardwareDevices {
             // Manual Turret Hood
             if (robotContainer.gamepadEx2.dpadUp.wasJustPressed()) {
                 manualHood = true;
-                double targetHoodPos = robotContainer.turret.hoodServo.getPosition() == Constants.Turret.HOOD_PRESETS[2]  ? Constants.Turret.HOOD_PRESETS[0] : Constants.Turret.HOOD_PRESETS[2];
+                double targetHoodPos = robotContainer.turret.hoodServo.getPosition() == Constants.Turret.HOOD_PRESETS[2]  ? Constants.Turret.HOOD_PRESETS[0] : Constants.Turret.HOOD_PRESETS[1];
                 robotContainer.turret.hood.setPos(targetHoodPos);
             }
 
-            if (robotContainer.gamepadEx2.dpadDown.isHeldFor(1.0)){
+            if (robotContainer.gamepadEx2.dpadUp.isHeldFor(1.0)){
                 manualHood = false;
             }
 
@@ -149,6 +151,7 @@ public class Turret extends RobotContainer.HardwareDevices {
     public void setTargetPosition(double position) {
         targetPosition = position;
         turretServos.setPosition(HelperFunctions.clamp(position, Constants.Turret.MIN_SERVO, Constants.Turret.MAX_SERVO));
+        turretMotor.setTargetPosition(HelperFunctions.clamp((int)Math.round(position), Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR));
     }
 
     public double getTargetPosition(){ return targetPosition;}

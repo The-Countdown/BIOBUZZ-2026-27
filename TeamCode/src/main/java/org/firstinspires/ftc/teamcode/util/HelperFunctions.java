@@ -83,6 +83,10 @@ public class HelperFunctions {
         return Math.max(min, Math.min(max, value));
     }
 
+    public static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     public static double disToGoal() {
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE){
             double xDiff = 72 - Status.currentPose.getX(DistanceUnit.INCH);
