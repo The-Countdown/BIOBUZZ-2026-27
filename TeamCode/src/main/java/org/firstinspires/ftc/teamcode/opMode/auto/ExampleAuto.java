@@ -54,7 +54,7 @@ public class ExampleAuto extends OpMode {
             .setStart(() -> {
                 // executed on start of command
                 Status.flywheelToggle = true;
-                robotContainer.door.close();
+                robotContainer.tongue.up();
                 robotContainer.turret.hood.setPos(Constants.Turret.HOOD_PRESETS[0]);
             })
             .setExecute(() -> {
