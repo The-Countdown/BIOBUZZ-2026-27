@@ -33,6 +33,9 @@ public class Turret extends RobotContainer.HardwareDevices {
     private double goalAngle;
     public double goalOrientedVelocityX;
     public double goalOrientedVelocityY;
+    public double getGoalOrientedVelocityRX;
+    public double angleToFaceGoal;
+    public double lastAngleToFaceGoal;
 
     public Turret(RobotContainer robotContainer, LinkedMotors flyWheelMotors, BetterServo hoodServo, LinkedServos turretServos, BetterDcMotor turretMotor) {
         this.robotContainer = robotContainer;
@@ -75,9 +78,23 @@ public class Turret extends RobotContainer.HardwareDevices {
             goalAngle = -45;
         }
 
-        goalOrientedVelocityX = (pinpoint.getVelX(DistanceUnit.INCH) * Math.cos(Math.toRadians(goalAngle))) - (pinpoint.getVelY(DistanceUnit.INCH) * Math.sin(Math.toRadians(goalAngle)));
-        goalOrientedVelocityY = (pinpoint.getVelX(DistanceUnit.INCH) * Math.sin(Math.toRadians(goalAngle))) + (pinpoint.getVelY(DistanceUnit.INCH) * Math.cos(Math.toRadians(goalAngle)));
+        double xDiff;
+        double yDiff;
 
+        if (Status.alliance == Constants.Game.ALLIANCE.RED) {
+            xDiff = Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM);
+            yDiff = Status.goalPose.getY(DistanceUnit.CM) + Status.currentPose.getY(DistanceUnit.CM);
+        } else {
+            xDiff = Status.goalPose.getX(DistanceUnit.CM) + Status.currentPose.getX(DistanceUnit.CM);
+            yDiff = Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
+        }
+
+        angleToFaceGoal = ((Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading - 180);
+
+
+        goalOrientedVelocityX = (Status.currentVelocityX * Math.cos(Math.toRadians(goalAngle))) - (Status.currentVelocityY * Math.sin(Math.toRadians(goalAngle)));
+        goalOrientedVelocityY = (Status.currentVelocityX * Math.sin(Math.toRadians(goalAngle))) + (Status.currentVelocityY * Math.cos(Math.toRadians(goalAngle)));
+        getGoalOrientedVelocityRX =  angleToFaceGoal - lastAngleToFaceGoal;
 
         if (teleop) {
 
@@ -144,7 +161,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         if (robotContainer.controlHubVoltage > 8) {
             flyWheelMotors.setPower(targetPower);
         }
-
+        lastAngleToFaceGoal = angleToFaceGoal;
     }
 
     // This is for manual control
@@ -253,18 +270,18 @@ public class Turret extends RobotContainer.HardwareDevices {
     }
 
     public void pointAtGoal() {
-
         adjustByPosition(!Constants.Turret.ADJUST_TURRET_BY_MULTIPLIER);
 
         double xDiff;
         double yDiff;
         if (Status.alliance == Constants.Game.ALLIANCE.RED) {
-            xDiff = Status.goalPose.getX(DistanceUnit.INCH) - Status.currentPose.getX(DistanceUnit.INCH);
-            yDiff = Status.goalPose.getY(DistanceUnit.INCH) + Status.currentPose.getY(DistanceUnit.INCH);
+            xDiff = Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM);
+            yDiff = Status.goalPose.getY(DistanceUnit.CM) + Status.currentPose.getY(DistanceUnit.CM);
         } else {
-            xDiff = Status.goalPose.getX(DistanceUnit.INCH) + Status.currentPose.getX(DistanceUnit.INCH);
-            yDiff = Status.goalPose.getY(DistanceUnit.INCH) - Status.currentPose.getY(DistanceUnit.INCH);
+            xDiff = Status.goalPose.getX(DistanceUnit.CM) + Status.currentPose.getX(DistanceUnit.CM);
+            yDiff = Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
         }
+
         double angleToFaceGoal = Constants.Turret.ADJUST_TURRET_BY_MULTIPLIER ? adjustByMultiplier((Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading - 180) : (Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading - 180;
         setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
 
@@ -275,7 +292,7 @@ public class Turret extends RobotContainer.HardwareDevices {
     }
 
     public void adjustByPosition(boolean doIt){
-        if (doIt) Status.goalPose = new Pose2D(DistanceUnit.INCH, Status.goalPose.getX(DistanceUnit.INCH) + goalOrientedVelocityX * Constants.Turret.GOAL_POSITION_VELOCITY_MULTIPLIER, Status.goalPose.getY(DistanceUnit.INCH) + goalOrientedVelocityY * Constants.Turret.GOAL_POSITION_VELOCITY_MULTIPLIER, AngleUnit.DEGREES, Status.goalPose.getHeading(AngleUnit.DEGREES));
+        if (doIt) Status.goalPose = new Pose2D(DistanceUnit.CM, Status.goalPose.getX(DistanceUnit.CM) + goalOrientedVelocityX * Constants.Turret.GOAL_POSITION_VELOCITY_MULTIPLIER, Status.goalPose.getY(DistanceUnit.CM) + goalOrientedVelocityY * Constants.Turret.GOAL_POSITION_VELOCITY_MULTIPLIER, AngleUnit.DEGREES, Status.goalPose.getHeading(AngleUnit.DEGREES));
     }
 
     public boolean atTarget() {
@@ -294,11 +311,11 @@ public class Turret extends RobotContainer.HardwareDevices {
             double xDiff;
             double yDiff;
             if (Status.alliance == Constants.Game.ALLIANCE.BLUE){
-                 xDiff = -Status.goalPose.getX(DistanceUnit.INCH) - Status.currentPose.getX(DistanceUnit.INCH);
-                 yDiff = Status.goalPose.getY(DistanceUnit.INCH) - Status.currentPose.getY(DistanceUnit.INCH);
+                 xDiff = -Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM);
+                 yDiff = Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
             } else {
-                 xDiff = Status.goalPose.getX(DistanceUnit.INCH) - Status.currentPose.getX(DistanceUnit.INCH);
-                 yDiff = -Status.goalPose.getY(DistanceUnit.INCH) - Status.currentPose.getY(DistanceUnit.INCH);
+                 xDiff = Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM);
+                 yDiff = -Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
             }
             double angleToFaceGoal = Math.atan2(yDiff, xDiff);
             double initialVel = Math.sqrt(Math.pow((verticalVel), 2) * Math.pow((horizonalVel), 2));

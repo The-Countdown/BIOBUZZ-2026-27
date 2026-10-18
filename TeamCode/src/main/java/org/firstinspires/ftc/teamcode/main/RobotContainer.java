@@ -21,6 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
@@ -281,9 +282,9 @@ public class RobotContainer {
         gamepadEx2 = new GamepadWrapper(opmode.gamepad2);
         Status.isDrivingActive = false;
         Status.goalPose =
-                Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.INCH, 70, 70, AngleUnit.DEGREES, -45) :
-                Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.INCH, -70, 70, AngleUnit.DEGREES, 45) :
-                new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0);
+                Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.CM, 70, 70, AngleUnit.DEGREES, -45) :
+                Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.CM, -70, 70, AngleUnit.DEGREES, 45) :
+                new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
 
         Status.startingPose =
                 Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.CM, Constants.Robot.STARTING_X, Constants.Robot.STARTING_Y, AngleUnit.DEGREES, Constants.Robot.STARTING_HEADING) :
@@ -343,11 +344,14 @@ public class RobotContainer {
         wings.update(teleop);
         intake.update(teleop);
 
+        Status.currentHeading = Constants.System.USE_BETTER_IMU ? HardwareDevices.betterIMU.getAngle() : Status.currentPose.getHeading(AngleUnit.DEGREES);
+        Status.currentVelocityX = HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
+        Status.currentVelocityY = HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
+        Status.currentVelocityHeading = HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
+
         switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
 
         PREV_LOOP_TIME_MS = CURRENT_LOOP_TIME_MS;
-
-        Status.currentHeading = Constants.System.USE_BETTER_IMU ? HardwareDevices.betterIMU.getAngle() : Status.currentPose.getHeading(AngleUnit.DEGREES);
 
         updateTelemetry();
     }
