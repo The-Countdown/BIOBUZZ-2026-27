@@ -93,7 +93,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         angleToFaceGoal = ((Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading - 180);
         goalOrientedVelocityRX =  angleToFaceGoal - lastAngleToFaceGoal;
 
-        turretMotor.get
+// start work here
 
         if (teleop) {
 

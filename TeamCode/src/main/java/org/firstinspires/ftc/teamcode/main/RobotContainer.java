@@ -684,7 +684,7 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("Door");
-                addDataLog("Door Open", Status.tongueOpen, false);
+                addDataLog("Door Open", Status.tongueDown, false);
             addCaptionLine("Tongue");
                 addDataLog("Tongue Open", Status.tongueDown, false);
             addBlankLine();
