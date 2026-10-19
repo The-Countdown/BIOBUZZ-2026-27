@@ -25,7 +25,6 @@ public class Status {
     public static boolean competitionMode = true;
     public static boolean loggingToFile = false;
     public static boolean debugMode = false;
-
     public static Pose2D cornerResetPose;
     public static Pose2D goalPose;
     public static Pose2D startingPose;

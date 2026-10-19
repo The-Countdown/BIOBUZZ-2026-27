@@ -41,11 +41,11 @@ public class TurretPDF {
      * @return The calculated PDF output.
      */
     public double calculate(double targetPosition, double targetVelocity) {
-        if (targetPosition == turretMotor.getTargetPosition() && targetVelocity == lastTargetVelocity) {
+        if (targetPosition == turretMotor.getCurrentPosition()  && targetVelocity == lastTargetVelocity) {
             lastTargetPosition = 0;
             return 0;
         }
-        double error = targetSpeed - turretMotor.getVelocity();
+        double error = targetPosition - turretMotor.getVelocity();
         dt = System.currentTimeMillis() - lastTime;
         errorDiff = (lastError - error) / dt; // differance between the errors scaled by time
 
@@ -55,7 +55,7 @@ public class TurretPDF {
 
             d = Constants.Turret.FLYWHEEL_KD  * -errorDiff; // this slows the acceleration down
 
-            ff = (targetSpeed * Constants.Turret.FLYWHEEL_KF) / Constants.Turret.FLYWHEEL_MAX_VELOCITY; // flat addition to the power
+            ff = (targetPosition * Constants.Turret.FLYWHEEL_KF) / Constants.Turret.FLYWHEEL_MAX_VELOCITY; // flat addition to the power
 
 
         pid = (p + i + d) * dt + ff;
@@ -73,8 +73,7 @@ public class TurretPDF {
             panelsTelemetry.addData("FF", ff);
             panelsTelemetry.addData("PID", pid);
             panelsTelemetry.addData("DT", dt);
-            panelsTelemetry.addData("Drop Time", dropTime);
-            panelsTelemetry.addData("Target", targetSpeed);
+            panelsTelemetry.addData("Target", targetPosition);
             panelsTelemetry.addData("Velocity", turretMotor.getVelocity());
             panelsTelemetry.addData("Error", error);
             panelsTelemetry.addData("error Diff", errorDiff);

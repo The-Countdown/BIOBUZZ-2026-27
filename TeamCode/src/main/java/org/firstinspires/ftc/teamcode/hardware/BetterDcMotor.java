@@ -92,6 +92,7 @@ public class BetterDcMotor extends Thread {
     }
 
     public double getTargetPosition() { return motor.getTargetPosition(); }
+    public double getCurrentPosition() { return motor.getCurrentPosition(); }
     
     public double getPower() {
         return this.power;

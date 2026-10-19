@@ -289,7 +289,7 @@ public class RobotContainer {
         Status.startingPose =
                 Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.CM, Constants.Robot.STARTING_X, Constants.Robot.STARTING_Y, AngleUnit.DEGREES, Constants.Robot.STARTING_HEADING) :
                 Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.CM, Constants.Robot.STARTING_X, -Constants.Robot.STARTING_Y, AngleUnit.DEGREES, -Constants.Robot.STARTING_HEADING) :
-                new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0);
+                new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
 
 
 
@@ -673,7 +673,7 @@ public class RobotContainer {
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
                 addDataLog("Servo Turret Leader Position", HardwareDevices.turretServoLeader.getPosition(), false);
                 addDataLog("Servo Turret Follower Position", HardwareDevices.turretServoFollower.getPosition(), false);
-                addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getTargetPosition(), false);
+                addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getCurrentPosition(), false);
                 addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
             addBlankLine();
 
