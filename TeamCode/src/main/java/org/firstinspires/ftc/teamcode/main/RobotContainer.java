@@ -28,12 +28,12 @@ import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.hardware.BetterIMU;
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
 import org.firstinspires.ftc.teamcode.other.PositionProvider;
-import org.firstinspires.ftc.teamcode.subsystems.Door;
 import org.firstinspires.ftc.teamcode.subsystems.Proboscis;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorLighting;
 import org.firstinspires.ftc.teamcode.other.LocalizationUpdater;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Tongue;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.subsystems.Wings;
 import org.firstinspires.ftc.teamcode.util.DelayedActionManager;
@@ -86,8 +86,8 @@ public class RobotContainer {
     public Drivetrain drivetrain;
     public Turret turret;
     public Intake intake;
+    public Tongue tongue;
     public Wings wings;
-    public Door door;
     public Proboscis proboscis;
     public double controlHubVoltage;
     public double expansionHubVoltage;
@@ -124,7 +124,7 @@ public class RobotContainer {
         public static BetterServo turretServoFollower;
         public static BetterDcMotor turretMotor;
         public static BetterServo hoodServo;
-        public static BetterServo doorServo;
+        public static BetterServo tongueServo;
         public static BetterServo proboscisServo;
 
         // Intake
@@ -196,7 +196,6 @@ public class RobotContainer {
 
         HardwareDevices.turretServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, 0);
         HardwareDevices.turretServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, 0);
-        HardwareDevices.turretMotor = new BetterDcMotor(getHardwareDevice(DcMotorImplEx.class, "turretMotor"), Constants.Robot.MOTOR_UPDATE_TIME, 0, 0);
         HardwareDevices.hoodServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "hoodServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
         HardwareDevices.intakeMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotorLeader"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
@@ -210,7 +209,7 @@ public class RobotContainer {
         HardwareDevices.wingsServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "wingsServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
         LinkedServos wingsServos = new LinkedServos(HardwareDevices.wingsServoLeader, HardwareDevices.wingsServoFollower);
 
-        HardwareDevices.doorServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "doorServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.tongueServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "tongueServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
         HardwareDevices.proboscisServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "proboscisServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
@@ -224,8 +223,8 @@ public class RobotContainer {
         turret = new Turret(this, flywheelMotors, HardwareDevices.hoodServo, turretServos, HardwareDevices.turretMotor);
         HardwareDevices.intakeMotorLeader.setDirection(DcMotor.Direction.REVERSE);
         intake = new Intake(this, intakeMotors);
+        tongue = new Tongue(this, HardwareDevices.tongueServo);
         wings = new Wings(this, wingsServos);
-        door = new Door(this, HardwareDevices.doorServo);
         proboscis = new Proboscis(this, HardwareDevices.proboscisServo);
 
         drivetrain = new Drivetrain(this, HardwareDevices.leftFront, HardwareDevices.rightFront, HardwareDevices.leftBack, HardwareDevices.rightBack);
@@ -282,9 +281,9 @@ public class RobotContainer {
         gamepadEx2 = new GamepadWrapper(opmode.gamepad2);
         Status.isDrivingActive = false;
         Status.goalPose =
-                Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.CM, 70, 70, AngleUnit.DEGREES, -45) :
-                Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.CM, -70, 70, AngleUnit.DEGREES, 45) :
-                new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
+                Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.INCH, 70, 70, AngleUnit.DEGREES, -45) :
+                Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.INCH, -70, 70, AngleUnit.DEGREES, 45) :
+                new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0);
 
         Status.startingPose =
                 Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.CM, Constants.Robot.STARTING_X, Constants.Robot.STARTING_Y, AngleUnit.DEGREES, Constants.Robot.STARTING_HEADING) :
@@ -338,7 +337,7 @@ public class RobotContainer {
         }
         delayedActionManager.update();
         allIndicatorLights.lightsUpdate();
-        door.update(teleop);
+        tongue.update(teleop);
         proboscis.update(teleop);
         turret.update(teleop);
         wings.update(teleop);
@@ -686,6 +685,8 @@ public class RobotContainer {
 
             addCaptionLine("Door");
                 addDataLog("Door Open", Status.tongueOpen, false);
+            addCaptionLine("Tongue");
+                addDataLog("Tongue Open", Status.tongueDown, false);
             addBlankLine();
 
             addCaptionLine("Proboscis");

@@ -39,6 +39,6 @@ public class Status {
     public static boolean manualControl = false;
     public static boolean wingsDown = false;
     public static boolean parking = false;
-    public static boolean tongueOpen = false;
+    public static boolean tongueDown = false;
     public static boolean proboscisDown = false;
 }

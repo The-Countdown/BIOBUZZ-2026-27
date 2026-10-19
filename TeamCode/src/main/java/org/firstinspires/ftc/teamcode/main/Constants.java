@@ -125,15 +125,9 @@ public class Constants {
     }
 
     @Configurable
-    public static class Door {
-        public static double OPEN = 0.0;
-        public static double CLOSED = 0.0;
-    }
-
-    @Configurable
     public static class Proboscis {
-        public static double OPEN = 0.0;
-        public static double CLOSED = 0.0;
+        public static double OPEN = -1;
+        public static double CLOSED = -1;
     }
 
     @Configurable
@@ -175,5 +169,11 @@ public class Constants {
         public static double TOP_SPEED = 1;
         public static double BEST_INTAKE_SPEED = 1;
         public static double REVERSE_TOP_SPEED = 0.5;
+    }
+
+    @Configurable
+    public static class Tongue {
+        public static double UP = -1;
+        public static double DOWN = -1;
     }
 }
