@@ -18,6 +18,9 @@ import org.firstinspires.ftc.teamcode.util.GamepadWrapper;
 public class Status {
     public static Pose2D currentPose = new Pose2D(DistanceUnit.CM,0,0, AngleUnit.DEGREES,0);
     public static double currentHeading = 0;
+    public static double currentVelocityX = 0;
+    public static double currentVelocityY = 0;
+    public static double currentVelocityHeading = 0;
     public static Constants.Game.ALLIANCE alliance = Constants.Game.ALLIANCE.RED;
     public static boolean competitionMode = true;
     public static boolean loggingToFile = false;
@@ -35,8 +38,8 @@ public class Status {
     public static boolean flywheelAtTargetSpeed = true;
     public static boolean flywheelToggle = false;
     public static boolean manualControl = false;
-    public static boolean parkingBrake = false;
+    public static boolean wingsDown = false;
     public static boolean parking = false;
-    public static boolean proboscisOpen = false;
     public static boolean tongueDown = false;
+    public static boolean proboscisDown = false;
 }

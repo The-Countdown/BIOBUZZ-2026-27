@@ -83,10 +83,15 @@ public class BetterDcMotor extends Thread {
     public void setDirection(DcMotorImplEx.Direction direction) {
         motor.setDirection(direction);
     }
-
-    public void setPIDF(PIDFCoefficients pidf) {
-        motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
+    public void setTargetPositionTolerance(int tolerance){
+        motor.setTargetPositionTolerance(tolerance);
     }
+
+    public void setTargetPosition(int position){
+        motor.setTargetPosition(position);
+    }
+
+    public double getTargetPosition() { return motor.getTargetPosition(); }
     
     public double getPower() {
         return this.power;

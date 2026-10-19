@@ -83,14 +83,18 @@ public class HelperFunctions {
         return Math.max(min, Math.min(max, value));
     }
 
+    public static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     public static double disToGoal() {
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE){
-            double xDiff = 72 - Status.currentPose.getX(DistanceUnit.INCH);
-            double yDiff = 72 - Status.currentPose.getY(DistanceUnit.INCH);
+            double xDiff = 72 * 2.54 - Status.currentPose.getX(DistanceUnit.CM);
+            double yDiff = 72 * 2.54 - Status.currentPose.getY(DistanceUnit.CM);
             return Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
         } else {
-            double xDiff = 72 - Status.currentPose.getX(DistanceUnit.INCH);
-            double yDiff = -72 - Status.currentPose.getY(DistanceUnit.INCH);
+            double xDiff = 72 * 2.54 - Status.currentPose.getX(DistanceUnit.CM);
+            double yDiff = -72 * 2.54 - Status.currentPose.getY(DistanceUnit.CM);
             return Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
             }
     }

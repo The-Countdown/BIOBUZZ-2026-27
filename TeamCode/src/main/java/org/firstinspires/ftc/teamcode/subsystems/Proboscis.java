@@ -16,10 +16,10 @@ public class Proboscis extends RobotContainer.HardwareDevices {
         if (teleop) {
             if (robotContainer.gamepadEx1.rightBumper.isHeld() || robotContainer.gamepadEx2.rightBumper.isHeld()) {
                 robotContainer.proboscis.setPosition(Constants.Proboscis.OPEN);
-                Status.proboscisOpen = true;
+                Status.proboscisDown = true;
             } else {
                 robotContainer.proboscis.setPosition(Constants.Proboscis.CLOSED);
-                Status.proboscisOpen = false;
+                Status.proboscisDown = false;
             }
         }
     }

@@ -75,7 +75,7 @@ public class Drivetrain {
 
         double rx = joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier;
 
-        if (Status.parkingBrake){
+        if (Status.wingsDown){
             double leftPower = y - rx;
             double rightPower = y + rx;
 
