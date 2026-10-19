@@ -23,6 +23,8 @@ out/
 # Gradle files
 .gradle/
 build/
+TeamCode/build/
+FtcRobotController/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
