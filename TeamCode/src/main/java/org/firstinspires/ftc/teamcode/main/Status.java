@@ -36,6 +36,7 @@ public class Status {
     public static final GamepadWrapper.ButtonReader flywheelToggleButton = new GamepadWrapper.ButtonReader();
     public static boolean flywheelAtTargetSpeed = true;
     public static boolean flywheelToggle = false;
+    public static boolean shootOnTheMove = false;
     public static boolean manualControl = false;
     public static boolean wingsDown = false;
     public static boolean parking = false;
