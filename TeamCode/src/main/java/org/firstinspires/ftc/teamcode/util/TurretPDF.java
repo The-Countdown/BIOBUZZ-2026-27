@@ -55,7 +55,7 @@ public class TurretPDF {
 
             d = Constants.Turret.FLYWHEEL_KD  * errorDiff; // this slows the acceleration down
 
-            ff = (goalOrientedRX / Constants.Turret.TURRET_GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // extra velocity in ticks per second for the motor
+            ff = Constants.Turret.FLYWHEEL_KF + (goalOrientedRX / Constants.Turret.TURRET_GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // 1. flat addition to the power 2. extra velocity in ticks per second for the motor
 
 
         pid = (p + i + d) + ff;

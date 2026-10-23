@@ -82,15 +82,22 @@ public class Turret extends RobotContainer.HardwareDevices {
         if (teleop) {
 
             // This will either increase or decrease the flywheel power by small increments
-            if (robotContainer.gamepadEx2.cross.wasJustPressed()){
+            if (robotContainer.gamepadEx2.dpadDown.wasJustReleased()){
                 flywheelPowerModifier -= 0.02;
             }
-            if (robotContainer.gamepadEx2.triangle.wasJustPressed()){
+
+            if (robotContainer.gamepadEx2.dpadUp.wasJustReleased()){
                 flywheelPowerModifier += 0.02;
             }
 
-            // Change this to change the Status.change degree whatever to rotate the robot pose, but this will need to be changed in the robot
-            // So some though will be required
+            if (robotContainer.gamepadEx2.dpadUp.isHeldFor(2) || robotContainer.gamepadEx2.dpadDown.isHeldFor(1.0)) {
+                flywheelPowerModifier = 0;
+            }
+
+            if (robotContainer.gamepadEx2.square.wasJustPressed()) {
+                Status.shootOnTheMove = !Status.shootOnTheMove;
+            }
+
             if (robotContainer.gamepadEx2.dpadLeft.wasJustReleased()) {
                 if (Status.currentPose.getX(DistanceUnit.CM) > -75) {
                     turretAngleOffset -= 2;
@@ -107,19 +114,19 @@ public class Turret extends RobotContainer.HardwareDevices {
                 }
             }
 
-            if (robotContainer.gamepadEx2.dpadDown.wasJustPressed()) {
+            if (robotContainer.gamepadEx2.dpadRight.isHeldFor(2) || robotContainer.gamepadEx2.dpadLeft.isHeldFor(1.0)) {
                 turretAngleOffset = 0;
                 turretAngleOffsetFar = 0;
             }
 
             // Manual Turret Hood
-            if (robotContainer.gamepadEx2.dpadUp.wasJustPressed()) {
+            if (robotContainer.gamepadEx2.triangle.wasJustPressed()) {
                 manualHood = true;
                 double targetHoodPos = robotContainer.turret.hoodServo.getPosition() == Constants.Turret.HOOD_PRESETS[2]  ? Constants.Turret.HOOD_PRESETS[0] : Constants.Turret.HOOD_PRESETS[1];
                 robotContainer.turret.hood.setPos(targetHoodPos);
             }
 
-            if (robotContainer.gamepadEx2.dpadUp.isHeldFor(1.0)){
+            if (robotContainer.gamepadEx2.triangle.isHeldFor(1.0)){
                 manualHood = false;
             }
 
@@ -306,7 +313,7 @@ public class Turret extends RobotContainer.HardwareDevices {
             }
             double angleToFaceGoal = Math.atan2(yDiff, xDiff);
             double initialVel = Math.sqrt(Math.pow((verticalVel), 2) * Math.pow((horizonalVel), 2));
-            double rpm = initialVel * (5000 / 12.5); //TODO: Stephan have fun with your calc IA find that number 5000/12.5 is an estimate from an online shooter calculator
+            double rpm = initialVel * (5000 / 12.5); //TODO: Stephan have fun with your calc IA find that number, 5000/12.5 is an estimate from an online shooter calculator
             targetVelocity = (rpm / 60) * Constants.Robot.MOTOR_TICKS_PER_REVOLUTION;
         }
 
