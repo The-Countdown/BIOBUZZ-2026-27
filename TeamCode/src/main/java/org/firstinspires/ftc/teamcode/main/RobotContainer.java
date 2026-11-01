@@ -120,16 +120,14 @@ public class RobotContainer {
         // Turret
         public static BetterDcMotor flywheelMotorLeader;
         public static BetterDcMotor flywheelMotorFollower;
-        public static BetterServo turretServoLeader;
-        public static BetterServo turretServoFollower;
         public static BetterDcMotor turretMotor;
         public static BetterServo hoodServo;
-        public static BetterServo tongueServo;
+        public static BetterServo tongueServoLeader;
+        public static BetterServo tongueServoFollower;
         public static BetterServo proboscisServo;
 
         // Intake
-        public static BetterDcMotor intakeMotorLeader;
-        public static BetterDcMotor intakeMotorFollower;
+        public static BetterDcMotor intakeMotor;
 
         // Wings
         public static BetterServo wingsServoLeader;
@@ -194,13 +192,9 @@ public class RobotContainer {
         HardwareDevices.leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         HardwareDevices.rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        HardwareDevices.turretServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, 0);
-        HardwareDevices.turretServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "turretServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, 0);
         HardwareDevices.hoodServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "hoodServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
-        HardwareDevices.intakeMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotorLeader"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
-        HardwareDevices.intakeMotorFollower = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotorFollower"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
-        LinkedMotors intakeMotors = new LinkedMotors(HardwareDevices.intakeMotorLeader, HardwareDevices.intakeMotorFollower);
+        HardwareDevices.intakeMotor = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotor"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
 
         HardwareDevices.flywheelMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorLeader"), 0, 0, 0);
         HardwareDevices.flywheelMotorFollower = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorFollower"), 0, 0, 0);
@@ -209,21 +203,21 @@ public class RobotContainer {
         HardwareDevices.wingsServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "wingsServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
         LinkedServos wingsServos = new LinkedServos(HardwareDevices.wingsServoLeader, HardwareDevices.wingsServoFollower);
 
-        HardwareDevices.tongueServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "tongueServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.tongueServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "tongueServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.tongueServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "tongueServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
         HardwareDevices.proboscisServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "proboscisServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
 
         LinkedMotors flywheelMotors = new LinkedMotors(HardwareDevices.flywheelMotorLeader, HardwareDevices.flywheelMotorFollower);
+        LinkedServos tongueServos = new LinkedServos(HardwareDevices.tongueServoLeader, HardwareDevices.tongueServoFollower);
         HardwareDevices.flywheelMotorFollower.setDirection(DcMotorImplEx.Direction.REVERSE);
         flywheelMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelMotors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LinkedServos turretServos = new LinkedServos(HardwareDevices.turretServoLeader, HardwareDevices.turretServoFollower);
         positionProvider = new PositionProvider(this, HardwareDevices.pinpoint);
 
-        turret = new Turret(this, flywheelMotors, HardwareDevices.hoodServo, turretServos, HardwareDevices.turretMotor);
-        HardwareDevices.intakeMotorLeader.setDirection(DcMotor.Direction.REVERSE);
-        intake = new Intake(this, intakeMotors);
-        tongue = new Tongue(this, HardwareDevices.tongueServo);
+        turret = new Turret(this, flywheelMotors, HardwareDevices.hoodServo, HardwareDevices.turretMotor);
+        intake = new Intake(this, HardwareDevices.intakeMotor);
+        tongue = new Tongue(this, tongueServos);
         wings = new Wings(this, wingsServos);
         proboscis = new Proboscis(this, HardwareDevices.proboscisServo);
 
@@ -670,8 +664,6 @@ public class RobotContainer {
 
             addCaptionLine("Turret & Hood");
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
-                addDataLog("Servo Turret Leader Position", HardwareDevices.turretServoLeader.getPosition(), false);
-                addDataLog("Servo Turret Follower Position", HardwareDevices.turretServoFollower.getPosition(), false);
                 addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getCurrentPosition(), false);
                 addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
             addBlankLine();
@@ -698,8 +690,7 @@ public class RobotContainer {
 
             addCaptionLine("Intake Power Draw");
                 addDataLog("Intake Total Current", intake.getCurrent(), false);
-                addDataLog("Motor Intake Leader", HardwareDevices.intakeMotorLeader.getCurrent(CurrentUnit.AMPS), false);
-                addDataLog("Motor Intake Follower", HardwareDevices.intakeMotorFollower.getCurrent(CurrentUnit.AMPS), false);
+                addDataLog("Intake Motor", HardwareDevices.intakeMotor.getCurrent(CurrentUnit.AMPS), false);
             addBlankLine();
 
             addCaptionLine("Flywheel Power Draw");

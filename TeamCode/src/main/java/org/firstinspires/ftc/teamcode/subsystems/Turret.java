@@ -12,13 +12,11 @@ import org.firstinspires.ftc.teamcode.main.Status;
 import org.firstinspires.ftc.teamcode.util.FlywheelPDF;
 import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 import org.firstinspires.ftc.teamcode.hardware.LinkedMotors;
-import org.firstinspires.ftc.teamcode.hardware.LinkedServos;
 import org.firstinspires.ftc.teamcode.util.TurretPDF;
 
 public class Turret extends RobotContainer.HardwareDevices {
     private final RobotContainer robotContainer;
     private final LinkedMotors flyWheelMotors;
-    private final LinkedServos turretServos;
     private final BetterDcMotor turretMotor;
     public final BetterServo hoodServo;
     private FlywheelPDF flywheelPDF;
@@ -38,11 +36,10 @@ public class Turret extends RobotContainer.HardwareDevices {
     public double angleToFaceGoal;
     public double lastAngleToFaceGoal;
 
-    public Turret(RobotContainer robotContainer, LinkedMotors flyWheelMotors, BetterServo hoodServo, LinkedServos turretServos, BetterDcMotor turretMotor) {
+    public Turret(RobotContainer robotContainer, LinkedMotors flyWheelMotors, BetterServo hoodServo, BetterDcMotor turretMotor) {
         this.robotContainer = robotContainer;
         this.flyWheelMotors = flyWheelMotors;
         this.hoodServo = hoodServo;
-        this.turretServos = turretServos;
         this.turretMotor = turretMotor;
         this.flywheelPDF = new FlywheelPDF(robotContainer, flyWheelMotors);
         this.targetPosition = 0;
@@ -138,7 +135,7 @@ public class Turret extends RobotContainer.HardwareDevices {
              if (Status.manualControl && robotContainer.gamepadEx2.rightStickX() != 0) {
                  // Manual turret turning
                  manualTurretPos -= robotContainer.gamepadEx2.rightStickX() != 0 ? (Constants.Turret.SPEED_FACTOR * robotContainer.CURRENT_LOOP_TIME_MS) * Math.pow(robotContainer.gamepadEx2.rightStickX(), 3) : 0;
-                 manualTurretPos = HelperFunctions.clamp(manualTurretPos, Constants.Turret.MIN_SERVO, Constants.Turret.MAX_SERVO);
+                 manualTurretPos = HelperFunctions.clamp(manualTurretPos, Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
                  robotContainer.turret.setTargetPosition(manualTurretPos);
              } else if (!Status.manualControl) {
                  robotContainer.turret.pointAtGoal();
@@ -157,7 +154,6 @@ public class Turret extends RobotContainer.HardwareDevices {
     // This is for manual control
     public void setTargetPosition(double position) {
         targetPosition = position;
-        turretServos.setPosition(HelperFunctions.clamp(position, Constants.Turret.MIN_SERVO, Constants.Turret.MAX_SERVO));
         turretMotor.setTargetPosition(HelperFunctions.clamp((int)Math.round(position), Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR));
     }
 
@@ -173,7 +169,7 @@ public class Turret extends RobotContainer.HardwareDevices {
             angleInDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffset);
         }
 
-        double currentAngle = servoToAngle(turretServos.getPosition());
+        double currentAngle = motorToAngle(turretMotor.getCurrentPosition());
         double targetAngle = angleInDegrees;
 
         double delta = HelperFunctions.normalizeAngle(targetAngle - currentAngle);
@@ -187,9 +183,7 @@ public class Turret extends RobotContainer.HardwareDevices {
             proposedAngle = currentAngle + delta;
         }
 
-        double position = HelperFunctions.clamp(angleToServo(proposedAngle), Constants.Turret.MIN_SERVO, Constants.Turret.MAX_SERVO);
-        turretServoLeader.updateSetPosition(position - Constants.Turret.PRESSURE_OFFSET);
-        turretServoFollower.updateSetPosition(position + Constants.Turret.PRESSURE_OFFSET);
+        double position = HelperFunctions.clamp(angleToMotor(proposedAngle), Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
 
         if (Status.shootOnTheMove) {
             turretMotor.updateSetPower(turretPDF.calculate(position, goalOrientedVelocityRX));
@@ -241,7 +235,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         return lowerValue + ((higherValue - lowerValue) * (key - lowerKey) / (higherKey - lowerKey));
     }
 
-    private double angleToServo(double angle) {
+    private double angleToMotor(double angle) {
         return tableInterpolate(
                 Constants.Turret.TURRET_INTERPOLATION_ANGLES,
                 Constants.Turret.TURRET_INTERPOLATION_POSITIONS,
@@ -249,16 +243,16 @@ public class Turret extends RobotContainer.HardwareDevices {
         );
     }
 
-    private double servoToAngle(double servo) {
+    private double motorToAngle(double motor) {
         return tableInterpolate(
                 Constants.Turret.TURRET_INTERPOLATION_POSITIONS,
                 Constants.Turret.TURRET_INTERPOLATION_ANGLES,
-                servo
+                motor
         );
     }
 
     public double getPosition() {
-        return turretServos.getPosition();
+        return turretMotor.getCurrentPosition();
     }
 
     public double getPositionDegrees() {

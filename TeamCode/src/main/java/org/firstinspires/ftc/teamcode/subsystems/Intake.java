@@ -1,20 +1,20 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
-import org.firstinspires.ftc.teamcode.hardware.LinkedMotors;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 public class Intake {
     private RobotContainer robotContainer;
-    private LinkedMotors intakeMotors;
+    private BetterDcMotor intakeMotor;
     public double power = 0;
     public double currentAmps = 0;
     public double newPower;
 
-    public Intake(RobotContainer robotContainer, LinkedMotors intakeMotors) {
+    public Intake(RobotContainer robotContainer, BetterDcMotor intakeMotor) {
         this.robotContainer = robotContainer;
-        this.intakeMotors = intakeMotors;
+        this.intakeMotor = intakeMotor;
         this.newPower = 0;
     }
 
@@ -31,22 +31,22 @@ public class Intake {
         double current = getCurrent();
         if (current > 5 && !Status.tongueDown) {
             this.newPower = Math.max(power - (power * ((current - 5) * 0.1)), 0);
-            intakeMotors.setPower(newPower);
+            intakeMotor.setPower(newPower);
         } else {
-            intakeMotors.setPower(power);
+            intakeMotor.setPower(power);
         }
     }
 
     public double getVelocity() {
-        return intakeMotors.getVelocity();
+        return intakeMotor.getVelocity();
     }
 
     public double getPower() {
-        return intakeMotors.getPower();
+        return intakeMotor.getPower();
     }
 
     public double getCurrent() {
-        return intakeMotors.getCurrent(CurrentUnit.AMPS);
+        return intakeMotor.getCurrent(CurrentUnit.AMPS);
     }
 
     public double getNewPower(){

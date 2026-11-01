@@ -1,23 +1,21 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
+import org.firstinspires.ftc.teamcode.hardware.LinkedServos;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 
-public class Tongue extends RobotContainer. HardwareDevices{
-    public BetterServo tongueServo;
+public class Tongue extends RobotContainer.HardwareDevices{
+    public LinkedServos tongueServos;
 
     public Constants constants;
 
     public final RobotContainer robotContainer;
 
     public Status status;
-
-    public HelperFunctions helperFunctions;
-
-    public Tongue(RobotContainer robotContainer, BetterServo tongueServo) {
+    public Tongue(RobotContainer robotContainer, LinkedServos tongueServos) {
         this.robotContainer = robotContainer;
     }
 
@@ -25,19 +23,19 @@ public class Tongue extends RobotContainer. HardwareDevices{
 
         if (teleop) {
             if (robotContainer.gamepadEx1.triangle.wasJustPressed()) {
-                robotContainer.tongue.tongueServo.updateSetPosition(Constants.Tongue.UP);
+                robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.UP);
                 Status.tongueDown = true;
 
             } else {
-                robotContainer.tongue.tongueServo.updateSetPosition(Constants.Tongue.DOWN);
+                robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.DOWN);
                 Status.tongueDown = false;
             }
         }
     }
 
     public void setPosition(double position){
-        robotContainer.tongue.tongueServo.updateSetPosition(HelperFunctions.clamp(position, Constants.Tongue.UP, Constants.Tongue.DOWN));
+        robotContainer.tongue.tongueServos.setPosition(HelperFunctions.clamp(position, Constants.Tongue.UP, Constants.Tongue.DOWN));
     }
-    public void up(){robotContainer.tongue.tongueServo.updateSetPosition(Constants.Tongue.UP);}
-    public void down(){robotContainer.tongue.tongueServo.updateSetPosition(Constants.Tongue.DOWN);}
+    public void up(){robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.UP);}
+    public void down(){robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.DOWN);}
 }
