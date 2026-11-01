@@ -152,7 +152,7 @@ public class RobotContainer {
         allIndicatorLights.addLight(indicatorLightLeft);
         allIndicatorLights.addLight(indicatorLightRight);
 
-        allIndicatorLights.setColor(Constants.LED.COLOR.RED);
+        //allIndicatorLights.setColor(Constants.LED.COLOR.RED);
 
         HardwareDevices.imu = getHardwareDevice(IMU.class, "imu");
         HardwareDevices.imu.initialize(Constants.Robot.IMU_PARAMETERS);
@@ -163,7 +163,7 @@ public class RobotContainer {
         betterIMUP.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         betterIMUP.calibrationDataFile = "AdafruitIMUCalibration.json";
 
-        HardwareDevices.betterIMU.initialize(betterIMUP);
+        //HardwareDevices.betterIMU.initialize(betterIMUP);
         panelsTelemetry.debug("Calibrating External IMU...");
         telemetry.addLine("Calibrating External IMU...");
         panelsTelemetry.update(telemetry);
@@ -171,9 +171,9 @@ public class RobotContainer {
         Thread.sleep(800); // Ensure that the IMU has some still time so that it will auto calibrate at zero.
 
         HardwareDevices.pinpoint = getHardwareDevice(GoBildaPinpointDriver.class, "pinpoint");
-        HardwareDevices.pinpoint.setOffsets(Constants.System.PINPOINT_X_OFFSET_MM, Constants.System.PINPOINT_Y_OFFSET_MM, DistanceUnit.MM);
-        HardwareDevices.pinpoint.setEncoderResolution(Constants.System.PINPOINT_ODOM_POD);
-        HardwareDevices.pinpoint.setEncoderDirections(Constants.System.PINPOINT_X_ENCODER_DIRECTION, Constants.System.PINPOINT_Y_ENCODER_DIRECTION);
+//        HardwareDevices.pinpoint.setOffsets(Constants.System.PINPOINT_X_OFFSET_MM, Constants.System.PINPOINT_Y_OFFSET_MM, DistanceUnit.MM);
+//        HardwareDevices.pinpoint.setEncoderResolution(Constants.System.PINPOINT_ODOM_POD);
+//        HardwareDevices.pinpoint.setEncoderDirections(Constants.System.PINPOINT_X_ENCODER_DIRECTION, Constants.System.PINPOINT_Y_ENCODER_DIRECTION);
 
         HardwareDevices.switchCurrentSensor = getHardwareDevice(AnalogInput.class, "switchCurrentSensor");
 
@@ -193,6 +193,7 @@ public class RobotContainer {
         HardwareDevices.rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         HardwareDevices.hoodServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "hoodServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.turretMotor = new BetterDcMotor(getHardwareDevice(DcMotorImplEx.class, "turretMotor"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
 
         HardwareDevices.intakeMotor = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotor"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
 
@@ -230,7 +231,7 @@ public class RobotContainer {
 
     public void init() {
         this.isRunning = true;
-        RobotContainer.HardwareDevices.imu.resetYaw();
+        //RobotContainer.HardwareDevices.imu.resetYaw();
         HardwareDevices.allHubs = hardwareMap.getAll(LynxModule.class);
         HardwareDevices.controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
         HardwareDevices.expansionHub = hardwareMap.get(LynxModule.class, "Expansion Hub 2");
@@ -239,7 +240,7 @@ public class RobotContainer {
         }
 
         // Reset the IMU angle
-        HardwareDevices.betterIMU.resetAngle();
+        //HardwareDevices.betterIMU.resetAngle();
 
         if (Status.competitionMode) {
             telemetry.setMsTransmissionInterval(Constants.System.TELEMETRY_COMP_UPDATE_INTERVAL_MS);
@@ -289,8 +290,8 @@ public class RobotContainer {
         // Start the required threads
         telemetryLogger = new TelemetryLogger(this);
         telemetryLogger.start();
-        localizationUpdater = new LocalizationUpdater(this, teleop);
-        localizationUpdater.start();
+//        localizationUpdater = new LocalizationUpdater(this, teleop);
+//        localizationUpdater.start();
     }
 
     public void stop() {

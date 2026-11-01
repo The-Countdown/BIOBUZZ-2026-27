@@ -29,10 +29,6 @@ public class MotorTest extends OpMode {
     public void start() {
         Status.opModeIsActive = true;
         robotContainer.start(this, true);
-        RobotContainer.HardwareDevices.flywheelMotorLeader.start();
-        RobotContainer.HardwareDevices.flywheelMotorFollower.start();
-        RobotContainer.HardwareDevices.intakeMotor.start();
-        RobotContainer.HardwareDevices.turretMotor.start();
     }
 
     @Override
