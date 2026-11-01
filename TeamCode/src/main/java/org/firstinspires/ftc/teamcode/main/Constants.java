@@ -26,7 +26,9 @@ public class Constants {
 
         public static Pose2D ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
         public static double GRAVITY = 9.811;
-        public static double GOAL_HEIGHT = 0.0; // In meters
+        public static double GOAL_HEIGHT = 144.78;
+        public static double CELL_POSITION_X = 30.48;
+        public static double CELL_POSITION_Y = 35.56;
     }
 
     @Configurable

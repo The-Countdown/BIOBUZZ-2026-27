@@ -37,6 +37,14 @@ public class Intake {
         }
     }
 
+    public void on() {
+        setPower(1);
+    }
+
+    public void off(){
+        setPower(0);
+    }
+
     public double getVelocity() {
         return intakeMotor.getVelocity();
     }
