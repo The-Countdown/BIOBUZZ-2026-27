@@ -31,8 +31,8 @@ public class MotorTest extends OpMode {
         robotContainer.start(this, true);
         RobotContainer.HardwareDevices.flywheelMotorLeader.start();
         RobotContainer.HardwareDevices.flywheelMotorFollower.start();
-        RobotContainer.HardwareDevices.intakeMotorLeader.start();
-        RobotContainer.HardwareDevices.intakeMotorFollower.start();
+        RobotContainer.HardwareDevices.intakeMotor.start();
+        RobotContainer.HardwareDevices.turretMotor.start();
     }
 
     @Override
@@ -46,8 +46,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
                 telemetry.addLine("stopped");
@@ -57,8 +57,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
                 telemetry.addLine("rightFront");
@@ -68,8 +68,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.rightFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
                 telemetry.addLine("leftFront");
@@ -79,8 +79,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.rightFront.setPower(0);
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
                 telemetry.addLine("rightBack");
@@ -90,33 +90,33 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.rightFront.setPower(0);
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
                 telemetry.addLine("leftBack");
                 break;
             case 4:
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(motorPower);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(motorPower);
                 RobotContainer.HardwareDevices.rightFront.setPower(0);
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
-                telemetry.addLine("intakeMotorLeader");
+                telemetry.addLine("intakeMotor");
                 break;
             case 5:
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(motorPower);
+                RobotContainer.HardwareDevices.turretMotor.setPower(motorPower);
                 RobotContainer.HardwareDevices.rightFront.setPower(0);
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
-                telemetry.addLine("intakeMotorFollower");
+                telemetry.addLine("turretMotor");
                 break;
             case 6:
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(motorPower);
@@ -124,8 +124,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
                 telemetry.addLine("flyWheelMotorLeader");
                 break;
@@ -135,8 +135,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 telemetry.addLine("flyWheelMotorFollower");
                 break;
@@ -146,8 +146,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(0);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(0);
+                RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(motorPower);
                 telemetry.addLine("Flywheel motors");
                 break;
@@ -157,8 +157,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(motorPower);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(motorPower);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(motorPower);
+                RobotContainer.HardwareDevices.turretMotor.setPower(motorPower);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
                 telemetry.addLine("Intake motors");
                 break;
@@ -168,8 +168,8 @@ public class MotorTest extends OpMode {
                 RobotContainer.HardwareDevices.leftFront.setPower(0);
                 RobotContainer.HardwareDevices.rightBack.setPower(0);
                 RobotContainer.HardwareDevices.leftBack.setPower(0);
-                RobotContainer.HardwareDevices.intakeMotorLeader.setPower(1);
-                RobotContainer.HardwareDevices.intakeMotorFollower.setPower(1);
+                RobotContainer.HardwareDevices.intakeMotor.setPower(1);
+                RobotContainer.HardwareDevices.turretMotor.setPower(1);
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(motorPower);
                 telemetry.addLine("Intake and Flywheel");
                 break;
