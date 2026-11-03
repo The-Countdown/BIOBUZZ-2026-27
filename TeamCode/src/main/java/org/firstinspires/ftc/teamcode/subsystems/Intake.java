@@ -16,6 +16,8 @@ public class Intake {
         this.robotContainer = robotContainer;
         this.intakeMotor = intakeMotor;
         this.newPower = 0;
+
+        intakeMotor.start();
     }
 
     public void update(boolean teleop) {

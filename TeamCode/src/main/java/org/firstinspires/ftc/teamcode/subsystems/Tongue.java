@@ -22,20 +22,23 @@ public class Tongue extends RobotContainer.HardwareDevices{
     public void update(boolean teleop){
 
         if (teleop) {
-            if (robotContainer.gamepadEx1.triangle.wasJustPressed()) {
-                robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.UP);
-                Status.tongueDown = true;
-
+            if (robotContainer.gamepadEx1.rightBumper.isHeld() || robotContainer.gamepadEx2.rightBumper.isHeld()) {
+                up();
             } else {
-                robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.DOWN);
-                Status.tongueDown = false;
+                down();
             }
         }
     }
 
     public void setPosition(double position){
         robotContainer.tongue.tongueServos.setPosition(HelperFunctions.clamp(position, Constants.Tongue.UP, Constants.Tongue.DOWN));
+        Status.tongueDown = false;
     }
-    public void up(){robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.UP);}
-    public void down(){robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.DOWN);}
+    public void up(){
+        robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.UP);
+    }
+    public void down(){
+        robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.DOWN);
+        Status.tongueDown = true;
+    }
 }

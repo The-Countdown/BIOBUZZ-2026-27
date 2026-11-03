@@ -18,6 +18,9 @@ public class Drivetrain {
     public double[] driveOutputs = {0,0};
     public double[] driveTargets = {0,0};
     public double[] lastDriveOutputs = {0,0};
+    private double x;
+    private double y;
+    private double rx;
 
 
     public Drivetrain(RobotContainer robotContainer, BetterDcMotor leftFront, BetterDcMotor rightFront, BetterDcMotor leftBack, BetterDcMotor rightBack) {
@@ -26,6 +29,10 @@ public class Drivetrain {
         this.rightFront = rightFront;
         this.leftBack = leftBack;
         this.rightBack = rightBack;
+
+        this.x = 0;
+        this.y = 0;
+        this.rx = 0;
 
         leftFront.start();
         rightFront.start();
@@ -45,12 +52,18 @@ public class Drivetrain {
 
     }
 
+    public void parkingCheck(){
+        if (Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
+            Status.parking = true;
+        }
+    }
+
     public void driveJoystickUpdate() {
 
         double current = getCurrent();
         double currentMultiplier = current > 15 ? 14/current : 1;
-        double y = joystickScaler(robotContainer.gamepadEx1.leftStickY()) * currentMultiplier;
-        double x = joystickScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
+        y = joystickScaler(robotContainer.gamepadEx1.leftStickY()) * currentMultiplier;
+        x = joystickScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
 
         double currentTime = System.currentTimeMillis()/1000.0;
         double dt = currentTime - lastTime;
@@ -73,7 +86,7 @@ public class Drivetrain {
         lastTime = currentTime;
         lastDriveOutputs = driveOutputs;
 
-        double rx = joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier;
+        rx = joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier;
 
         if (Status.wingsDown){
             double leftPower = y - rx;
@@ -98,8 +111,8 @@ public class Drivetrain {
             Status.fieldOriented = !Status.fieldOriented;
         }
 
-        if (y == 0 && x == 0 && rx == 0) {
-            Status.parking = true;
+        if (Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
+            robotContainer.delayedActionManager.schedule(() -> parkingCheck(), 500);
         } else {
             Status.parking = false;
         }

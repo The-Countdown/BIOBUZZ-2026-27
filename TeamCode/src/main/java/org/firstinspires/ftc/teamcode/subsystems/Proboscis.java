@@ -14,25 +14,27 @@ public class Proboscis extends RobotContainer.HardwareDevices {
 
     public void update(boolean teleop) {
         if (teleop) {
-            if (robotContainer.gamepadEx1.rightBumper.isHeld() || robotContainer.gamepadEx2.rightBumper.isHeld()) {
-                robotContainer.proboscis.setPosition(Constants.Proboscis.OPEN);
-                Status.proboscisDown = true;
+            if (robotContainer.gamepadEx1.leftBumper.isHeld() || robotContainer.gamepadEx2.leftBumper.isHeld()) {
+                down();
             } else {
-                robotContainer.proboscis.setPosition(Constants.Proboscis.CLOSED);
-                Status.proboscisDown = false;
+                up();
             }
         }
     }
 
     // This is for manual control
     public void setPosition(double position) {
-        proboscisServo.updateSetPosition(HelperFunctions.clamp(position, Constants.Proboscis.OPEN, Constants.Proboscis.CLOSED));
+        proboscisServo.updateSetPosition(HelperFunctions.clamp(position, Constants.Proboscis.DOWN, Constants.Proboscis.UP));
+        Status.proboscisDown = false;
     }
 
-    public void open(){
-        robotContainer.proboscis.setPosition(Constants.Proboscis.OPEN);
+    public void down(){
+        robotContainer.proboscis.setPosition(Constants.Proboscis.DOWN);
+        Status.proboscisDown = true;
     }
 
-    public void close() { robotContainer.proboscis.setPosition(Constants.Proboscis.CLOSED); }
+    public void up() {
+        robotContainer.proboscis.setPosition(Constants.Proboscis.UP);
+    }
 
 }

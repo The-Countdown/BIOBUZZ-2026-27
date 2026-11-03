@@ -49,6 +49,10 @@ public class Turret extends RobotContainer.HardwareDevices {
         this.flywheelError = 0;
         this.flywheelPowerModifier = 0;
         this.manualHood = false;
+
+        flywheelMotorLeader.start();
+        flywheelMotorFollower.start();
+        turretMotor.start();
     }
 
     public void update(boolean teleop) {
@@ -70,32 +74,32 @@ public class Turret extends RobotContainer.HardwareDevices {
         Status.flywheelAtTargetSpeed = robotContainer.turret.flywheel.atTargetVelocity();
         double targetPower = flywheelPDF.calculate(flywheel.targetVelocity);
 
-        if (Status.alliance == Constants.Game.ALLIANCE.RED) {
-            goalAngle = 45;
+        if (Status.currentPose.getX(DistanceUnit.CM) < 0) {
+            goalAngle = 180;
         } else {
-            goalAngle = -45;
+            goalAngle = 0;
         }
 
         if (teleop) {
 
             // This will either increase or decrease the flywheel power by small increments
-            if (robotContainer.gamepadEx2.dpadDown.wasJustReleased()){
+            if (robotContainer.gamepadEx2.dpadDown.wasJustPressed()){
                 flywheelPowerModifier -= 0.02;
             }
 
-            if (robotContainer.gamepadEx2.dpadUp.wasJustReleased()){
+            if (robotContainer.gamepadEx2.dpadUp.wasJustPressed()){
                 flywheelPowerModifier += 0.02;
             }
 
-            if (robotContainer.gamepadEx2.dpadUp.isHeldFor(2) || robotContainer.gamepadEx2.dpadDown.isHeldFor(1.0)) {
+            if (robotContainer.gamepadEx2.dpadUp.isHeldFor(1.0) || robotContainer.gamepadEx2.dpadDown.isHeldFor(1.0)) {
                 flywheelPowerModifier = 0;
             }
 
-            if (robotContainer.gamepadEx2.square.wasJustPressed()) {
+            if (robotContainer.gamepadEx2.cross.isHeldFor(1.0)) {
                 Status.shootOnTheMove = !Status.shootOnTheMove;
             }
 
-            if (robotContainer.gamepadEx2.dpadLeft.wasJustReleased()) {
+            if (robotContainer.gamepadEx2.dpadLeft.wasJustPressed()) {
                 if (Status.currentPose.getX(DistanceUnit.CM) > -75) {
                     turretAngleOffset -= 2;
                 } else {
@@ -103,7 +107,7 @@ public class Turret extends RobotContainer.HardwareDevices {
                 }
             }
 
-            if (robotContainer.gamepadEx2.dpadRight.wasJustReleased()) {
+            if (robotContainer.gamepadEx2.dpadRight.wasJustPressed()) {
                 if (Status.currentPose.getX(DistanceUnit.CM) > -75) {
                     turretAngleOffset += 1.5;
                 } else {
@@ -111,7 +115,7 @@ public class Turret extends RobotContainer.HardwareDevices {
                 }
             }
 
-            if (robotContainer.gamepadEx2.dpadRight.isHeldFor(2) || robotContainer.gamepadEx2.dpadLeft.isHeldFor(1.0)) {
+            if (robotContainer.gamepadEx2.dpadRight.isHeldFor(1.0) || robotContainer.gamepadEx2.dpadLeft.isHeldFor(1.0)) {
                 turretAngleOffset = 0;
                 turretAngleOffsetFar = 0;
             }
@@ -127,7 +131,7 @@ public class Turret extends RobotContainer.HardwareDevices {
                 manualHood = false;
             }
 
-            if (robotContainer.gamepadEx1.leftBumper.wasJustPressed() || robotContainer.gamepadEx2.leftBumper.wasJustPressed()) {
+            if (robotContainer.gamepadEx1.cross.wasJustPressed() || robotContainer.gamepadEx2.cross.wasJustPressed()) {
                 Status.flywheelToggle = !Status.flywheelToggle;
             }
 
@@ -144,10 +148,7 @@ public class Turret extends RobotContainer.HardwareDevices {
             robotContainer.turret.pointAtGoal();
         }
 
-        // Only run flywheel if good voltage
-        if (robotContainer.controlHubVoltage > 8) {
-            flyWheelMotors.setPower(targetPower);
-        }
+        flyWheelMotors.setPower(targetPower);
         lastAngleToFaceGoal = angleToFaceGoal;
     }
 

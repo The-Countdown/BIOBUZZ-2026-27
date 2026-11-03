@@ -128,8 +128,8 @@ public class Constants {
 
     @Configurable
     public static class Proboscis {
-        public static double OPEN = -1;
-        public static double CLOSED = -1;
+        public static double DOWN = -1;
+        public static double UP = -1;
     }
 
     @Configurable

@@ -21,19 +21,16 @@ public class Wings extends RobotContainer.HardwareDevices {
         if (teleop) {
 
             // Actions to happen when wingsDown boolean was just changed
-            if (robotContainer.gamepadEx1.dpadDown.wasJustPressed()) {
+            if (robotContainer.gamepadEx1.dpadDown.wasJustPressed() || robotContainer.gamepadEx2.square.wasJustPressed()) {
                 Status.wingsDown = !Status.wingsDown;
                 if (Status.wingsDown) {
-                    robotContainer.delayedActionManager.schedule(() -> targetPosition = Constants.Wings.EXTENDED, 250);
-                    robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.setPosition(targetPosition), 250);
+                    robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.setPosition(Constants.Wings.EXTENDED), 250);
                 }
+            }
 
-            // Actions to run in a loop
-            } else if (Status.parking && !Status.wingsDown) {
-                targetPosition = Constants.Wings.PARK;
+            if (Status.parking && !Status.wingsDown) {
                 robotContainer.wings.setPosition(Constants.Wings.PARK);
             } else if (!Status.wingsDown) {
-                targetPosition = Constants.Wings.MIN;
                 robotContainer.wings.setPosition(Constants.Wings.MIN);
             }
         }
