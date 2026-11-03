@@ -106,7 +106,7 @@ public class Noobular extends OpMode {
 
     Command autoRoutine3 = Command.build()
             .setStart(() -> {
-            robotContainer.proboscis.open();
+            robotContainer.proboscis.up();
             })
             .setExecute(() -> {
 
@@ -117,7 +117,7 @@ public class Noobular extends OpMode {
 
     Command autoRoutine4 = Command.build()
             .setStart(() -> {
-               robotContainer.proboscis.close();
+               robotContainer.proboscis.down();
             })
             .setExecute(() -> {
 

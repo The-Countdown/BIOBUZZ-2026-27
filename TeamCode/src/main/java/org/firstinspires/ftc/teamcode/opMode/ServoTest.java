@@ -32,35 +32,6 @@ public class ServoTest extends OpMode {
     public void loop() {
         robotContainer.gamepadEx1.update();
         robotContainer.gamepadEx2.update();
-        switch(servoIndex) {
-            case -1:
-                telemetry.addLine("stopped");
-                break;
-            case 0:
-                RobotContainer.HardwareDevices.wingsServoLeader.updateSetPosition(servoPose + RobotContainer.HardwareDevices.wingsServoLeader.getPosition());
-                telemetry.addData("wingsServoLeader", RobotContainer.HardwareDevices.wingsServoLeader.getPosition());
-                break;
-            case 1:
-                RobotContainer.HardwareDevices.wingsServoFollower.updateSetPosition(servoPose + RobotContainer.HardwareDevices.wingsServoFollower.getPosition());
-                telemetry.addData("wingsServoFollower", RobotContainer.HardwareDevices.wingsServoFollower.getPosition());
-                break;
-            case 2:
-                RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(servoPose + RobotContainer.HardwareDevices.tongueServoLeader.getPosition());
-                telemetry.addData("tongueServoLeader", RobotContainer.HardwareDevices.tongueServoLeader.getPosition());
-                break;
-            case 3:
-                RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(servoPose + RobotContainer.HardwareDevices.tongueServoFollower.getPosition());
-                telemetry.addData("tongueServoFollower", RobotContainer.HardwareDevices.tongueServoFollower.getPosition());
-                break;
-            case 4:
-                RobotContainer.HardwareDevices.proboscisServo.updateSetPosition(servoPose + RobotContainer.HardwareDevices.proboscisServo.getPosition());
-                telemetry.addData("proboscisServo", RobotContainer.HardwareDevices.proboscisServo.getPosition());
-                break;
-
-            default:
-                telemetry.addData("index", servoIndex);
-                break;
-        }
 
         if (robotContainer.gamepadEx1.dpadRight.wasJustPressed()) {
             servoIndex++;
@@ -74,8 +45,39 @@ public class ServoTest extends OpMode {
             servoPose -= 0.025;
         }
 
-        if (robotContainer.gamepadEx1.cross.wasJustPressed()) {
+        if (robotContainer.gamepadEx1.cross.isHeldFor(1.0)) {
             servoPose = 0;
+        }
+
+        if (robotContainer.gamepadEx1.cross.wasJustPressed()) {
+            switch (servoIndex) {
+                case -1:
+                    telemetry.addLine("stopped");
+                    break;
+                case 0:
+                    RobotContainer.HardwareDevices.wingsServoLeader.updateSetPosition(servoPose + RobotContainer.HardwareDevices.wingsServoLeader.getPosition());
+                    telemetry.addData("wingsServoLeader", RobotContainer.HardwareDevices.wingsServoLeader.getPosition());
+                    break;
+                case 1:
+                    RobotContainer.HardwareDevices.wingsServoFollower.updateSetPosition(servoPose + RobotContainer.HardwareDevices.wingsServoFollower.getPosition());
+                    telemetry.addData("wingsServoFollower", RobotContainer.HardwareDevices.wingsServoFollower.getPosition());
+                    break;
+                case 2:
+                    RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(servoPose + RobotContainer.HardwareDevices.tongueServoLeader.getPosition());
+                    telemetry.addData("tongueServoLeader", RobotContainer.HardwareDevices.tongueServoLeader.getPosition());
+                    break;
+                case 3:
+                    RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(servoPose + RobotContainer.HardwareDevices.tongueServoFollower.getPosition());
+                    telemetry.addData("tongueServoFollower", RobotContainer.HardwareDevices.tongueServoFollower.getPosition());
+                    break;
+                case 4:
+                    RobotContainer.HardwareDevices.proboscisServo.updateSetPosition(servoPose + RobotContainer.HardwareDevices.proboscisServo.getPosition());
+                    telemetry.addData("proboscisServo", RobotContainer.HardwareDevices.proboscisServo.getPosition());
+                    break;
+                default:
+                    telemetry.addData("index", servoIndex);
+                    break;
+            }
         }
 
         telemetry.addData("servoPose", servoPose);
