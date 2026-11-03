@@ -78,11 +78,11 @@ public class ServoTest extends OpMode {
                     telemetry.addData("index", servoIndex);
                     break;
             }
+            telemetry.addData("servoPose", servoPose);
+            telemetry.update();
         }
 
-        telemetry.addData("servoPose", servoPose);
 
-        telemetry.update();
         Thread.yield();
     }
 }
