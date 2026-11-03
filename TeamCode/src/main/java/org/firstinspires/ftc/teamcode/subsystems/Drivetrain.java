@@ -54,7 +54,7 @@ public class Drivetrain {
 
     public void parkingCheck(){
         if (Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
-            Status.parking = true;
+            Status.parked = true;
         }
     }
 
@@ -111,10 +111,10 @@ public class Drivetrain {
             Status.fieldOriented = !Status.fieldOriented;
         }
 
-        if (Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
+        if (!Status.parked && Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
             robotContainer.delayedActionManager.schedule(() -> parkingCheck(), 500);
-        } else {
-            Status.parking = false;
+        } else if (Status.parked) {
+            Status.parked = false;
         }
 
         if (Status.fieldOriented) {

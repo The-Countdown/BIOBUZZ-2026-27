@@ -24,9 +24,8 @@ public class Wings extends RobotContainer.HardwareDevices {
             if (robotContainer.gamepadEx1.dpadDown.wasJustPressed() || robotContainer.gamepadEx2.square.wasJustPressed()) {
                 Status.wingsDown = !Status.wingsDown;
                 if (Status.wingsDown) {
-                    //robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.setPosition(Constants.Wings.EXTENDED), 250);
-                    robotContainer.wings.setPosition(Constants.Wings.EXTENDED);
-                } else if (Status.parking) {
+                    robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.setPosition(Constants.Wings.EXTENDED), 250);
+                } else if (Status.parked) {
                     robotContainer.wings.setPosition(Constants.Wings.PARK);
                 } else {
                     robotContainer.wings.setPosition(Constants.Wings.MIN);
