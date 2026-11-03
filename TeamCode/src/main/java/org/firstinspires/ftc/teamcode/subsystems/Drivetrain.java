@@ -41,10 +41,10 @@ public class Drivetrain {
     }
 
     public void update(){
-        if (robotContainer.gamepadEx1.circle.wasJustPressed()) {
+        if (robotContainer.gamepadEx1.circle.wasJustPressed() || robotContainer.gamepadEx2.circle.wasJustPressed()) {
             RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.ORIGIN);
             RobotContainer.HardwareDevices.betterIMU.resetAngle();
-        } else if (robotContainer.gamepadEx1.triangle.wasJustPressed()) {
+        } else if (robotContainer.gamepadEx1.triangle.wasJustPressed() || robotContainer.gamepadEx2.circle.isHeldFor(1.0)) {
              Pose2D resetPose = Status.cornerResetPose;
             RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
             RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
