@@ -11,10 +11,10 @@ public class Wings extends RobotContainer.HardwareDevices {
     private final LinkedServos wingServos;
     public double targetPosition;
 
-    public Wings(RobotContainer robotContainer, LinkedServos brakeServos) {
+    public Wings(RobotContainer robotContainer, LinkedServos wingServos) {
         this.robotContainer = robotContainer;
         this.targetPosition = Constants.Wings.MIN;
-        this.wingServos = brakeServos;
+        this.wingServos = wingServos;
     }
 
     public void update(boolean teleop) {
@@ -24,21 +24,20 @@ public class Wings extends RobotContainer.HardwareDevices {
             if (robotContainer.gamepadEx1.dpadDown.wasJustPressed() || robotContainer.gamepadEx2.square.wasJustPressed()) {
                 Status.wingsDown = !Status.wingsDown;
                 if (Status.wingsDown) {
-                    robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.setPosition(Constants.Wings.EXTENDED), 250);
+                    //robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.setPosition(Constants.Wings.EXTENDED), 250);
+                    robotContainer.wings.setPosition(Constants.Wings.EXTENDED);
+                } else if (Status.parking) {
+                    robotContainer.wings.setPosition(Constants.Wings.PARK);
+                } else {
+                    robotContainer.wings.setPosition(Constants.Wings.MIN);
                 }
-            }
-
-            if (Status.parking && !Status.wingsDown) {
-                robotContainer.wings.setPosition(Constants.Wings.PARK);
-            } else if (!Status.wingsDown) {
-                robotContainer.wings.setPosition(Constants.Wings.MIN);
             }
         }
     }
 
     // This is for manual control
     public void setPosition(double position) {
-        wingServos.setPosition(HelperFunctions.clamp(position, Constants.Wings.MIN, Constants.Wings.MAX));
+        wingServos.setPosition(HelperFunctions.clamp(position, Constants.Wings.MIN, Constants.Wings.MAX), Constants.Wings.FOLLOWER_OFFSET);
     }
 
     public double getPosition() {

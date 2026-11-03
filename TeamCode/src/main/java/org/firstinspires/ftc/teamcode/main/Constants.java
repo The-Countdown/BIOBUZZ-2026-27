@@ -124,12 +124,13 @@ public class Constants {
         public static double EXTENDED = 0.4;
         public static double MIN = 0.325;
         public static double PARK = 0.41;
+        public static double FOLLOWER_OFFSET = 0.625;
     }
 
     @Configurable
     public static class Proboscis {
-        public static double DOWN = -1;
-        public static double UP = -1;
+        public static double DOWN = 0.5;
+        public static double UP = 0.125;
     }
 
     @Configurable
@@ -175,7 +176,7 @@ public class Constants {
 
     @Configurable
     public static class Tongue {
-        public static double UP = -1;
-        public static double DOWN = -1;
+        public static double UP = 0;
+        public static double DOWN = 0.35;
     }
 }
