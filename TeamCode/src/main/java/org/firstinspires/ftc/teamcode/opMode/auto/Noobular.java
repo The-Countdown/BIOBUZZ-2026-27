@@ -90,20 +90,53 @@ public class Noobular extends OpMode {
             })
             .setEnd(endCondition -> {
                 // executed at the end of the command
-                pathNumber++;
             });
 
-    // Path methods
+    Command autoRoutine2 = Command.build()
+            .setStart(() -> {
+                robotContainer.intake.on();
+                robotContainer.tongue.down();
+            })
+            .setExecute(() -> {
 
+            })
+            .setEnd((endCondition) -> {
+                robotContainer.intake.off();
+            });
+
+    Command autoRoutine3 = Command.build()
+            .setStart(() -> {
+            robotContainer.proboscis.open();
+            })
+            .setExecute(() -> {
+
+            })
+            .setEnd((endCondition) -> {
+
+            });
+
+    Command autoRoutine4 = Command.build()
+            .setStart(() -> {
+               robotContainer.proboscis.close();
+            })
+            .setExecute(() -> {
+
+            })
+            .setEnd((endCondition) -> {
+
+            });
 
     private Command autoRoutine1() {
         return sequential( // list of *commands* to run in a row when executed
                 autoRoutine1,
+                autoRoutine2,
                 follow(follower, path1()),
-                autoRoutine1,
                 follow(follower, path2()),
                 autoRoutine1,
-                follow(follower, path3())
+                autoRoutine3,
+                autoRoutine3,
+                follow(follower, path3()),
+                autoRoutine4
         );
     }
 
