@@ -35,11 +35,11 @@ public class Constants {
     public static class Robot {
         public static int MOTOR_TICKS_PER_REVOLUTION = 28;
         public static int MOTOR_UPDATE_TIME = 50;
-        public static double MOTOR_UPDATE_MIN_POWER_DIFF = 0.1;
-        public static double MOTOR_UPDATE_MIN_VELOCITY_DIFF = MOTOR_TICKS_PER_REVOLUTION * 10;
+        public static double MOTOR_UPDATE_MIN_POWER_DIFF = 0.0;
+        public static double MOTOR_UPDATE_MIN_VELOCITY_DIFF = 0; // MOTOR_TICKS_PER_REVOLUTION * 10;
         public static int SERVO_UPDATE_TIME = 100;
-        public static double SERVO_UPDATE_MIN_POWER_DIFF = 0.1;
-        public static double SERVO_UPDATE_MIN_POS_DIFF = 0.05;
+        public static double SERVO_UPDATE_MIN_POWER_DIFF = 0.0;
+        public static double SERVO_UPDATE_MIN_POS_DIFF = 0.0;
 
         public static final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
@@ -120,10 +120,10 @@ public class Constants {
 
     @Configurable
     public static class Wings {
-        public static double MAX = 1;
-        public static double EXTENDED = 0.0;
-        public static double MIN = 0;
-        public static double PARK = 0.0;
+        public static double MAX = 0.41;
+        public static double EXTENDED = 0.4;
+        public static double MIN = 0.325;
+        public static double PARK = 0.41;
     }
 
     @Configurable

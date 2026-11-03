@@ -77,22 +77,21 @@ public class Noobular extends OpMode {
     }
 
     // Action Creation
-    Command autoRoutine1 = Command.build()
+    Command turretOnOff = Command.build()
             .setStart(() -> {
                 // executed on start of command
                 Status.flywheelToggle = true;
-                robotContainer.tongue.up();
-                robotContainer.turret.hood.setPos(Constants.Turret.HOOD_PRESETS[0]);
+                robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.up(), 1000);
             })
             .setExecute(() -> {
                 // executed on every loop while command is running
-                robotContainer.turret.pointAtGoal();
             })
             .setEnd(endCondition -> {
                 // executed at the end of the command
+                Status.flywheelToggle = false;
             });
 
-    Command autoRoutine2 = Command.build()
+    Command intakeOnOff = Command.build()
             .setStart(() -> {
                 robotContainer.intake.on();
                 robotContainer.tongue.down();
@@ -104,7 +103,7 @@ public class Noobular extends OpMode {
                 robotContainer.intake.off();
             });
 
-    Command autoRoutine3 = Command.build()
+    Command proboscisUp = Command.build()
             .setStart(() -> {
             robotContainer.proboscis.up();
             })
@@ -115,7 +114,7 @@ public class Noobular extends OpMode {
 
             });
 
-    Command autoRoutine4 = Command.build()
+    Command proboscisDown = Command.build()
             .setStart(() -> {
                robotContainer.proboscis.down();
             })
@@ -126,17 +125,17 @@ public class Noobular extends OpMode {
 
             });
 
-    private Command autoRoutine1() {
+    private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
-                autoRoutine1,
-                autoRoutine2,
+                turretOnOff,
+                proboscisDown,
                 follow(follower, path1()),
+                intakeOnOff,
                 follow(follower, path2()),
-                autoRoutine1,
-                autoRoutine3,
-                autoRoutine3,
+                turretOnOff,
+                intakeOnOff,
                 follow(follower, path3()),
-                autoRoutine4
+                proboscisUp
         );
     }
 
@@ -166,7 +165,7 @@ public class Noobular extends OpMode {
     @Override
     public void start() { // Runs when the start button is pressed on the driver station
         robotContainer.start(this, false);
-        schedule(autoRoutine1()); // This will schedule the auto routine that you had previously created to run in sequence
+        schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
     }
 
     @Override
