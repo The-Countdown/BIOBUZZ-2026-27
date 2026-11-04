@@ -135,6 +135,7 @@ public class Noobular extends OpMode {
                 turretOnOff,
                 intakeOnOff,
                 follow(follower, path3()),
+                follow(follower, path4()),
                 proboscisUp
         );
     }
