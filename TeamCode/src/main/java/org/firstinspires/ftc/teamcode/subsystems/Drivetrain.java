@@ -62,8 +62,8 @@ public class Drivetrain {
 
         double current = getCurrent();
         double currentMultiplier = current > 15 ? 14/current : 1;
-        y = joystickScaler(robotContainer.gamepadEx1.leftStickY()) * currentMultiplier;
-        x = joystickScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
+        y = -joystickScaler(robotContainer.gamepadEx1.leftStickY()) * currentMultiplier;
+        x = joystickScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier;
 
         double currentTime = System.currentTimeMillis()/1000.0;
         double dt = currentTime - lastTime;
@@ -86,7 +86,13 @@ public class Drivetrain {
         lastTime = currentTime;
         lastDriveOutputs = driveOutputs;
 
-        rx = joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier;
+        rx = joystickRotationScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
+
+        if (!Status.parked && Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
+            robotContainer.delayedActionManager.schedule(() -> parkingCheck(), 500);
+        } else if (Status.parked) {
+            Status.parked = false;
+        }
 
         if (Status.wingsDown){
             double leftPower = y - rx;
@@ -109,12 +115,6 @@ public class Drivetrain {
 
         if (robotContainer.gamepadEx1.cross.wasJustPressed()){
             Status.fieldOriented = !Status.fieldOriented;
-        }
-
-        if (!Status.parked && Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
-            robotContainer.delayedActionManager.schedule(() -> parkingCheck(), 500);
-        } else if (Status.parked) {
-            Status.parked = false;
         }
 
         if (Status.fieldOriented) {

@@ -42,6 +42,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         this.hoodServo = hoodServo;
         this.turretMotor = turretMotor;
         this.flywheelPDF = new FlywheelPDF(robotContainer, flyWheelMotors);
+        this.turretPDF = new TurretPDF(robotContainer, turretMotor);
         this.targetPosition = 0;
         this.manualTurretPos = 0;
         this.turretAngleOffset = 0;
@@ -122,13 +123,12 @@ public class Turret extends RobotContainer.HardwareDevices {
 
             // Manual Turret Hood
             if (robotContainer.gamepadEx2.triangle.wasJustPressed()) {
-                manualHood = true;
 //                double targetHoodPos = robotContainer.turret.hoodServo.getPosition() == Constants.Turret.HOOD_PRESETS[2]  ? Constants.Turret.HOOD_PRESETS[0] : Constants.Turret.HOOD_PRESETS[1];
 //                robotContainer.turret.hood.setPos(targetHoodPos);
             }
 
             if (robotContainer.gamepadEx2.triangle.isHeldFor(1.0)){
-                manualHood = false;
+                Status.manualControl = !Status.manualControl;
             }
 
             if (robotContainer.gamepadEx1.cross.wasJustPressed() || robotContainer.gamepadEx2.cross.wasJustPressed()) {

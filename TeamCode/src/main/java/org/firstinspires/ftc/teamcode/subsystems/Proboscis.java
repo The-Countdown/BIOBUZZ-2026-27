@@ -24,7 +24,7 @@ public class Proboscis extends RobotContainer.HardwareDevices {
     // This is for manual control
     public void setPosition(double position) {
         proboscisServo.updateSetPosition(HelperFunctions.clamp(position, Constants.Proboscis.UP, Constants.Proboscis.DOWN));
-        Status.proboscisDown = false;
+//        Status.proboscisDown = false;
     }
 
     public void down(){

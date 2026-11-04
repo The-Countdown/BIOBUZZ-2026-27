@@ -331,7 +331,7 @@ public class RobotContainer {
 //            positionProvider.update();
         }
         delayedActionManager.update();
-        allIndicatorLights.lightsUpdate();
+//        allIndicatorLights.lightsUpdate();
         tongue.update(teleop);
         proboscis.update(teleop);
         turret.update(teleop);
