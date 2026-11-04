@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
@@ -26,6 +27,12 @@ public class ServoTest extends OpMode {
     public void start() {
         Status.opModeIsActive = true;
         robotContainer.start(this, true);
+        RobotContainer.HardwareDevices.wingsServoLeader.updateSetPosition(Constants.Wings.MIN);
+        RobotContainer.HardwareDevices.wingsServoFollower.updateSetPosition(Constants.Wings.MIN + Constants.Wings.FOLLOWER_OFFSET);
+        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(Constants.Tongue.DOWN);
+        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(Constants.Tongue.DOWN);
+        RobotContainer.HardwareDevices.proboscisServo.updateSetPosition(Constants.Proboscis.UP);
+
     }
 
     @Override
@@ -46,7 +53,7 @@ public class ServoTest extends OpMode {
         }
 
         if (robotContainer.gamepadEx1.cross.isHeldFor(1.0)) {
-            servoPose = 0;
+            servoPose = 0.0;
         }
 
         if (robotContainer.gamepadEx1.cross.wasJustPressed()) {
@@ -82,6 +89,9 @@ public class ServoTest extends OpMode {
             telemetry.update();
         }
 
+        robotContainer.wings.update(true);
+        robotContainer.tongue.update(true);
+        robotContainer.proboscis.update(true);
 
         Thread.yield();
     }

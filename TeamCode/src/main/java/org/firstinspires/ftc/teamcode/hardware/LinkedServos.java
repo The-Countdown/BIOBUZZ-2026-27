@@ -32,10 +32,10 @@ public class LinkedServos {
         this.slaveCRServo.add(slaveServo);
     }
 
-    public void setPosition(double position) {
+    public void setPosition(double position, double slaveServoOffset) {
         masterServo.updateSetPosition(position);
         for (BetterServo slaveServo : slaveServo) {
-            slaveServo.updateSetPosition(position);
+            slaveServo.updateSetPosition(position + slaveServoOffset);
         }
     }
 

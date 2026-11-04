@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 public class Proboscis extends RobotContainer.HardwareDevices {
     private final RobotContainer robotContainer;
-
     public Proboscis(RobotContainer robotContainer, BetterServo proboscisServo) {
         this.robotContainer = robotContainer;
     }
@@ -16,7 +15,7 @@ public class Proboscis extends RobotContainer.HardwareDevices {
         if (teleop) {
             if (robotContainer.gamepadEx1.leftBumper.isHeld() || robotContainer.gamepadEx2.leftBumper.isHeld()) {
                 down();
-            } else {
+            } else if (Status.proboscisDown) {
                 up();
             }
         }
@@ -24,17 +23,17 @@ public class Proboscis extends RobotContainer.HardwareDevices {
 
     // This is for manual control
     public void setPosition(double position) {
-        proboscisServo.updateSetPosition(HelperFunctions.clamp(position, Constants.Proboscis.DOWN, Constants.Proboscis.UP));
+        proboscisServo.updateSetPosition(HelperFunctions.clamp(position, Constants.Proboscis.UP, Constants.Proboscis.DOWN));
         Status.proboscisDown = false;
     }
 
     public void down(){
-        robotContainer.proboscis.setPosition(Constants.Proboscis.DOWN);
+        setPosition(Constants.Proboscis.DOWN);
         Status.proboscisDown = true;
     }
 
     public void up() {
-        robotContainer.proboscis.setPosition(Constants.Proboscis.UP);
+        setPosition(Constants.Proboscis.UP);
     }
 
 }

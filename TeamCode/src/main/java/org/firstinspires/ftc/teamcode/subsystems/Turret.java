@@ -57,7 +57,7 @@ public class Turret extends RobotContainer.HardwareDevices {
 
     public void update(boolean teleop) {
         Status.flywheelToggleButton.update(Status.flywheelToggle);
-        robotContainer.turret.hood.setPos(HelperFunctions.clamp(tableInterpolate(Constants.Turret.HOOD_TABLE_DISTANCES, Constants.Turret.HOOD_PRESETS, HelperFunctions.disToGoal()), Constants.Turret.HOOD_PRESETS[0], Constants.Turret.HOOD_PRESETS[Constants.Turret.HOOD_PRESETS.length-1]));
+        //robotContainer.turret.hood.setPos(HelperFunctions.clamp(tableInterpolate(Constants.Turret.HOOD_TABLE_DISTANCES, Constants.Turret.HOOD_PRESETS, HelperFunctions.disToGoal()), Constants.Turret.HOOD_PRESETS[0], Constants.Turret.HOOD_PRESETS[Constants.Turret.HOOD_PRESETS.length-1]));
 
         if (Status.flywheelToggle) {
             flywheel.targetVelocity = tableInterpolate(Constants.Turret.FLYWHEEL_SPEED_TABLE_DISTANCES, Constants.Turret.FLYWHEEL_SPEED_TABLE, HelperFunctions.disToGoal()) - (goalOrientedVelocityX * Constants.Turret.FLYWHEEL_POWER_VELOCITY_MULTIPLIER);
@@ -123,8 +123,8 @@ public class Turret extends RobotContainer.HardwareDevices {
             // Manual Turret Hood
             if (robotContainer.gamepadEx2.triangle.wasJustPressed()) {
                 manualHood = true;
-                double targetHoodPos = robotContainer.turret.hoodServo.getPosition() == Constants.Turret.HOOD_PRESETS[2]  ? Constants.Turret.HOOD_PRESETS[0] : Constants.Turret.HOOD_PRESETS[1];
-                robotContainer.turret.hood.setPos(targetHoodPos);
+//                double targetHoodPos = robotContainer.turret.hoodServo.getPosition() == Constants.Turret.HOOD_PRESETS[2]  ? Constants.Turret.HOOD_PRESETS[0] : Constants.Turret.HOOD_PRESETS[1];
+//                robotContainer.turret.hood.setPos(targetHoodPos);
             }
 
             if (robotContainer.gamepadEx2.triangle.isHeldFor(1.0)){
@@ -278,10 +278,6 @@ public class Turret extends RobotContainer.HardwareDevices {
         goalOrientedVelocityRX =  angleToFaceGoal - lastAngleToFaceGoal;
 
         setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
-    }
-
-    public void adjustByPosition(boolean doIt){
-        if (doIt) Status.goalPose = new Pose2D(DistanceUnit.CM, Status.goalPose.getX(DistanceUnit.CM) + goalOrientedVelocityX * Constants.Turret.GOAL_POSITION_VELOCITY_MULTIPLIER, Status.goalPose.getY(DistanceUnit.CM) + goalOrientedVelocityY * Constants.Turret.GOAL_POSITION_VELOCITY_MULTIPLIER, AngleUnit.DEGREES, Status.goalPose.getHeading(AngleUnit.DEGREES));
     }
 
     public boolean atTarget() {

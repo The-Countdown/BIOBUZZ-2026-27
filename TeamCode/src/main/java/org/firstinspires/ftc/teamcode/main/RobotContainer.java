@@ -152,10 +152,10 @@ public class RobotContainer {
         allIndicatorLights.addLight(indicatorLightLeft);
         allIndicatorLights.addLight(indicatorLightRight);
 
-        //allIndicatorLights.setColor(Constants.LED.COLOR.RED);
+//        allIndicatorLights.setColor(Constants.LED.COLOR.RED);
 
-        HardwareDevices.imu = getHardwareDevice(IMU.class, "imu");
-        HardwareDevices.imu.initialize(Constants.Robot.IMU_PARAMETERS);
+//        HardwareDevices.imu = getHardwareDevice(IMU.class, "imu");
+//        HardwareDevices.imu.initialize(Constants.Robot.IMU_PARAMETERS);
 
         HardwareDevices.betterIMU = new BetterIMU(getHardwareDevice(AdafruitBNO055IMU.class, "betterIMU"));
         betterIMUP.mode = BNO055IMU.SensorMode.IMU;
@@ -268,7 +268,7 @@ public class RobotContainer {
         telemetry.addLine("Alliance: " + Status.alliance.toString());
         panelsTelemetry.update(telemetry);
         telemetry.update();
-        allIndicatorLights.rainbow();
+//        allIndicatorLights.rainbow();
     }
 
     public void start(OpMode opmode, boolean teleop) {
@@ -328,7 +328,7 @@ public class RobotContainer {
             gamepadEx2.update();
             drivetrain.driveJoystickUpdate();
             drivetrain.update();
-            positionProvider.update();
+//            positionProvider.update();
         }
         delayedActionManager.update();
         allIndicatorLights.lightsUpdate();
@@ -338,12 +338,12 @@ public class RobotContainer {
         wings.update(teleop);
         intake.update(teleop);
 
-        Status.currentHeading = Constants.System.USE_BETTER_IMU ? HardwareDevices.betterIMU.getAngle() : Status.currentPose.getHeading(AngleUnit.DEGREES);
-        Status.currentVelocityX = HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
-        Status.currentVelocityY = HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
-        Status.currentVelocityHeading = HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
-
-        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
+//        Status.currentHeading = Constants.System.USE_BETTER_IMU ? HardwareDevices.betterIMU.getAngle() : Status.currentPose.getHeading(AngleUnit.DEGREES);
+//        Status.currentVelocityX = HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
+//        Status.currentVelocityY = HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
+//        Status.currentVelocityHeading = HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
+//
+//        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
 
         PREV_LOOP_TIME_MS = CURRENT_LOOP_TIME_MS;
 
@@ -587,7 +587,7 @@ public class RobotContainer {
         if (Status.competitionMode) { // Stuff in competition mode.
             addCaptionLine("Loop Times");
                 addDataLog("OpMode Avg Loop Time", (int) getRollingAverageLoopTime("teleOp") + " ms", true);
-                addDataLog("Pinpoint Avg Loop Time", (int) getRollingAverageLoopTime("pinpointUpdater") + " ms", true);
+//                addDataLog("Pinpoint Avg Loop Time", (int) getRollingAverageLoopTime("pinpointUpdater") + " ms", true);
             addBlankLine();
 
             addCaptionLine("Current Pull");
@@ -601,9 +601,9 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("Robot Headings");
-                addDataLog("BetterIMU Yaw", HardwareDevices.betterIMU.getAngle(), true); // First angle is the yaw
-                addDataLog("Pinpoint Yaw", HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES), true); // First angle is the yaw
-                addDataLog("Use Better IMU", Constants.System.USE_BETTER_IMU, true);
+//                addDataLog("BetterIMU Yaw", HardwareDevices.betterIMU.getAngle(), true); // First angle is the yaw
+//                addDataLog("Pinpoint Yaw", HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES), true); // First angle is the yaw
+//                addDataLog("Use Better IMU", Constants.System.USE_BETTER_IMU, true);
             addBlankLine();
 
         } else { // Stuff not in competition mode.
@@ -624,9 +624,9 @@ public class RobotContainer {
 
             addCaptionLine("Loop Times");
                 addDataLog("OpMode Loop Time", getLoopTime("teleOp") + " ms", true);
-                addDataLog("Pinpoint Loop Time", (int) getLoopTime("pinpointUpdater") + " ms", false);
+//                addDataLog("Pinpoint Loop Time", (int) getLoopTime("pinpointUpdater") + " ms", false);
                 addDataLog("OpMode Avg Loop Time", (int) getRollingAverageLoopTime("teleOp") + " ms", true);
-                addDataLog("Pinpoint Avg Loop Time", (int) getRollingAverageLoopTime("pinpointUpdater") + " ms", false);
+//                addDataLog("Pinpoint Avg Loop Time", (int) getRollingAverageLoopTime("pinpointUpdater") + " ms", false);
             addBlankLine();
 
             addCaptionLine("Position & Heading");
@@ -635,9 +635,9 @@ public class RobotContainer {
                 addDataLog("Robot X", Status.currentPose.getX(DistanceUnit.CM) + " cm", true);
                 addDataLog("Robot Y", Status.currentPose.getY(DistanceUnit.CM) + " cm", true);
                 addDataLog("Use Better IMU", Constants.System.USE_BETTER_IMU, false);
-                addDataLog("Pinpoint Status", RobotContainer.HardwareDevices.pinpoint.getDeviceStatus(), false);
-                addDataLog("Pinpoint Heading", RobotContainer.HardwareDevices.pinpoint.getPosition().getHeading(AngleUnit.DEGREES), false);
-                addDataLog("Better IMU Heading", HardwareDevices.betterIMU.getAngle(), false);
+//                addDataLog("Pinpoint Status", RobotContainer.HardwareDevices.pinpoint.getDeviceStatus(), false);
+//                addDataLog("Pinpoint Heading", RobotContainer.HardwareDevices.pinpoint.getPosition().getHeading(AngleUnit.DEGREES), false);
+//                addDataLog("Better IMU Heading", HardwareDevices.betterIMU.getAngle(), false);
             addBlankLine();
 
             addCaptionLine("General Info");
@@ -666,24 +666,29 @@ public class RobotContainer {
             addCaptionLine("Turret & Hood");
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
                 addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getCurrentPosition(), false);
-                addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
+//                addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
             addBlankLine();
 
             addCaptionLine("Wings");
+                addDataLog("Wings Down", Status.wingsDown, false);
                 addDataLog("Wings position", wings.getPosition(), false);
                 addDataLog("Wings angle", wings.getPositionDegrees(), false);
                 addDataLog("Wings Servo Leader", HardwareDevices.wingsServoLeader.getPosition(), false);
                 addDataLog("Wings Servo Follower", HardwareDevices.wingsServoFollower.getPosition(), false);
             addBlankLine();
 
-            addCaptionLine("Door");
-                addDataLog("Door Open", Status.tongueDown, false);
             addCaptionLine("Tongue");
                 addDataLog("Tongue Open", Status.tongueDown, false);
+                addDataLog("Tongue position", tongue.tongueServos.getPosition(), false);
+                addDataLog("Tongue angle", tongue.tongueServos.getPositionDegrees(), false);
+                addDataLog("Tongue Servo Leader", HardwareDevices.tongueServoLeader.getPosition(), false);
+                addDataLog("Tongue Servo Follower", HardwareDevices.tongueServoFollower.getPosition(), false);
             addBlankLine();
 
             addCaptionLine("Proboscis");
-            addDataLog("Proboscis Open", Status.proboscisDown, false);
+                addDataLog("Proboscis Down", Status.proboscisDown, false);
+                addDataLog("Proboscis position", HardwareDevices.proboscisServo.getPosition(), false);
+                addDataLog("Proboscis angle", HardwareDevices.proboscisServo.getPositionDegrees(), false);
             addBlankLine();
 
             addCaptionLine("Individual Power Draw");

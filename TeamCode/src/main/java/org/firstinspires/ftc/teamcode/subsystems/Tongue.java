@@ -17,6 +17,7 @@ public class Tongue extends RobotContainer.HardwareDevices{
     public Status status;
     public Tongue(RobotContainer robotContainer, LinkedServos tongueServos) {
         this.robotContainer = robotContainer;
+        this.tongueServos = tongueServos;
     }
 
     public void update(boolean teleop){
@@ -24,21 +25,21 @@ public class Tongue extends RobotContainer.HardwareDevices{
         if (teleop) {
             if (robotContainer.gamepadEx1.rightBumper.isHeld() || robotContainer.gamepadEx2.rightBumper.isHeld()) {
                 up();
-            } else {
+            } else if (!Status.tongueDown) {
                 down();
             }
         }
     }
 
     public void setPosition(double position){
-        robotContainer.tongue.tongueServos.setPosition(HelperFunctions.clamp(position, Constants.Tongue.UP, Constants.Tongue.DOWN));
+        robotContainer.tongue.tongueServos.setPosition(HelperFunctions.clamp(position, Constants.Tongue.UP, Constants.Tongue.DOWN),0);
         Status.tongueDown = false;
     }
     public void up(){
-        robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.UP);
+        setPosition(Constants.Tongue.UP);
     }
     public void down(){
-        robotContainer.tongue.tongueServos.setPosition(Constants.Tongue.DOWN);
+        setPosition(Constants.Tongue.DOWN);
         Status.tongueDown = true;
     }
 }
