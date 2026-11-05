@@ -128,6 +128,12 @@ public class Constants {
     }
 
     @Configurable
+    public static class Tongue {
+        public static double UP = 0;
+        public static double DOWN = 0.35;
+    }
+
+    @Configurable
     public static class Proboscis {
         public static double DOWN = 0.8;
         public static double UP = 0.25;
@@ -172,11 +178,5 @@ public class Constants {
         public static double TOP_SPEED = 1;
         public static double BEST_INTAKE_SPEED = 1;
         public static double REVERSE_TOP_SPEED = 0.5;
-    }
-
-    @Configurable
-    public static class Tongue {
-        public static double UP = 0;
-        public static double DOWN = 0.35;
     }
 }
