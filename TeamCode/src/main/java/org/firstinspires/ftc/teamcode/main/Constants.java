@@ -129,8 +129,8 @@ public class Constants {
 
     @Configurable
     public static class Proboscis {
-        public static double DOWN = 0.5;
-        public static double UP = 0.125;
+        public static double DOWN = 0.8;
+        public static double UP = 0.25;
     }
 
     @Configurable
