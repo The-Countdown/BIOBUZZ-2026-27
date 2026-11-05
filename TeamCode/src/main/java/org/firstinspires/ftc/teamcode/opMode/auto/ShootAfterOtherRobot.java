@@ -1,3 +1,4 @@
+
 // Autonomous Package
 package org.firstinspires.ftc.teamcode.opMode.auto;
 
@@ -12,13 +13,14 @@ import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
-import static java.lang.Thread.sleep;
+import static com.pedropathing.api.Paths.*;
+        import static java.lang.Thread.sleep;
 
 import com.pedropathing.follower.*;
-import com.pedropathing.api.PoseFactory;
+        import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
-import com.pedropathing.paths.*;
-import org.firstinspires.ftc.teamcode.pedroPathing.PedroPathingConstants;
+        import com.pedropathing.paths.*;
+        import org.firstinspires.ftc.teamcode.pedroPathing.PedroPathingConstants;
 
 // Panels Imports
 import com.bylazar.configurables.annotations.Configurable;
@@ -27,6 +29,7 @@ import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Our Imports
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
@@ -46,15 +49,14 @@ public class ShootAfterOtherRobot extends OpMode {
     int pathNumber = 1;
 
     // Poses
-
     private final Pose start = poseFactory.of(58.855, 133.2623, 90);
     private final Pose path1 = poseFactory.of(46.8997, 130.9281, 89.3394);
     private final Pose path1Control1 = poseFactory.of(58.6828, 109.3656, 0);
     private final Pose path1Control2 = poseFactory.of(46.653, 109.529, 0);
     private final Pose point2Start = poseFactory.of(46.8997, 130.9281, 90);
     private final Pose point2 = poseFactory.of(12.6251, 94.8396, 0);
-    private final Pose point2Control1 = poseFactory.of(47.4519, 112.2192, 0);
-    private final Pose point2Control2 = poseFactory.of(48.7557, 104.418, 0);
+    private final Pose point2Control1 = poseFactory.of(47.6303, 105.974, 0);
+    private final Pose point2Control2 = poseFactory.of(51.6107, 94.7824, 0);
 
     public Path path1() {
         return Paths.curve(start, path1Control1, path1Control2, path1).tangent();
@@ -63,17 +65,12 @@ public class ShootAfterOtherRobot extends OpMode {
     public Path path2() {
         return Paths.curve(point2Start, point2Control1, point2Control2, point2).linear(point2Start, point2);
     }
-
-
-
-
-// Action Creation
+    // Action Creation
     Command turretOnOff = Command.build()
             .setStart(() -> {
                 // executed on start of command
-
                 Status.flywheelToggle = true;
-                robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.up(), 3000);
+                robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.up(), 1000);
             })
             .setExecute(() -> {
                 // executed on every loop while command is running
