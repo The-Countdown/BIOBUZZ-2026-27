@@ -128,12 +128,6 @@ public class Constants {
     }
 
     @Configurable
-    public static class Tongue {
-        public static double UP = 0;
-        public static double DOWN = 0.35;
-    }
-
-    @Configurable
     public static class Proboscis {
         public static double DOWN = 0.8;
         public static double UP = 0.25;
