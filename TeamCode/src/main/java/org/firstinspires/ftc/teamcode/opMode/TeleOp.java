@@ -28,7 +28,7 @@ public class TeleOp extends OpMode {
         robotContainer.init();
 
         Status.currentPose = (Pose2D) blackboard.getOrDefault("Robot Pose", new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0));
-//        RobotContainer.HardwareDevices.pinpoint.setPosition(Status.currentPose);
+        RobotContainer.HardwareDevices.pinpoint.setPosition(Status.currentPose);
 //        RobotContainer.HardwareDevices.betterIMU.resetAngle();
 //        RobotContainer.HardwareDevices.betterIMU.setAngleOffset(-Status.currentHeading);
 
@@ -50,12 +50,6 @@ public class TeleOp extends OpMode {
     @Override
     public void loop() {
         robotContainer.update(true);
-        if (robotContainer.gamepadEx1.dpadLeft.wasJustPressed()) {
-            robotContainer.turret.setTargetPosition(1);
-        } else if (robotContainer.gamepadEx1.dpadRight.wasJustPressed()) {
-            robotContainer.turret.setTargetPosition(0);
-        }
-
         Thread.yield();
     }
 }

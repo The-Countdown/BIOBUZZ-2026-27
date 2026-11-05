@@ -39,7 +39,7 @@ public class BetterServo {
         this.positionDegrees = ((HelperFunctions.normalizeAngle(positionDegrees) + 180) / 322);
         long currentTime = System.currentTimeMillis();
         if (currentTime - this.lastTimeDegrees >= this.minTimeBetweenUpdates && Math.abs(this.positionDegrees - this.lastPositionDegrees) > minPosDiffBetweenUpdates) {
-            // This is where the interpolate happens
+            // This is where the interpolation happens
             servo.setPosition(this.positionDegrees);
             this.lastTimeDegrees = System.currentTimeMillis();
             this.lastPositionDegrees = this.positionDegrees;

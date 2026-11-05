@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
@@ -43,13 +41,11 @@ public class Drivetrain {
     public void update(){
         if (robotContainer.gamepadEx1.circle.wasJustPressed() || robotContainer.gamepadEx2.circle.wasJustPressed()) {
             RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.ORIGIN);
-            RobotContainer.HardwareDevices.betterIMU.resetAngle();
+//            RobotContainer.HardwareDevices.betterIMU.resetAngle();
         } else if (robotContainer.gamepadEx1.triangle.wasJustPressed() || robotContainer.gamepadEx2.circle.isHeldFor(1.0)) {
-             Pose2D resetPose = Status.cornerResetPose;
-            RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
-            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
+            RobotContainer.HardwareDevices.pinpoint.setPosition(Status.cornerResetPose);
+//            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
         }
-
     }
 
     public void parkingCheck(){
@@ -63,7 +59,8 @@ public class Drivetrain {
         double current = getCurrent();
         double currentMultiplier = current > 15 ? 14/current : 1;
         y = -joystickScaler(robotContainer.gamepadEx1.leftStickY()) * currentMultiplier;
-        x = joystickScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier;
+        x = joystickScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
+        rx = joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier;
 
         double currentTime = System.currentTimeMillis()/1000.0;
         double dt = currentTime - lastTime;
@@ -85,8 +82,6 @@ public class Drivetrain {
 
         lastTime = currentTime;
         lastDriveOutputs = driveOutputs;
-
-        rx = joystickRotationScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
 
         if (!Status.parked && Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
             robotContainer.delayedActionManager.schedule(() -> parkingCheck(), 500);
@@ -113,7 +108,7 @@ public class Drivetrain {
         double leftBackPower;
         double rightBackPower;
 
-        if (robotContainer.gamepadEx1.cross.wasJustPressed()){
+        if (robotContainer.gamepadEx1.rightStickButton.wasJustPressed() || robotContainer.gamepadEx1.leftStickButton.wasJustPressed()){
             Status.fieldOriented = !Status.fieldOriented;
         }
 

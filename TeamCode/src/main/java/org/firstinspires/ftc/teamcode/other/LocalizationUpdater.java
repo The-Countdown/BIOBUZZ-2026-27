@@ -38,7 +38,6 @@ public class LocalizationUpdater extends Thread {
         }
         while (Status.opModeIsActive) {
             pinpoint.update();
-//            Status.currentPose = new Pose2D(DistanceUnit.CM, pinpoint.getPosX(DistanceUnit.CM), pinpoint.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, pinpoint.getHeading(AngleUnit.DEGREES));
             CURRENT_LOOP_TIME_MS = robotContainer.updateLoopTime("pinpointUpdater");
             CURRENT_LOOP_TIME_AVG_MS = robotContainer.getRollingAverageLoopTime("pinpointUpdater");
             if (Status.isDrivingActive) {

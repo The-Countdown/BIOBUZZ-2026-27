@@ -27,11 +27,11 @@ public class ServoTest extends OpMode {
     public void start() {
         Status.opModeIsActive = true;
         robotContainer.start(this, true);
-        RobotContainer.HardwareDevices.wingsServoLeader.updateSetPosition(Constants.Wings.MIN);
-        RobotContainer.HardwareDevices.wingsServoFollower.updateSetPosition(Constants.Wings.MIN + Constants.Wings.FOLLOWER_OFFSET);
-        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(Constants.Tongue.DOWN);
-        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(Constants.Tongue.DOWN);
-        RobotContainer.HardwareDevices.proboscisServo.updateSetPosition(Constants.Proboscis.UP);
+//        RobotContainer.HardwareDevices.wingsServoLeader.updateSetPosition(Constants.Wings.MIN);
+//        RobotContainer.HardwareDevices.wingsServoFollower.updateSetPosition(Constants.Wings.MIN + Constants.Wings.FOLLOWER_OFFSET);
+//        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(Constants.Tongue.DOWN);
+//        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(Constants.Tongue.UP);
+//        RobotContainer.HardwareDevices.proboscisServo.updateSetPosition(Constants.Proboscis.UP);
 
     }
 
@@ -89,9 +89,9 @@ public class ServoTest extends OpMode {
             telemetry.update();
         }
 
-        robotContainer.wings.update(true);
-        robotContainer.tongue.update(true);
-        robotContainer.proboscis.update(true);
+//        robotContainer.wings.update(true);
+//        robotContainer.tongue.update(true);
+//        robotContainer.proboscis.update(true);
 
         Thread.yield();
     }

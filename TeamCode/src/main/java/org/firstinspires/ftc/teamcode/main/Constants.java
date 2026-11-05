@@ -64,10 +64,10 @@ public class Constants {
         public static final double PINPOINT_X_OFFSET_MM = 0;
         public static final double PINPOINT_Y_OFFSET_MM = 0;
         public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
-        public static final GoBildaPinpointDriver.EncoderDirection PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.FORWARD;
-        public static final GoBildaPinpointDriver.EncoderDirection PINPOINT_Y_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+        public static final GoBildaPinpointDriver.EncoderDirection PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.REVERSED;
+        public static final GoBildaPinpointDriver.EncoderDirection PINPOINT_Y_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.REVERSED;
         public static double IMU_PER_ROTATION_OFFSET = 3.1;
-        public static boolean USE_BETTER_IMU = false;
+//        public static boolean USE_BETTER_IMU = false;
     }
 
     @Configurable
@@ -134,6 +134,12 @@ public class Constants {
     }
 
     @Configurable
+    public static class Tongue {
+        public static double UP = 0.125;
+        public static double DOWN = 0.625;
+    }
+
+    @Configurable
     public static class Turret {
         public static double TURRET_GEAR_RATIO = 192.0/9.0;
         public static boolean ADJUST_TURRET_BY_MULTIPLIER = true;
@@ -172,11 +178,5 @@ public class Constants {
         public static double TOP_SPEED = 1;
         public static double BEST_INTAKE_SPEED = 1;
         public static double REVERSE_TOP_SPEED = 0.5;
-    }
-
-    @Configurable
-    public static class Tongue {
-        public static double UP = 0;
-        public static double DOWN = 0.35;
     }
 }
