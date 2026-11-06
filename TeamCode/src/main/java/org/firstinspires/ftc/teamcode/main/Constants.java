@@ -29,6 +29,8 @@ public class Constants {
         public static double GOAL_HEIGHT = 144.78;
         public static double CELL_POSITION_X = 30.48;
         public static double CELL_POSITION_Y = 35.56;
+
+
     }
 
     @Configurable
