@@ -390,12 +390,7 @@ public class RobotContainer {
     public void addDataLog(String caption, Object data, boolean driveStation) {
         if (driveStation) {
             telemetry.addData(caption, data);
-            if(!Status.debugMode) {
-                panelsTelemetry.addData(caption, data);
-            } else {
-                panelsTelemetry.debug(caption, data);
-            }
-
+            panelsTelemetry.addData(caption, data);
         }
 
         if (Status.loggingToFile) {
@@ -671,7 +666,7 @@ public class RobotContainer {
 
             addCaptionLine("Turret & Hood");
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
-                addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getCurrentPosition(), false);
+                addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getCurrentPosition(), true);
 //                addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
             addBlankLine();
 
@@ -687,8 +682,8 @@ public class RobotContainer {
                 addDataLog("Tongue Open", Status.tongueDown, false);
                 addDataLog("Tongue position", tongue.tongueServos.getPosition(), false);
                 addDataLog("Tongue angle", tongue.tongueServos.getPositionDegrees(), false);
-                addDataLog("Tongue Servo Leader", HardwareDevices.tongueServoLeader.getPosition(), true);
-                addDataLog("Tongue Servo Follower", HardwareDevices.tongueServoFollower.getPosition(), true);
+                addDataLog("Tongue Servo Leader", HardwareDevices.tongueServoLeader.getPosition(), false);
+                addDataLog("Tongue Servo Follower", HardwareDevices.tongueServoFollower.getPosition(), false);
             addBlankLine();
 
             addCaptionLine("Proboscis");
@@ -722,7 +717,7 @@ public class RobotContainer {
             displayEventTelemetry();
         }
         commitLoopData();
-        panelsTelemetry.update(telemetry);
+        if (!Status.debugMode) { panelsTelemetry.update(telemetry); }
         telemetry.update();
     }
 }

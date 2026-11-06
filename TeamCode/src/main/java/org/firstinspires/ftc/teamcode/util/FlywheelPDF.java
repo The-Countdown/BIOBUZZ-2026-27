@@ -67,9 +67,9 @@ public class FlywheelPDF {
             ff = (targetSpeed * Constants.Turret.FLYWHEEL_KF) / Constants.Turret.FLYWHEEL_MAX_VELOCITY; // flat addition to the power
 
 
-        pid = (p + i + d) * dt + ff;
+        pid += (p + i + d) * dt;
 
-        lastTargetPower = HelperFunctions.clamp(pid, 0, 1);
+        lastTargetPower = HelperFunctions.clamp(pid + ff, 0, 1);
 
 //        if (!Status.competitionMode){
             panelsTelemetry.addData("Power", lastTargetPower);
@@ -82,11 +82,11 @@ public class FlywheelPDF {
             panelsTelemetry.addData("DT", dt);
             panelsTelemetry.addData("Drop Time", dropTime);
             panelsTelemetry.addData("Target", targetSpeed);
-        panelsTelemetry.debug("Target", targetSpeed);
             panelsTelemetry.addData("Velocity", flywheelMotors.getVelocity());
-            panelsTelemetry.debug("Velocity", flywheelMotors.getVelocity());
             panelsTelemetry.addData("Error", error);
             panelsTelemetry.addData("error Diff", errorDiff);
+
+        panelsTelemetry.update();
 //        }
 
         lastError = error;
