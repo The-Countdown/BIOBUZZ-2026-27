@@ -138,12 +138,13 @@ public class Constants {
     @Configurable
     public static class Tongue {
         public static double UP = 0.125;
-        public static double DOWN = 0.625;
+        public static double DOWN = 0.6;
     }
 
     @Configurable
     public static class Turret {
         public static double TURRET_GEAR_RATIO = 192.0/9.0;
+        public static double FLYWHEEL_GEAR_RATIO = 3.0/4.0;
         public static boolean ADJUST_TURRET_BY_MULTIPLIER = true;
         public static double FLYWHEEL_POWER_VELOCITY_MULTIPLIER = 1;
         public static double TURRET_ANGLE_VELOCITY_MULTIPLIER = 1;
@@ -159,11 +160,10 @@ public class Constants {
         public static double[] TURRET_INTERPOLATION_ANGLES = {-180,-90, 0, 90, 180};
         public static double[] TURRET_INTERPOLATION_POSITIONS = {0.9517, 0.7226, 0.4985, 0.2755, 0.0559};
         public static double SPEED_FACTOR = 0.0003;
-        public static int FLYWHEEL_MAX_VELOCITY = 6000 * Robot.MOTOR_TICKS_PER_REVOLUTION;
+        public static int FLYWHEEL_MAX_VELOCITY = (int) (6000 * FLYWHEEL_GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60; // 2100
         public static double[] FLYWHEEL_SPEED_TABLE = {0.260, 0.270, 0.320, 0.330, 0.355, 0.440, 0.465};
         public static double[] FLYWHEEL_SPEED_TABLE_DISTANCES = {40, 56, 90, 95, 103, 127, 152};
         public static int FLYWHEEL_SPINUP_MS = 0;
-        public static double FLYWHEEL_GEAR_RATIO = 1;
         public static double[] HOOD_PRESETS = {0.58, 0.7, 0.95};
         public static double[] HOOD_TABLE_DISTANCES = {50, 90, 130};
         public static double FLYWHEEL_KP = 0.001;

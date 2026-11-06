@@ -35,6 +35,7 @@ public class FlywheelPDF {
         this.lastTargetPower = 0;
         this.lastTime = 0;
         this.dropTime = 0;
+        this.i = 0;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
     }
 
@@ -48,7 +49,7 @@ public class FlywheelPDF {
             return 0;
         }
         double error = targetSpeed - flywheelMotors.getVelocity();
-        dt = System.currentTimeMillis() - lastTime;
+        dt = System.currentTimeMillis() - lastTime + 1;
         errorDiff = (lastError - error) / dt; // differance between the errors scaled by time
 
         if (errorDiff < -4 & System.currentTimeMillis() - dropTime > 250 ){
@@ -68,9 +69,7 @@ public class FlywheelPDF {
 
         pid = (p + i + d) * dt + ff;
 
-        lastTargetPower = pid;
-
-        lastTargetPower = HelperFunctions.clamp(lastTargetPower, 0, 1);
+        lastTargetPower = HelperFunctions.clamp(pid, 0, 1);
 
 //        if (!Status.competitionMode){
             panelsTelemetry.addData("Power", lastTargetPower);
