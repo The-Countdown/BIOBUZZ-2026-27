@@ -60,6 +60,8 @@ public class FlywheelPDF {
 
             p = Constants.Turret.FLYWHEEL_KP * error; // proportional to error
 
+            p = p < 0 ? p / Constants.Turret.FLYWHEEL_KS : p;
+
             i += error * Constants.Turret.FLYWHEEL_KI;
 
             d = Constants.Turret.FLYWHEEL_KD  * -errorDiff; // this slows the acceleration down

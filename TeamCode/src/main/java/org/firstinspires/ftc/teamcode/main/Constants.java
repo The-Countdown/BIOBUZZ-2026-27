@@ -170,6 +170,7 @@ public class Constants {
         public static double FLYWHEEL_KI = 0.0;
         public static double FLYWHEEL_KD = 0.001;
         public static double FLYWHEEL_KF = 0.95;
+        public static double FLYWHEEL_KS = 3;
         public static double TURRET_KP = 0.0;
         public static double TURRET_KI = 0.0;
         public static double TURRET_KD = 0.0;
