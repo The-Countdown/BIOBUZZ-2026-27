@@ -60,7 +60,7 @@ public class Drivetrain {
         double currentMultiplier = current > 15 ? 14/current : 1;
         y = -joystickScaler(robotContainer.gamepadEx1.leftStickY()) * currentMultiplier;
         x = joystickScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
-        rx = joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier;
+        rx = (joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier) / 2;
 
         double currentTime = System.currentTimeMillis()/1000.0;
         double dt = currentTime - lastTime;
@@ -149,11 +149,11 @@ public class Drivetrain {
      * @return the scaled power
      */
     public double joystickScaler(double input) {
-        return Math.pow(Math.abs(input), Constants.Control.JOYSTICK_SCALER_EXPONENT) * input;
+        return Math.pow(Math.abs(input), Constants.Control.JOYSTICK_SCALER_EXPONENT) * Math.signum(input);
     }
 
     public double joystickRotationScaler(double input) {
-        return Math.pow(Math.abs(input), Constants.Control.JOYSTICK_ROTATION_SCALER_EXPONENT) * input;
+        return Math.pow(Math.abs(input), Constants.Control.JOYSTICK_ROTATION_SCALER_EXPONENT) * Math.signum(input);
     }
 
     public double getPower(){

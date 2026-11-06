@@ -37,11 +37,11 @@ public class Constants {
     public static class Robot {
         public static int MOTOR_TICKS_PER_REVOLUTION = 28;
         public static int MOTOR_UPDATE_TIME = 50;
-        public static double MOTOR_UPDATE_MIN_POWER_DIFF = 0.0;
-        public static double MOTOR_UPDATE_MIN_VELOCITY_DIFF = 0; // MOTOR_TICKS_PER_REVOLUTION * 10;
+        public static double MOTOR_UPDATE_MIN_POWER_DIFF = 0.1;
+        public static double MOTOR_UPDATE_MIN_VELOCITY_DIFF = MOTOR_TICKS_PER_REVOLUTION * 10;
         public static int SERVO_UPDATE_TIME = 100;
-        public static double SERVO_UPDATE_MIN_POWER_DIFF = 0.0;
-        public static double SERVO_UPDATE_MIN_POS_DIFF = 0.0;
+        public static double SERVO_UPDATE_MIN_POWER_DIFF = 0.05;
+        public static double SERVO_UPDATE_MIN_POS_DIFF = 0.0125;
 
         public static final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
@@ -74,8 +74,8 @@ public class Constants {
 
     @Configurable
     public static class Control {
-        public static double JOYSTICK_SCALER_EXPONENT = 1.0;
-        public static double JOYSTICK_ROTATION_SCALER_EXPONENT = 0.5;
+        public static double JOYSTICK_SCALER_EXPONENT = 3.0;
+        public static double JOYSTICK_ROTATION_SCALER_EXPONENT = 3.0;
         public static double MAX_DRIVE_ACCELERATION = 3;
     }
 
@@ -161,8 +161,8 @@ public class Constants {
         public static double[] TURRET_INTERPOLATION_POSITIONS = {0.9517, 0.7226, 0.4985, 0.2755, 0.0559};
         public static double SPEED_FACTOR = 0.0003;
         public static int FLYWHEEL_MAX_VELOCITY = (int) (6000 * FLYWHEEL_GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60; // 2100
-        public static double[] FLYWHEEL_SPEED_TABLE = {0.260, 0.270, 0.320, 0.330, 0.355, 0.440, 0.465};
-        public static double[] FLYWHEEL_SPEED_TABLE_DISTANCES = {40, 56, 90, 95, 103, 127, 152};
+        public static double[] FLYWHEEL_SPEED_TABLE = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+        public static double[] FLYWHEEL_SPEED_TABLE_DISTANCES = {40, 56, 90, 95, 103, 180, 205};
         public static int FLYWHEEL_SPINUP_MS = 0;
         public static double[] HOOD_PRESETS = {0.58, 0.7, 0.95};
         public static double[] HOOD_TABLE_DISTANCES = {50, 90, 130};

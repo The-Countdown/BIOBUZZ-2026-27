@@ -13,10 +13,13 @@ public class Proboscis extends RobotContainer.HardwareDevices {
 
     public void update(boolean teleop) {
         if (teleop) {
-            if (robotContainer.gamepadEx1.leftBumper.isHeld() || robotContainer.gamepadEx2.leftBumper.isHeld()) {
-                down();
-            } else if (Status.proboscisDown) {
-                up();
+            if (robotContainer.gamepadEx1.leftBumper.wasJustPressed() || robotContainer.gamepadEx2.leftBumper.wasJustPressed()) {
+                Status.proboscisDown = !Status.proboscisDown;
+                if (!Status.proboscisDown) {
+                    up();
+                } else {
+                    down();
+                }
             }
         }
     }

@@ -6,10 +6,8 @@ import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 public class BetterServo {
     private ServoImplEx servo;
-
     private long lastTime;
     private long lastTimeDegrees;
-
     private double lastPosition = 0;
     private double position = 0;
     private double lastPositionDegrees = 0;

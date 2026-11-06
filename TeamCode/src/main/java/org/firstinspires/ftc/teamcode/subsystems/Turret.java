@@ -61,8 +61,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         //robotContainer.turret.hood.setPos(HelperFunctions.clamp(tableInterpolate(Constants.Turret.HOOD_TABLE_DISTANCES, Constants.Turret.HOOD_PRESETS, HelperFunctions.disToGoal()), Constants.Turret.HOOD_PRESETS[0], Constants.Turret.HOOD_PRESETS[Constants.Turret.HOOD_PRESETS.length-1]));
 
         if (Status.flywheelToggle) {
-            flywheel.targetVelocity = flywheelPowerModifier * 10 - flywheelPowerModifier;
-//            flywheel.targetVelocity = tableInterpolate(Constants.Turret.FLYWHEEL_SPEED_TABLE_DISTANCES, Constants.Turret.FLYWHEEL_SPEED_TABLE, HelperFunctions.disToGoal()) - (goalOrientedVelocityX * Constants.Turret.FLYWHEEL_POWER_VELOCITY_MULTIPLIER);
+            flywheel.targetVelocity = tableInterpolate(Constants.Turret.FLYWHEEL_SPEED_TABLE_DISTANCES, Constants.Turret.FLYWHEEL_SPEED_TABLE, HelperFunctions.disToGoal()) - (goalOrientedVelocityX * Constants.Turret.FLYWHEEL_POWER_VELOCITY_MULTIPLIER);
         } else {
             flywheel.targetVelocity = -flywheelPowerModifier;
         }
@@ -187,11 +186,11 @@ public class Turret extends RobotContainer.HardwareDevices {
 
         double position = HelperFunctions.clamp(angleToMotor(proposedAngle), Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
 
-        if (Status.shootOnTheMove) {
-            turretMotor.updateSetPower(turretPDF.calculate(position, goalOrientedVelocityRX));
-        } else {
-            turretMotor.updateSetPower(turretPDF.calculate(position, 0));
-        }
+//        if (Status.shootOnTheMove) {
+//            turretMotor.updateSetPower(turretPDF.calculate(position, goalOrientedVelocityRX));
+//        } else {
+//            turretMotor.updateSetPower(turretPDF.calculate(position, 0));
+//        }
     }
 
     /**

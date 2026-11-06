@@ -6,11 +6,8 @@ import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 public class BetterAnalogInput {
     private AnalogInput analog;
-
     private long lastTime;
-
     private double voltage = 0;
-
     private int minTimeBetweenUpdates = 0;
 
     public BetterAnalogInput(AnalogInput analog, int minTimeBetweenUpdates) {

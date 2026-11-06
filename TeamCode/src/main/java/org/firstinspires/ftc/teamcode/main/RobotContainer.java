@@ -201,14 +201,14 @@ public class RobotContainer {
         HardwareDevices.flywheelMotorLeader = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorLeader"), 0, 0, 0);
         HardwareDevices.flywheelMotorFollower = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "flywheelMotorFollower"), 0, 0, 0);
 
-        HardwareDevices.wingsServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "wingsServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
-        HardwareDevices.wingsServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "wingsServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.wingsServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "wingsServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POS_DIFF);
+        HardwareDevices.wingsServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "wingsServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POS_DIFF);
         LinkedServos wingsServos = new LinkedServos(HardwareDevices.wingsServoLeader, HardwareDevices.wingsServoFollower);
 
-        HardwareDevices.tongueServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "tongueServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
-        HardwareDevices.tongueServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "tongueServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.tongueServoLeader = new BetterServo(getHardwareDevice(ServoImplEx.class, "tongueServoLeader"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POS_DIFF);
+        HardwareDevices.tongueServoFollower = new BetterServo(getHardwareDevice(ServoImplEx.class, "tongueServoFollower"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POS_DIFF);
 
-        HardwareDevices.proboscisServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "proboscisServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
+        HardwareDevices.proboscisServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "proboscisServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POS_DIFF);
 
         LinkedMotors flywheelMotors = new LinkedMotors(HardwareDevices.flywheelMotorLeader, HardwareDevices.flywheelMotorFollower);
         LinkedServos tongueServos = new LinkedServos(HardwareDevices.tongueServoLeader, HardwareDevices.tongueServoFollower);
@@ -345,8 +345,8 @@ public class RobotContainer {
         Status.currentVelocityY = HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
         Status.currentVelocityHeading = HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
 
-        double yMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
-        double xMultiplier = Status.currentPose.getX(DistanceUnit.CM) > 0 ? 1: -1;
+        double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
+        double yMultiplier = Status.currentPose.getY(DistanceUnit.CM) > 0 ? 1: -1;
         Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
 //
 //        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
@@ -717,7 +717,7 @@ public class RobotContainer {
             displayEventTelemetry();
         }
         commitLoopData();
-        if (!Status.debugMode) { panelsTelemetry.update(telemetry); }
+        if (!Status.debugMode || !Status.competitionMode || Status.debugMode && Status.competitionMode) { panelsTelemetry.update(telemetry); }
         telemetry.update();
     }
 }

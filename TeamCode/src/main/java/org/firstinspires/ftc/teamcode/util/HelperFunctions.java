@@ -88,15 +88,9 @@ public class HelperFunctions {
     }
 
     public static double disToGoal() {
-        if (Status.alliance == Constants.Game.ALLIANCE.BLUE){
-            double xDiff = 72 * 2.54 - Status.currentPose.getX(DistanceUnit.CM);
-            double yDiff = 72 * 2.54 - Status.currentPose.getY(DistanceUnit.CM);
+            double xDiff = Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM);
+            double yDiff = Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
             return Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-        } else {
-            double xDiff = 72 * 2.54 - Status.currentPose.getX(DistanceUnit.CM);
-            double yDiff = -72 * 2.54 - Status.currentPose.getY(DistanceUnit.CM);
-            return Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-            }
     }
 
     // Assuming point 1 is less than point 2

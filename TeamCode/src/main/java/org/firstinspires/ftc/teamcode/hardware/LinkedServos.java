@@ -39,10 +39,12 @@ public class LinkedServos {
         }
     }
 
-    public void setMirroredPositions(double position1, double position2) {
-        masterServo.updateSetPosition(position1);
+    public void setMirroredPositions(double position) {
+        double posDiff = masterServo.getPosition() - position;
+        masterServo.updateSetPosition(position);
+
         for (BetterServo slaveServo : slaveServo) {
-            slaveServo.updateSetPosition(position2);
+            slaveServo.updateSetPosition(slaveServo.getPosition() + posDiff);
         }
     }
 

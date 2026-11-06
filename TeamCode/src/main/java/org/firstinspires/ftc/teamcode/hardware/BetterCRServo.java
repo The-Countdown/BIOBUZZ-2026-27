@@ -7,12 +7,9 @@ import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 // Warning the Axon servos in servo mode do not work.
 public class BetterCRServo {
     private CRServoImplEx servo;
-
     private long lastTime;
-
     private double lastPower = 0;
     private double power = 0;
-
     private int minTimeBetweenUpdates = 0;
     private double minPowerDiffBetweenUpdates = 0;
 
