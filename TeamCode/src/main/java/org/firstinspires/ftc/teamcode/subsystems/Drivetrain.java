@@ -138,8 +138,8 @@ public class Drivetrain {
 
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
-            leftBack.setPower(leftBackPower);
-            rightBack.setPower(rightBackPower);
+            leftBack.setPower(rightBackPower);
+            rightBack.setPower(leftBackPower);
     }
 
     /**

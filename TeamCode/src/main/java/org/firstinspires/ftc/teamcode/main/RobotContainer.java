@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -182,7 +183,7 @@ public class RobotContainer {
         HardwareDevices.leftBack = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "leftBack"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
         HardwareDevices.rightBack = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "rightBack"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
 
-        HardwareDevices.leftFront.setDirection(DcMotorImplEx.Direction.REVERSE);
+        HardwareDevices.leftFront.setDirection(DcMotorImplEx.Direction.FORWARD);
         HardwareDevices.rightFront.setDirection(DcMotorImplEx.Direction.FORWARD);
         HardwareDevices.leftBack.setDirection(DcMotorImplEx.Direction.REVERSE);
         HardwareDevices.rightBack.setDirection(DcMotorImplEx.Direction.FORWARD);
@@ -211,7 +212,7 @@ public class RobotContainer {
 
         LinkedMotors flywheelMotors = new LinkedMotors(HardwareDevices.flywheelMotorLeader, HardwareDevices.flywheelMotorFollower);
         LinkedServos tongueServos = new LinkedServos(HardwareDevices.tongueServoLeader, HardwareDevices.tongueServoFollower);
-        HardwareDevices.flywheelMotorFollower.setDirection(DcMotorImplEx.Direction.REVERSE);
+        HardwareDevices.flywheelMotorLeader.setDirection(DcMotorImplEx.Direction.REVERSE);
         flywheelMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelMotors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         positionProvider = new PositionProvider(this, HardwareDevices.pinpoint);
