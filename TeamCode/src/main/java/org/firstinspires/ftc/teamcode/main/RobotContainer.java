@@ -344,6 +344,10 @@ public class RobotContainer {
         Status.currentVelocityY = HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
         Status.currentVelocityHeading = HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
 
+        double yMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
+        double xMultiplier = Status.currentPose.getX(DistanceUnit.CM) > 0 ? 1: -1;
+        Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
+//
 //        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
 
         PREV_LOOP_TIME_MS = CURRENT_LOOP_TIME_MS;
