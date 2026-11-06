@@ -108,7 +108,7 @@ public class Drivetrain {
         double leftBackPower;
         double rightBackPower;
 
-        if (robotContainer.gamepadEx1.rightStickButton.wasJustPressed() || robotContainer.gamepadEx1.leftStickButton.wasJustPressed()){
+        if (robotContainer.gamepadEx1.ps.wasJustPressed()){
             Status.fieldOriented = !Status.fieldOriented;
         }
 

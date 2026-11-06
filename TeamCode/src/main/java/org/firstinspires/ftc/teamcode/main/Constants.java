@@ -166,10 +166,14 @@ public class Constants {
         public static int FLYWHEEL_SPINUP_MS = 0;
         public static double[] HOOD_PRESETS = {0.58, 0.7, 0.95};
         public static double[] HOOD_TABLE_DISTANCES = {50, 90, 130};
-        public static double FLYWHEEL_KP = 0.001;
+        public static double FLYWHEEL_KP = 0.0;
         public static double FLYWHEEL_KI = 0.0;
         public static double FLYWHEEL_KD = 0.0;
-        public static double FLYWHEEL_KF = 0.0;
+        public static double FLYWHEEL_KF = 0.95;
+        public static double TURRET_KP = 0.0;
+        public static double TURRET_KI = 0.0;
+        public static double TURRET_KD = 0.0;
+        public static double TURRET_KF = 0.0;
         public static double TURRET_TOLERANCE_DEGREES = 1;
         public static double PRESSURE_OFFSET = 0.0;
 

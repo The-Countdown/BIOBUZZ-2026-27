@@ -49,13 +49,13 @@ public class TurretPDF {
         goalOrientedRX /= dt;
         errorDiff = (error - lastError) / dt; // differance between the errors scaled by time
 
-            p = Constants.Turret.FLYWHEEL_KP * error; // proportional to error
+            p = Constants.Turret.TURRET_KP * error; // proportional to error
 
-            i += error * Constants.Turret.FLYWHEEL_KI;
+            i += error * Constants.Turret.TURRET_KI;
 
-            d = Constants.Turret.FLYWHEEL_KD  * errorDiff; // this slows the acceleration down
+            d = Constants.Turret.TURRET_KD  * errorDiff; // this slows the acceleration down
 
-            ff = Constants.Turret.FLYWHEEL_KF + (goalOrientedRX / Constants.Turret.TURRET_GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // 1. flat addition to the power 2. extra velocity in ticks per second for the motor
+            ff = Constants.Turret.TURRET_KF + (goalOrientedRX / Constants.Turret.TURRET_GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // 1. flat addition to the power 2. extra velocity in ticks per second for the motor
 
 
         pid = (p + i + d) + ff;

@@ -82,7 +82,9 @@ public class FlywheelPDF {
             panelsTelemetry.addData("DT", dt);
             panelsTelemetry.addData("Drop Time", dropTime);
             panelsTelemetry.addData("Target", targetSpeed);
+        panelsTelemetry.debug("Target", targetSpeed);
             panelsTelemetry.addData("Velocity", flywheelMotors.getVelocity());
+            panelsTelemetry.debug("Velocity", flywheelMotors.getVelocity());
             panelsTelemetry.addData("Error", error);
             panelsTelemetry.addData("error Diff", errorDiff);
 //        }
