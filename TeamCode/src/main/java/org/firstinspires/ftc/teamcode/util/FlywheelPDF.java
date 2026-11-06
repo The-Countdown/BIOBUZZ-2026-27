@@ -67,9 +67,9 @@ public class FlywheelPDF {
             ff = (targetSpeed * Constants.Turret.FLYWHEEL_KF) / Constants.Turret.FLYWHEEL_MAX_VELOCITY; // flat addition to the power
 
 
-        pid += (p + i + d) * dt;
+        pid = (p + i + d) * dt + ff;
 
-        lastTargetPower = HelperFunctions.clamp(pid + ff, 0, 1);
+        lastTargetPower = HelperFunctions.clamp(pid, 0, 1);
 
 //        if (!Status.competitionMode){
             panelsTelemetry.addData("Power", lastTargetPower);
