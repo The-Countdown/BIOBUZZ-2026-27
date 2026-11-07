@@ -73,7 +73,7 @@ public class FlywheelPDF {
 
         lastTargetPower = HelperFunctions.clamp(pid, 0, 1);
 
-        if (!Status.competitionMode){
+        if (!Status.competitionMode || Status.debugMode){
             panelsTelemetry.addData("Power", lastTargetPower);
             panelsTelemetry.addData("P", p);
             panelsTelemetry.addData("I", i);

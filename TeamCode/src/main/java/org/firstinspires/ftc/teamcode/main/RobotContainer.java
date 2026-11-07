@@ -717,7 +717,7 @@ public class RobotContainer {
             displayEventTelemetry();
         }
         commitLoopData();
-        if (!Status.debugMode || !Status.competitionMode || Status.debugMode && Status.competitionMode) { panelsTelemetry.update(telemetry); }
+        if (!Status.debugMode && !Status.competitionMode) { panelsTelemetry.update(telemetry); }
         telemetry.update();
     }
 }
