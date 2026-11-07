@@ -48,8 +48,8 @@ public class PositionProvider {
     }
 
     public void update() {
-            Pose2D odPose = RobotContainer.HardwareDevices.pinpoint.getPosition();
-            Status.currentPose = getRobotPose();
-            lastODPose = odPose;
+//            Pose2D odPose = Status.currentPose;
+//            Status.currentPose = getRobotPose();
+//            lastODPose = odPose;
         }
     }
