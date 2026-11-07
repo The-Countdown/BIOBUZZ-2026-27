@@ -77,6 +77,7 @@ public class Constants {
         public static double JOYSTICK_SCALER_EXPONENT = 3.0;
         public static double JOYSTICK_ROTATION_SCALER_EXPONENT = 3.0;
         public static double MAX_DRIVE_ACCELERATION = 3;
+        public static double ROTATION_SCALER = 0.75;
     }
 
     @Configurable

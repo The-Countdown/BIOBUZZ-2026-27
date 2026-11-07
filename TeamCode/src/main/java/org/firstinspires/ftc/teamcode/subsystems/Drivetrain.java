@@ -60,7 +60,7 @@ public class Drivetrain {
         double currentMultiplier = current > 15 ? 14/current : 1;
         y = -joystickScaler(robotContainer.gamepadEx1.leftStickY()) * currentMultiplier;
         x = joystickScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
-        rx = (joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier) / 2;
+        rx = (joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier) * Constants.Control.ROTATION_SCALER;
 
         double currentTime = System.currentTimeMillis()/1000.0;
         double dt = currentTime - lastTime;
@@ -115,7 +115,7 @@ public class Drivetrain {
         if (Status.fieldOriented) {
             double rotX;
             double rotY;
-            if (Status.alliance == Constants.Game.ALLIANCE.RED) {
+            if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
                 rotX = x * Math.cos(-Math.toRadians(Status.currentHeading + 90)) - y * Math.sin(-Math.toRadians(Status.currentHeading + 90));
                 rotY = x * Math.sin(-Math.toRadians(Status.currentHeading + 90)) + y * Math.cos(-Math.toRadians(Status.currentHeading + 90));
             } else {

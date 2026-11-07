@@ -340,7 +340,7 @@ public class RobotContainer {
         intake.update(teleop);
 
 //        Status.currentHeading = Constants.System.USE_BETTER_IMU ? HardwareDevices.betterIMU.getAngle() : Status.currentPose.getHeading(AngleUnit.DEGREES);
-//        Status.currentHeading = Status.currentPose.getHeading(AngleUnit.DEGREES);
+        Status.currentHeading = HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES);
 //        Status.currentVelocityX = HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
 //        Status.currentVelocityY = HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
 //        Status.currentVelocityHeading = HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
