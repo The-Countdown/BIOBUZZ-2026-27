@@ -138,8 +138,8 @@ public class Constants {
 
     @Configurable
     public static class Tongue {
-        public static double UP = 0.15;
-        public static double DOWN = 0.6;
+        public static double UP = 0.125;
+        public static double DOWN = 0.55;
     }
 
     @Configurable

@@ -90,7 +90,7 @@ public class ServoTest extends OpMode {
         }
 
 //        robotContainer.wings.update(true);
-//        robotContainer.tongue.update(true);
+        robotContainer.tongue.update(true);
 //        robotContainer.proboscis.update(true);
 
         Thread.yield();

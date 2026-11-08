@@ -36,11 +36,13 @@ public class Tongue extends RobotContainer.HardwareDevices{
         Status.tongueDown = false;
     }
     public void up(){
-        robotContainer.tongue.tongueServos.setOffsetMirroredPositions(Constants.Tongue.UP, Constants.Tongue.DOWN, 0.025);
+        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(0.15);
+        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(0.65);
         Status.tongueDown = false;
     }
     public void down(){
-        robotContainer.tongue.tongueServos.setOffsetMirroredPositions(Constants.Tongue.DOWN, Constants.Tongue.UP, 0.025);
+        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(0.58);
+        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(0.225);
         Status.tongueDown = true;
     }
 }

@@ -114,8 +114,10 @@ public class HardcodedAuto extends OpMode {
             Status.wingsDown = true;
             pause(0);
             strafe(true, 0.5, 350);
-            drive(0.4, 1750);
+            drive(0.4, 2000);
             off();
+            robotContainer.wings.setPosition(Constants.Wings.MIN);
+            Status.wingsDown = false;
             end();
 
         // Log values to Panels and Driver Station

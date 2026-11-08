@@ -20,6 +20,8 @@ public class Proboscis extends RobotContainer.HardwareDevices {
                 } else {
                     down();
                 }
+            } else {
+                up();
             }
         }
     }
