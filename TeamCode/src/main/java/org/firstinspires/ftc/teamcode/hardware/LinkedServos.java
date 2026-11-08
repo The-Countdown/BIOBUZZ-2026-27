@@ -44,14 +44,14 @@ public class LinkedServos {
         masterServo.updateSetPosition(position);
 
         for (BetterServo slaveServo : slaveServo) {
-            slaveServo.updateSetPosition(slaveServo.getPosition() + posDiff);
+            slaveServo.updateSetPosition(slaveServo.getPosition() - posDiff);
         }
     }
 
-    public void setOffsetMirroredPositions(double position1, double position2, double offset) {
-        masterServo.updateSetPosition(position1);
+    public void setOffsetMirroredPositions(double leaderPosition, double followerPosition, double followerOffset) {
+        masterServo.updateSetPosition(leaderPosition);
         for (BetterServo slaveServo : slaveServo) {
-            slaveServo.updateSetPosition(position2 + offset);
+            slaveServo.updateSetPosition(followerPosition + followerOffset);
         }
     }
 
@@ -69,6 +69,8 @@ public class LinkedServos {
             slaveCRServo.updateSetPower(power);
         }
     }
+
+
     public double getPosition() {
         return masterServo.getPosition();
     }

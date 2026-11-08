@@ -32,17 +32,19 @@ public class Tongue extends RobotContainer.HardwareDevices{
     }
 
     public void setPosition(double position){
-        robotContainer.tongue.tongueServos.setPosition(HelperFunctions.clamp(position, Constants.Tongue.UP, Constants.Tongue.DOWN),0);
+        tongueServos.setPosition(HelperFunctions.clamp(position, Constants.Tongue.UP, Constants.Tongue.DOWN),0);
         Status.tongueDown = false;
     }
     public void up(){
-        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(0.15);
-        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(0.65);
+        tongueServos.setOffsetMirroredPositions(Constants.Tongue.UP, Constants.Tongue.DOWN, Constants.Tongue.FOLLOWER_OFFSET);
+//        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(0.15);
+//        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(0.65);
         Status.tongueDown = false;
     }
     public void down(){
-        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(0.58);
-        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(0.225);
+        tongueServos.setOffsetMirroredPositions(Constants.Tongue.DOWN, Constants.Tongue.UP, Constants.Tongue.FOLLOWER_OFFSET);
+//        RobotContainer.HardwareDevices.tongueServoLeader.updateSetPosition(0.575);
+//        RobotContainer.HardwareDevices.tongueServoFollower.updateSetPosition(0.225);
         Status.tongueDown = true;
     }
 }

@@ -130,4 +130,9 @@ public class MotorTest extends OpMode {
         telemetry.update();
         Thread.yield();
     }
+
+    @Override
+    public void stop(){
+        robotContainer.stop();
+    }
 }

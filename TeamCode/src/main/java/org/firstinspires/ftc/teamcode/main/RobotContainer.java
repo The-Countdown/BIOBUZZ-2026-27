@@ -340,14 +340,10 @@ public class RobotContainer {
         intake.update(teleop);
 
 //        Status.currentHeading = Constants.System.USE_BETTER_IMU ? HardwareDevices.betterIMU.getAngle() : Status.currentPose.getHeading(AngleUnit.DEGREES);
-        Status.currentHeading = HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES);
-//        Status.currentVelocityX = HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
-//        Status.currentVelocityY = HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
-//        Status.currentVelocityHeading = HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
 
-//        double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
-//        double yMultiplier = Status.currentPose.getY(DistanceUnit.CM) > 0 ? 1: -1;
-//        Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
+        double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
+        double yMultiplier = Status.currentPose.getY(DistanceUnit.CM) > 0 ? 1: -1;
+        Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
 
 //        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
 

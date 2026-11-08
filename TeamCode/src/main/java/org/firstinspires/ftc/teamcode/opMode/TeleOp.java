@@ -52,4 +52,9 @@ public class TeleOp extends OpMode {
         robotContainer.update(true);
         Thread.yield();
     }
+
+    @Override
+    public void stop(){
+        robotContainer.stop();
+    }
 }

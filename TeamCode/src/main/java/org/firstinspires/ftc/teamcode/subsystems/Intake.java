@@ -9,13 +9,10 @@ public class Intake {
     private RobotContainer robotContainer;
     private BetterDcMotor intakeMotor;
     public double power = 0;
-    public double currentAmps = 0;
-    public double newPower;
 
     public Intake(RobotContainer robotContainer, BetterDcMotor intakeMotor) {
         this.robotContainer = robotContainer;
         this.intakeMotor = intakeMotor;
-        this.newPower = 0;
 
         intakeMotor.start();
     }
@@ -29,14 +26,10 @@ public class Intake {
     }
 
     public void setPower(double power) {
-        this.power = power;
-        double current = getCurrent();
-        if (current > 5 && !Status.tongueDown) {
-            this.newPower = Math.max(power - (power * ((current - 5) * 0.1)), 0);
-            intakeMotor.setPower(newPower);
-        } else {
-            intakeMotor.setPower(power);
-        }
+//        double current = getCurrent();
+//        this.power = current < 5 ? power : (power * 5) / current;
+        this.power = Status.tongueDown ? power : power/2;
+        intakeMotor.setPower(power);
     }
 
     public void on() {
@@ -57,9 +50,5 @@ public class Intake {
 
     public double getCurrent() {
         return intakeMotor.getCurrent(CurrentUnit.AMPS);
-    }
-
-    public double getNewPower(){
-        return newPower;
     }
 }

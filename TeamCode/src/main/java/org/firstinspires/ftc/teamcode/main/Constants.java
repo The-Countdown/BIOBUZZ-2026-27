@@ -69,7 +69,6 @@ public class Constants {
         public static final GoBildaPinpointDriver.EncoderDirection PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.REVERSED;
         public static final GoBildaPinpointDriver.EncoderDirection PINPOINT_Y_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.REVERSED;
         public static double IMU_PER_ROTATION_OFFSET = 3.1;
-//        public static boolean USE_BETTER_IMU = false;
     }
 
     @Configurable
@@ -138,8 +137,9 @@ public class Constants {
 
     @Configurable
     public static class Tongue {
-        public static double UP = 0.125;
-        public static double DOWN = 0.55;
+        public static double UP = 0.15;
+        public static double DOWN = 0.575;
+        public static double FOLLOWER_OFFSET = 0.075;
     }
 
     @Configurable

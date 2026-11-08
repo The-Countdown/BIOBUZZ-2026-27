@@ -95,4 +95,9 @@ public class ServoTest extends OpMode {
 
         Thread.yield();
     }
+
+    @Override
+    public void stop(){
+        robotContainer.stop();
+    }
 }
