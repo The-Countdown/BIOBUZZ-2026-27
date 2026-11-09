@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.other;
+package org.firstinspires.ftc.teamcode.util;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
@@ -6,7 +6,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
