@@ -34,14 +34,12 @@ public class Status {
     // Match Info
 
         public static Constants.Game.ALLIANCE alliance = Constants.Game.ALLIANCE.RED;
-        public static Pose2D cornerResetPose;
+        public static Pose2D flowerResetPose;
         public static Pose2D goalPose;
-        public static Pose2D startingPose;
 
     // Data Checks
         public static boolean isDrivingActive = false;
         public static boolean parked = false;
-        public static final GamepadWrapper.ButtonReader flywheelToggleButton = new GamepadWrapper.ButtonReader();
         public static boolean flywheelAtTargetSpeed = true;
         public static boolean wingsDown = false;
         public static boolean tongueDown = false;

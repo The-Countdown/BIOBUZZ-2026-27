@@ -57,7 +57,6 @@ public class Turret extends RobotContainer.HardwareDevices {
     }
 
     public void update(boolean teleop) {
-        Status.flywheelToggleButton.update(Status.flywheelToggle);
         //robotContainer.turret.hood.setPos(HelperFunctions.clamp(tableInterpolate(Constants.Turret.HOOD_TABLE_DISTANCES, Constants.Turret.HOOD_PRESETS, HelperFunctions.disToGoal()), Constants.Turret.HOOD_PRESETS[0], Constants.Turret.HOOD_PRESETS[Constants.Turret.HOOD_PRESETS.length-1]));
 
         if (Status.flywheelToggle) {

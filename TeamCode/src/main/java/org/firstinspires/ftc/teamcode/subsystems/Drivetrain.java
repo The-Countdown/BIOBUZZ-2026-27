@@ -43,7 +43,7 @@ public class Drivetrain {
             RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.ORIGIN);
 //            RobotContainer.HardwareDevices.betterIMU.resetAngle();
         } else if (robotContainer.gamepadEx1.triangle.wasJustPressed() || robotContainer.gamepadEx2.circle.isHeldFor(1.0)) {
-//            RobotContainer.HardwareDevices.pinpoint.setPosition(Status.cornerResetPose);
+//            RobotContainer.HardwareDevices.pinpoint.setPosition(Status.flowerResetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
         }
     }

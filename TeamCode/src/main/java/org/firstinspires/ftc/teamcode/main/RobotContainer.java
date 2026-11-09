@@ -276,17 +276,6 @@ public class RobotContainer {
         gamepadEx1 = new GamepadWrapper(opmode.gamepad1);
         gamepadEx2 = new GamepadWrapper(opmode.gamepad2);
         Status.isDrivingActive = false;
-        Status.goalPose =
-                Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.INCH, 70, 70, AngleUnit.DEGREES, -45) :
-                Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.INCH, -70, 70, AngleUnit.DEGREES, 45) :
-                new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0);
-
-        Status.startingPose =
-                Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.CM, Constants.Robot.STARTING_X, Constants.Robot.STARTING_Y, AngleUnit.DEGREES, Constants.Robot.STARTING_HEADING) :
-                Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.CM, Constants.Robot.STARTING_X, -Constants.Robot.STARTING_Y, AngleUnit.DEGREES, -Constants.Robot.STARTING_HEADING) :
-                new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
-
-
 
         // Start the required threads
         telemetryLogger = new TelemetryLogger(this);
@@ -339,11 +328,10 @@ public class RobotContainer {
         wings.update(teleop);
         intake.update(teleop);
 
-//        Status.currentHeading = Constants.System.USE_BETTER_IMU ? HardwareDevices.betterIMU.getAngle() : Status.currentPose.getHeading(AngleUnit.DEGREES);
-
-        double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
-        double yMultiplier = Status.currentPose.getY(DistanceUnit.CM) > 0 ? 1: -1;
-        Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
+        // Update Goal Pose
+            double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
+            double yMultiplier = Status.currentPose.getY(DistanceUnit.CM) > 0 ? 1: -1;
+            Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
 
 //        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
 
@@ -583,8 +571,8 @@ public class RobotContainer {
 
         if (Status.competitionMode) { // Stuff in competition mode.
             addCaptionLine("Loop Times");
-                addDataLog("OpMode Avg Loop Time", (int) getRollingAverageLoopTime("teleOp") + " ms", true);
-                addDataLog("Pinpoint Avg Loop Time", (int) getRollingAverageLoopTime("pinpointUpdater") + " ms", true);
+                addDataLog("OpMode Avg Loop Time", (int) getLoopTime("teleOp") + " ms", true);
+                addDataLog("Pinpoint Avg Loop Time", (int) getLoopTime("pinpointUpdater") + " ms", true);
             addBlankLine();
 
             addCaptionLine("Current Pull");
@@ -592,14 +580,14 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("Robot Pose");
-                addDataLog("Pinpoint X", Status.currentPose.getX(DistanceUnit.CM) + " cm", true);
-                addDataLog("Pinpoint Y", Status.currentPose.getY(DistanceUnit.CM) + " cm", true);
+                addDataLog("Pinpoint X", Status.currentX + " cm", true);
+                addDataLog("Pinpoint Y", Status.currentY + " cm", true);
                 addDataLog("Robot Heading", Status.currentHeading, true);
             addBlankLine();
 
             addCaptionLine("Robot Headings");
 //                addDataLog("BetterIMU Yaw", HardwareDevices.betterIMU.getAngle(), true); // First angle is the yaw
-                addDataLog("Pinpoint Yaw", HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES), true); // First angle is the yaw
+                addDataLog("Pinpoint Yaw", HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES), false); // First angle is the yaw
 //                addDataLog("Use Better IMU", Constants.System.USE_BETTER_IMU, true);
             addBlankLine();
 
@@ -629,8 +617,8 @@ public class RobotContainer {
             addCaptionLine("Position & Heading");
                 addDataLog("Robot Heading", Status.currentHeading, true);
                 addDataLog("Robot Position", Status.currentPose, false);
-                addDataLog("Robot X", Status.currentPose.getX(DistanceUnit.CM) + " cm", true);
-                addDataLog("Robot Y", Status.currentPose.getY(DistanceUnit.CM) + " cm", true);
+                addDataLog("Robot X", Status.currentX + " cm", true);
+                addDataLog("Robot Y", Status.currentY + " cm", true);
 //                addDataLog("Use Better IMU", Constants.System.USE_BETTER_IMU, false);
                 addDataLog("Pinpoint Status", RobotContainer.HardwareDevices.pinpoint.getDeviceStatus(), false);
                 addDataLog("Pinpoint Heading", RobotContainer.HardwareDevices.pinpoint.getPosition().getHeading(AngleUnit.DEGREES), false);
@@ -638,14 +626,13 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("General Info");
-                addDataLog("Start Position", Status.startingPose, false);
                 addDataLog("Field Oriented", Status.fieldOriented, false);
                 addDataLog("Goal Position", Status.goalPose, false);
                 addDataLog("Distance to Goal", HelperFunctions.disToGoal(), true);
             addBlankLine();
 
             addCaptionLine("Drivetrain");
-                addDataLog("Drivetrain Y Targets", drivetrain.driveTargets[0], false);
+                addDataLog("Drivetrain Y Target", drivetrain.driveTargets[0], false);
                 addDataLog("Drivetrain Y Output", drivetrain.driveOutputs[0], false);
                 addDataLog("Drivetrain X Target", drivetrain.driveTargets[1], false);
                 addDataLog("Drivetrain X Output", drivetrain.driveOutputs[1], false);
@@ -703,7 +690,7 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("Drivetrain Power Draw");
-                addDataLog("Drivetrain Total Current", drivetrain.getCurrent(), true);
+                addDataLog("Drivetrain Total Current", drivetrain.getCurrent(), false);
                 addDataLog("Drive Motor LF Current", HardwareDevices.leftFront.getCurrent(CurrentUnit.AMPS), false);
                 addDataLog("Drive Motor RF Current", HardwareDevices.rightFront.getCurrent(CurrentUnit.AMPS), false);
                 addDataLog("Drive Motor LB Current", HardwareDevices.leftBack.getCurrent(CurrentUnit.AMPS), false);
