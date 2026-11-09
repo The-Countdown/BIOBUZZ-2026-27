@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
+import org.firstinspires.ftc.teamcode.util.TurretPDF;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "MotorTest", group = "TeleOp")
 //@Disabled
@@ -13,6 +14,7 @@ public class MotorTest extends OpMode {
     private RobotContainer robotContainer;
     private int motorIndex = -1;
     private double motorPower = 0.0;
+    private TurretPDF turretPDF;
 
     public void defaultMotor(){
         RobotContainer.HardwareDevices.rightFront.setPower(0);
@@ -34,6 +36,7 @@ public class MotorTest extends OpMode {
         }
         robotContainer.init();
 
+        turretPDF = new TurretPDF(robotContainer, RobotContainer.HardwareDevices.turretMotor);
         RobotContainer.HardwareDevices.flywheelMotorFollower.start();
         RobotContainer.HardwareDevices.flywheelMotorLeader.start();
         RobotContainer.HardwareDevices.intakeMotor.start();
@@ -50,6 +53,7 @@ public class MotorTest extends OpMode {
 
     @Override
     public void loop() {
+        robotContainer.refreshData();
         robotContainer.gamepadEx1.update();
         robotContainer.gamepadEx2.update();
         defaultMotor();
@@ -78,7 +82,7 @@ public class MotorTest extends OpMode {
                 telemetry.addLine("intakeMotor");
                 break;
             case 5:
-                RobotContainer.HardwareDevices.turretMotor.setTargetPosition((int) (motorPower * 28));
+                RobotContainer.HardwareDevices.turretMotor.setPower(turretPDF.calculate(motorPower * 28, 0));
                 telemetry.addLine("turretMotor");
                 telemetry.addData("Position: ", RobotContainer.HardwareDevices.turretMotor.getCurrentPosition());
                 break;

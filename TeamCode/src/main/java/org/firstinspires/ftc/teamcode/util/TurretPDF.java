@@ -61,7 +61,7 @@ public class TurretPDF {
 
         lastTargetPower = pid;
 
-        lastTargetPower = HelperFunctions.clamp(lastTargetPower, 0, 1);
+        lastTargetPower = HelperFunctions.clamp(lastTargetPower, -1, 1);
 
 //        if (!Status.competitionMode){
             panelsTelemetry.addData("Power", lastTargetPower);
@@ -72,9 +72,10 @@ public class TurretPDF {
             panelsTelemetry.addData("PID", pid);
             panelsTelemetry.addData("DT", dt);
             panelsTelemetry.addData("Target", positionToFaceGoal);
-            panelsTelemetry.addData("Velocity", turretMotor.getVelocity());
+            panelsTelemetry.addData("Position", turretMotor.getCurrentPosition());
             panelsTelemetry.addData("Error", error);
             panelsTelemetry.addData("error Diff", errorDiff);
+            panelsTelemetry.update();
 //        }
 
         lastError = error;
