@@ -316,7 +316,6 @@ public class RobotContainer {
             try {
                 this.telemetryLogger.join();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
         }
     }

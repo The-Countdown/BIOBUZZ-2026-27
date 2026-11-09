@@ -6,17 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 // Pedro Pathing Imports
-import com.pedropathing.ivy.Command;
-import com.pedropathing.ivy.Scheduler;
-import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.groups.Groups.sequential;
-import static com.pedropathing.ivy.pedro.PedroCommands.follow;
-import static com.pedropathing.api.Paths.*;
 import com.pedropathing.follower.*;
-import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
 import com.pedropathing.paths.*;
-import org.firstinspires.ftc.teamcode.pedroPathing.PedroPathingConstants;
 
 // Panels Imports
 import com.bylazar.configurables.annotations.Configurable;
@@ -40,7 +32,6 @@ public class HardcodedAuto extends OpMode {
     // File Variables
     boolean end = false;
     ElapsedTime pathTimer = new ElapsedTime();
-    int pathNumber = 1;
 
 
     @Override
