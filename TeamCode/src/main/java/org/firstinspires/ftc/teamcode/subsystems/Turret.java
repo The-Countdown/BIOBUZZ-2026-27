@@ -61,8 +61,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         //robotContainer.turret.hood.setPos(HelperFunctions.clamp(tableInterpolate(Constants.Turret.HOOD_TABLE_DISTANCES, Constants.Turret.HOOD_PRESETS, HelperFunctions.disToGoal()), Constants.Turret.HOOD_PRESETS[0], Constants.Turret.HOOD_PRESETS[Constants.Turret.HOOD_PRESETS.length-1]));
 
         if (Status.flywheelToggle) {
-            flywheel.targetVelocity = 1;
-//            flywheel.targetVelocity = tableInterpolate(Constants.Turret.FLYWHEEL_SPEED_TABLE_DISTANCES, Constants.Turret.FLYWHEEL_SPEED_TABLE, HelperFunctions.disToGoal()) - (goalOrientedVelocityX * Constants.Turret.FLYWHEEL_POWER_VELOCITY_MULTIPLIER);
+            flywheel.targetVelocity = 1; // tableInterpolate(Constants.Turret.FLYWHEEL_SPEED_TABLE_DISTANCES, Constants.Turret.FLYWHEEL_SPEED_TABLE, HelperFunctions.disToGoal()) - (goalOrientedVelocityX * Constants.Turret.FLYWHEEL_POWER_VELOCITY_MULTIPLIER);
         } else {
             flywheel.targetVelocity = -flywheelPowerModifier;
         }
@@ -165,11 +164,8 @@ public class Turret extends RobotContainer.HardwareDevices {
 
     public void setTargetAngle(double angleInDegrees) {
         targetPositionDegrees = angleInDegrees;
-        if (Status.currentPose.getX(DistanceUnit.CM) < -75) {
-            angleInDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffsetFar);
-        } else {
-            angleInDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffset);
-        }
+
+        angleInDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffset);
 
         double currentAngle = motorToAngle(turretMotor.getCurrentPosition());
         double targetAngle = angleInDegrees;
@@ -186,12 +182,14 @@ public class Turret extends RobotContainer.HardwareDevices {
         }
 
         double position = HelperFunctions.clamp(angleToMotor(proposedAngle), Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
+        int numOfRotations = (int) (Math.round(position / 28));
+        int finalMotorPos = (int) Math.round(position % Constants.Robot.MOTOR_TICKS_PER_REVOLUTION);
 
-//        if (Status.shootOnTheMove) {
+        if (Status.shootOnTheMove) {
 //            turretMotor.updateSetPower(turretPDF.calculate(position, goalOrientedVelocityRX));
-//        } else {
+        } else {
 //            turretMotor.updateSetPower(turretPDF.calculate(position, 0));
-//        }
+        }
     }
 
     /**
@@ -238,19 +236,11 @@ public class Turret extends RobotContainer.HardwareDevices {
     }
 
     private double angleToMotor(double angle) {
-        return tableInterpolate(
-                Constants.Turret.TURRET_INTERPOLATION_ANGLES,
-                Constants.Turret.TURRET_INTERPOLATION_POSITIONS,
-                angle
-        );
+        return angle / Constants.Turret.TURRET_DEGREES_PER_TICK;
     }
 
-    private double motorToAngle(double motor) {
-        return tableInterpolate(
-                Constants.Turret.TURRET_INTERPOLATION_POSITIONS,
-                Constants.Turret.TURRET_INTERPOLATION_ANGLES,
-                motor
-        );
+    private double motorToAngle(double motorTicks) {
+        return motorTicks * Constants.Turret.TURRET_DEGREES_PER_TICK;
     }
 
     public double getPosition() {

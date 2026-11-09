@@ -144,16 +144,13 @@ public class Constants {
 
     @Configurable
     public static class Turret {
-        public static double TURRET_GEAR_RATIO = 192.0/9.0;
+        public static double TURRET_GEAR_RATIO = 64.0/3.0;
         public static double FLYWHEEL_GEAR_RATIO = 3.0/4.0;
-        public static boolean ADJUST_TURRET_BY_MULTIPLIER = true;
+        public static double TURRET_DEGREES_PER_TICK = (360.0 / TURRET_GEAR_RATIO) / Robot.MOTOR_TICKS_PER_REVOLUTION; //3 * 3 * 3 * 5 / 2 * 2 * 2 * 2 * 2 * 7 || 135 / 224
         public static double FLYWHEEL_POWER_VELOCITY_MULTIPLIER = 1;
-        public static double TURRET_ANGLE_VELOCITY_MULTIPLIER = 1;
         public static double GOAL_POSITION_VELOCITY_MULTIPLIER = 1;
         public static double FLYWHEEL_HEIGHT = 0.0;
         public static double DESIRED_MAX_HEIGHT = 0.0;
-        public static double MAX_SERVO = 1;
-        public static double MIN_SERVO = 0;
         public static int MAX_MOTOR = (int)(Robot.MOTOR_TICKS_PER_REVOLUTION * TURRET_GEAR_RATIO);
         public static int MIN_MOTOR = 0;
         public static double MAX_ANGLE = 180;

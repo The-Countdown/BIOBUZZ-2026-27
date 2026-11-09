@@ -78,8 +78,9 @@ public class MotorTest extends OpMode {
                 telemetry.addLine("intakeMotor");
                 break;
             case 5:
-                RobotContainer.HardwareDevices.turretMotor.setPower(motorPower);
+                RobotContainer.HardwareDevices.turretMotor.setTargetPosition((int) (motorPower * 28));
                 telemetry.addLine("turretMotor");
+                telemetry.addData("Position: ", RobotContainer.HardwareDevices.turretMotor.getCurrentPosition());
                 break;
             case 6:
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(motorPower);
