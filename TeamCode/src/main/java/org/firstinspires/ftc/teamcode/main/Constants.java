@@ -30,8 +30,8 @@ public class Constants {
         public static double
             GRAVITY = 9.811,
             GOAL_HEIGHT = 144.78,
-            CELL_POSITION_X = 30.48,
-            CELL_POSITION_Y = 35.56,
+            CELL_POSITION_X = 35.56,
+            CELL_POSITION_Y = 30.48,
             GOAL_POSITION_VELOCITY_MULTIPLIER = 1;
 
 
@@ -155,7 +155,7 @@ public class Constants {
     public static class Turret {
         public static double
             GEAR_RATIO = 64.0/3.0,
-            DEGREES_PER_TICK = (360.0 / GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION), //135 / 224
+            DEGREES_PER_TICK = (360.0 / (GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION)), //135 / 224
             MAX_ANGLE = 180,
             MIN_ANGLE = -180,
             SPEED_FACTOR = 0.0003,

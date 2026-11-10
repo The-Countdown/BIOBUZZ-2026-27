@@ -9,9 +9,6 @@ import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 public class TurretPDF {
-    private final RobotContainer robotContainer;
-    private BetterDcMotor turretMotor;
-
     private double error;
     private double lastError;
     private double p;
@@ -27,9 +24,7 @@ public class TurretPDF {
     private double lastTargetPower;
     public TelemetryManager panelsTelemetry;
 
-    public TurretPDF(RobotContainer robotContainer, BetterDcMotor turretMotor) {
-        this.robotContainer = robotContainer;
-        this.turretMotor = turretMotor;
+    public TurretPDF() {
         this.lastTargetPower = 0;
         this.lastTime = 0;
         this.ffMultiplier = 0;
@@ -44,6 +39,7 @@ public class TurretPDF {
     public double calculate(double target, double currentPosition, double goalOrientedRX) {
         if (Math.abs(target - currentPosition) < Constants.Turret.TOLERANCE_TICKS) {
             lastTargetPower = 0;
+            if (Status.debugMode){ panelsTelemetry.addLine("Returned within tolerance"); panelsTelemetry.update(); }
             return 0;
         }
 
@@ -56,7 +52,7 @@ public class TurretPDF {
 
             p = Constants.Turret.KP * error; // proportional to error
 
-            i += error * Constants.Turret.KI;
+            i += error * Constants.Turret.KI; // accounts for error over time
 
             d = Constants.Turret.KD * errorDiff; // this slows the acceleration down
 
@@ -69,7 +65,7 @@ public class TurretPDF {
 
         lastTargetPower = HelperFunctions.clamp(lastTargetPower, -1, 1);
 
-         if (!Status.competitionMode || Status.debugMode){
+         if (Status.debugMode){
             panelsTelemetry.addData("Power", lastTargetPower);
             panelsTelemetry.addData("P", p);
             panelsTelemetry.addData("I", i);
@@ -77,7 +73,7 @@ public class TurretPDF {
             panelsTelemetry.addData("FF", ff);
             panelsTelemetry.addData("PID", pid);
             panelsTelemetry.addData("DT", dt);
-            panelsTelemetry.addData("Target", target);
+            panelsTelemetry.addData("Target Position", target);
             panelsTelemetry.addData("Position", currentPosition);
             panelsTelemetry.addData("Error", error);
             panelsTelemetry.addData("error Diff", errorDiff);

@@ -313,7 +313,7 @@ public class RobotContainer {
         refreshData();
 
         // Update Goal Pose
-            double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
+            double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? 1 : -1;
             double yMultiplier = Status.currentY > 0 ? 1: -1;
             Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
 
@@ -332,6 +332,7 @@ public class RobotContainer {
         tongue.update(teleop);
         proboscis.update(teleop);
         turret.update(teleop);
+        flywheel.update(teleop);
         wings.update(teleop);
         intake.update(teleop);
 
@@ -652,6 +653,7 @@ public class RobotContainer {
                 addDataLog("Turret Target Position Degrees", turret.getTargetPositionDegrees(), true);
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
                 addDataLog("Turret Motor Position", turret.getPosition(), true);
+                addDataLog("Turret PID Output", turret.turretPDFOutput, true);
 //                addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
             addBlankLine();
 

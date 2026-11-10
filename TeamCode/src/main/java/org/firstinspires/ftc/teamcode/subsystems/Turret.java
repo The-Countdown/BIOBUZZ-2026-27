@@ -25,12 +25,14 @@ public class Turret extends RobotContainer.HardwareDevices {
     public double goalOrientedVelocityRX;
     public double angleToFaceGoal;
     public double lastAngleToFaceGoal;
+    public double turretPDFOutput;
 
     public Turret(RobotContainer robotContainer, BetterServo hoodServo, BetterDcMotor turretMotor) {
         this.robotContainer = robotContainer;
         this.hoodServo = hoodServo;
         this.turretMotor = turretMotor;
-        this.turretPDF = new TurretPDF(robotContainer, turretMotor);
+        this.turretPDF = new TurretPDF();
+        this.turretPDFOutput = 0;
         this.targetPosition = 0;
         this.manualTurretPos = 0;
         this.turretAngleOffset = 0;
@@ -102,15 +104,13 @@ public class Turret extends RobotContainer.HardwareDevices {
 
         double position = HelperFunctions.clamp(targetPosition, Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
 
-        if (Status.shootOnTheMove) {
-            turretMotor.updateSetPower(turretPDF.calculate(position, currentPosition, goalOrientedVelocityRX));
-        } else {
-            turretMotor.updateSetPower(turretPDF.calculate(position, currentPosition, 0));
-        }
+        turretPDFOutput = Status.shootOnTheMove ? turretPDF.calculate(position, currentPosition, goalOrientedVelocityRX) : turretPDF.calculate(position, currentPosition, 0);
+
+        turretMotor.updateSetPower(turretPDFOutput);
     }
 
     private double angleToMotor(double angle) {
-        return (HelperFunctions.normalizeAngle(angle + 180) / Constants.Turret.DEGREES_PER_TICK) + Constants.Turret.MIN_MOTOR;
+        return ((HelperFunctions.normalizeAngle(angle) + 180) / Constants.Turret.DEGREES_PER_TICK) + Constants.Turret.MIN_MOTOR;
     }
 
     private double motorToAngle(double motorTicks) {
@@ -140,7 +140,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         yDiff += goalOrientedVelocityY;
 
         angleToFaceGoal = ((Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading);
-        goalOrientedVelocityRX =  (angleToFaceGoal - lastAngleToFaceGoal) / robotContainer.CURRENT_LOOP_TIME_MS;
+        goalOrientedVelocityRX =  ((angleToFaceGoal - lastAngleToFaceGoal) * 1000 )/ robotContainer.CURRENT_LOOP_TIME_MS;
 
         setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
     }

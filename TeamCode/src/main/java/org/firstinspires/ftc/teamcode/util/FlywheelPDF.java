@@ -9,9 +9,6 @@ import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 public class FlywheelPDF {
-    private final RobotContainer robotContainer;
-    private LinkedMotors flywheelMotors;
-
     private double error;
     private double lastError;
     private double p;
@@ -27,9 +24,7 @@ public class FlywheelPDF {
     private double dropTime;
     public TelemetryManager panelsTelemetry;
 
-    public FlywheelPDF(RobotContainer robotContainer, LinkedMotors flywheelMotors) {
-        this.robotContainer = robotContainer;
-        this.flywheelMotors = flywheelMotors;
+    public FlywheelPDF() {
         this.lastTargetPower = 0;
         this.lastTime = 0;
         this.dropTime = 0;
@@ -44,9 +39,10 @@ public class FlywheelPDF {
     public double calculate(double targetSpeed) {
         if (targetSpeed == 0) {
             lastTargetPower = 0;
+            if (Status.debugMode){ panelsTelemetry.addLine("Returned within tolerance"); panelsTelemetry.update(); }
             return 0;
         }
-        double error = targetSpeed - flywheelMotors.getVelocity();
+        double error = targetSpeed - RobotContainer.HardwareDevices.flywheelMotorLeader.getVelocity();
         dt = System.currentTimeMillis() - lastTime + 1;
         errorDiff = (lastError - error) / dt; // differance between the errors scaled by time
 
@@ -71,7 +67,7 @@ public class FlywheelPDF {
 
         lastTargetPower = HelperFunctions.clamp(pid, 0, 1);
 
-        if (!Status.competitionMode || Status.debugMode){
+        if (Status.debugMode){
             panelsTelemetry.addData("Power", lastTargetPower);
             panelsTelemetry.addData("P", p);
             panelsTelemetry.addData("I", i);
@@ -81,12 +77,12 @@ public class FlywheelPDF {
             panelsTelemetry.addData("PID", pid);
             panelsTelemetry.addData("DT", dt);
             panelsTelemetry.addData("Drop Time", dropTime);
-            panelsTelemetry.addData("Target", targetSpeed);
-            panelsTelemetry.addData("Velocity", flywheelMotors.getVelocity());
+            panelsTelemetry.addData("Target Velocity", targetSpeed);
+            panelsTelemetry.addData("Velocity", RobotContainer.HardwareDevices.flywheelMotorLeader.getVelocity());
             panelsTelemetry.addData("Error", error);
             panelsTelemetry.addData("error Diff", errorDiff);
 
-        panelsTelemetry.update();
+//        panelsTelemetry.update();
         }
 
         lastError = error;

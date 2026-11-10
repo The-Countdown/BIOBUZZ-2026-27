@@ -19,7 +19,7 @@ public class Flywheel {
     public Flywheel(RobotContainer robotContainer, LinkedMotors flyWheelMotors) {
         this.flyWheelMotors = flyWheelMotors;
         this.robotContainer = robotContainer;
-        this.flywheelPDF = new FlywheelPDF(robotContainer, flyWheelMotors);
+        this.flywheelPDF = new FlywheelPDF();
         this.targetVelocity = 0;
         this.error = 0;
         this.powerModifier = 0;

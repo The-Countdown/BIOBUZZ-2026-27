@@ -34,7 +34,7 @@ public class MotorTest extends OpMode {
         }
         robotContainer.init();
 
-        turretPDF = new TurretPDF(robotContainer, RobotContainer.HardwareDevices.turretMotor);
+        turretPDF = new TurretPDF();
         RobotContainer.HardwareDevices.flywheelMotorFollower.start();
         RobotContainer.HardwareDevices.flywheelMotorLeader.start();
         RobotContainer.HardwareDevices.intakeMotor.start();
@@ -80,7 +80,7 @@ public class MotorTest extends OpMode {
                 telemetry.addLine("intakeMotor");
                 break;
             case 5:
-                RobotContainer.HardwareDevices.turretMotor.setPower(turretPDF.calculate(motorPower * 28, RobotContainer.HardwareDevices.turretMotor.getCurrentPosition(), 0));
+                RobotContainer.HardwareDevices.turretMotor.setPower(turretPDF.calculate(motorPower * 10 * 28, RobotContainer.HardwareDevices.turretMotor.getCurrentPosition(), 0));
                 telemetry.addLine("turretMotor");
                 telemetry.addData("Position: ", RobotContainer.HardwareDevices.turretMotor.getCurrentPosition());
                 break;
