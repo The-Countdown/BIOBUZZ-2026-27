@@ -308,20 +308,6 @@ public class RobotContainer {
     public void update(boolean teleop) {
         CURRENT_LOOP_TIME_MS = updateLoopTime("teleOp");
         refreshData();
-        if (teleop){
-            gamepadEx1.update();
-            gamepadEx2.update();
-            drivetrain.driveJoystickUpdate();
-            drivetrain.update();
-            positionProvider.update();
-        }
-        delayedActionManager.update();
-//        allIndicatorLights.lightsUpdate();
-        tongue.update(teleop);
-        proboscis.update(teleop);
-        turret.update(teleop);
-        wings.update(teleop);
-        intake.update(teleop);
 
         // Update Goal Pose
             double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
@@ -329,6 +315,22 @@ public class RobotContainer {
             Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
 
 //        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
+
+        if (teleop){
+            gamepadEx1.update();
+            gamepadEx2.update();
+            drivetrain.driveJoystickUpdate();
+            drivetrain.update();
+            positionProvider.update();
+        }
+
+        delayedActionManager.update();
+//        allIndicatorLights.lightsUpdate();
+        tongue.update(teleop);
+        proboscis.update(teleop);
+        turret.update(teleop);
+        wings.update(teleop);
+        intake.update(teleop);
 
         PREV_LOOP_TIME_MS = CURRENT_LOOP_TIME_MS;
 

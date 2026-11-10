@@ -185,9 +185,9 @@ public class Turret extends RobotContainer.HardwareDevices {
         int finalMotorPos = (int) Math.round(position % Constants.Robot.MOTOR_TICKS_PER_REVOLUTION);
 
         if (Status.shootOnTheMove) {
-//            turretMotor.updateSetPower(turretPDF.calculate(position, goalOrientedVelocityRX));
+            turretMotor.updateSetPower(turretPDF.calculate(position, goalOrientedVelocityRX));
         } else {
-//            turretMotor.updateSetPower(turretPDF.calculate(position, 0));
+            turretMotor.updateSetPower(turretPDF.calculate(position, 0));
         }
     }
 

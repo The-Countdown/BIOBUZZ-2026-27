@@ -151,12 +151,10 @@ public class Constants {
         public static double GOAL_POSITION_VELOCITY_MULTIPLIER = 1;
         public static double FLYWHEEL_HEIGHT = 0.0;
         public static double DESIRED_MAX_HEIGHT = 0.0;
-        public static int MAX_MOTOR = (int)(Robot.MOTOR_TICKS_PER_REVOLUTION * TURRET_GEAR_RATIO);
+        public static int MAX_MOTOR = (int)(Robot.MOTOR_TICKS_PER_REVOLUTION * TURRET_GEAR_RATIO); //
         public static int MIN_MOTOR = 0;
         public static double MAX_ANGLE = 180;
         public static double MIN_ANGLE = -180;
-        public static double[] TURRET_INTERPOLATION_ANGLES = {-180,-90, 0, 90, 180};
-        public static double[] TURRET_INTERPOLATION_POSITIONS = {0.9517, 0.7226, 0.4985, 0.2755, 0.0559};
         public static double SPEED_FACTOR = 0.0003;
         public static int FLYWHEEL_MAX_VELOCITY = (int) (6000 * FLYWHEEL_GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60; // 2100
         public static double[] FLYWHEEL_SPEED_TABLE = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
@@ -170,11 +168,12 @@ public class Constants {
         public static double FLYWHEEL_KF = 0.95;
         public static double FLYWHEEL_KS = 3;
         public static double TURRET_KP = 0.005;
-        public static double TURRET_KI = 0.0001;
-        public static double TURRET_KD = 0.0;
-        public static double TURRET_KF = 0.0;
-        public static double TURRET_TOLERANCE_DEGREES = 1;
-        public static double PRESSURE_OFFSET = 0.0;
+        public static double TURRET_KI = 0.0;
+        public static double TURRET_KD = 0.005;
+        public static double TURRET_KF = 0.15;
+        public static double TURRET_TOLERANCE_DEGREES = 3;
+        public static double TURRET_GEAR_SLOP = 0.5;
+        public static double TURRET_TOLERANCE_TICKS = (TURRET_TOLERANCE_DEGREES - TURRET_GEAR_SLOP) / TURRET_DEGREES_PER_TICK;
 
     }
 
