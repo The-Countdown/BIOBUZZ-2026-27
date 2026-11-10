@@ -41,15 +41,15 @@ public class TurretPDF {
      * Calculates the PDF output for the servo.
      * @return The calculated PDF output.
      */
-    public double calculate(double positionToFaceGoal, double goalOrientedRX) {
-        if (Math.abs(positionToFaceGoal - turretMotor.getCurrentPosition()) < Constants.Turret.TOLERANCE_TICKS) {
+    public double calculate(double target, double currentPosition, double goalOrientedRX) {
+        if (Math.abs(target - currentPosition) < Constants.Turret.TOLERANCE_TICKS) {
             lastTargetPower = 0;
             return 0;
         }
 
-        ffMultiplier = Math.abs(positionToFaceGoal - turretMotor.getCurrentPosition()) < 2.5 * Constants.Turret.TOLERANCE_TICKS ? -1 :1;
+        ffMultiplier = Math.abs(target - currentPosition) < 2.5 * Constants.Turret.TOLERANCE_TICKS ? -1 :1;
 
-        double error = positionToFaceGoal - turretMotor.getCurrentPosition();
+        double error = target - currentPosition;
         dt = System.currentTimeMillis() - lastTime;
         goalOrientedRX /= dt;
         errorDiff = (error - lastError) / dt; // differance between the errors scaled by time
@@ -77,8 +77,8 @@ public class TurretPDF {
             panelsTelemetry.addData("FF", ff);
             panelsTelemetry.addData("PID", pid);
             panelsTelemetry.addData("DT", dt);
-            panelsTelemetry.addData("Target", positionToFaceGoal);
-            panelsTelemetry.addData("Position", turretMotor.getCurrentPosition());
+            panelsTelemetry.addData("Target", target);
+            panelsTelemetry.addData("Position", currentPosition);
             panelsTelemetry.addData("Error", error);
             panelsTelemetry.addData("error Diff", errorDiff);
             panelsTelemetry.update();

@@ -651,7 +651,7 @@ public class RobotContainer {
                 addDataLog("Turret Target Position", turret.getTargetPosition(), true);
                 addDataLog("Turret Target Position Degrees", turret.getTargetPositionDegrees(), true);
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
-                addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getCurrentPosition(), true);
+                addDataLog("Turret Motor Position", turret.getPosition(), true);
 //                addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
             addBlankLine();
 

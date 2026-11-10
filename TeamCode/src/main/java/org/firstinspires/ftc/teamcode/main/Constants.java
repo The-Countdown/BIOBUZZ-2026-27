@@ -155,7 +155,7 @@ public class Constants {
     public static class Turret {
         public static double
             GEAR_RATIO = 64.0/3.0,
-            DEGREES_PER_TICK = (360.0 / GEAR_RATIO) / Robot.MOTOR_TICKS_PER_REVOLUTION, //3 * 3 * 3 * 5 / 2 * 2 * 2 * 2 * 2 * 7 || 135 / 224
+            DEGREES_PER_TICK = (360.0 / GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION), //135 / 224
             MAX_ANGLE = 180,
             MIN_ANGLE = -180,
             SPEED_FACTOR = 0.0003,
