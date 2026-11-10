@@ -6,7 +6,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 public class HelperFunctions {
@@ -88,8 +87,8 @@ public class HelperFunctions {
     }
 
     public static double disToGoal() {
-            double xDiff = Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM);
-            double yDiff = Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
+            double xDiff = Status.goalPose.getX(DistanceUnit.CM) - Status.currentX;
+            double yDiff = Status.goalPose.getY(DistanceUnit.CM) - Status.currentY;
             return Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
     }
 
@@ -101,5 +100,48 @@ public class HelperFunctions {
     public static int getRandomWithin(int num, double percent) {
         double adjustment = num * percent;
         return (int) (num + Math.random() > percent ? adjustment : -adjustment);
+    }
+
+    /**
+     * Interpolates a value from one table given a key from a parallel table.
+     * Uses the same binary-search-style nearest-neighbor interpolation as getPoseToAim.
+     *
+     * @param keyTable   The table to search (e.g. angles or servo positions)
+     * @param valueTable The parallel table to interpolate from
+     * @param key        The input value to look up
+     * @return The interpolated output value
+     */
+    private double tableInterpolate(double[] keyTable, double[] valueTable, double key) {
+        int lowerIndex = 0;
+        int higherIndex = keyTable.length - 1;
+        double lowerKey = keyTable[lowerIndex];
+        double higherKey = keyTable[higherIndex];
+
+        for (int i = keyTable.length - 2; i > 0; i--) {
+            double current = keyTable[i];
+            if (current > key) {
+                if (current < higherKey) {
+                    higherKey = current;
+                    higherIndex = i;
+                }
+            } else if (current < key) {
+                if (current >= lowerKey) {
+                    lowerKey = current;
+                    lowerIndex = i;
+                }
+            } else {
+                // Exact match
+                return valueTable[i];
+            }
+        }
+
+        double lowerValue = valueTable[lowerIndex];
+        double higherValue = valueTable[higherIndex];
+
+        if (higherKey == lowerKey) {
+            return lowerValue;
+        }
+
+        return lowerValue + ((higherValue - lowerValue) * (key - lowerKey) / (higherKey - lowerKey));
     }
 }

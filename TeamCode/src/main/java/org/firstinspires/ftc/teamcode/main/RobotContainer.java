@@ -23,10 +23,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
+import org.firstinspires.ftc.teamcode.subsystems.Flywheel;
 import org.firstinspires.ftc.teamcode.util.PositionProvider;
 import org.firstinspires.ftc.teamcode.subsystems.Proboscis;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorLighting;
-import org.firstinspires.ftc.teamcode.other.LocalizationUpdater;
+import org.firstinspires.ftc.teamcode.threadedPrograms.LocalizationUpdater;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Tongue;
@@ -37,7 +38,7 @@ import org.firstinspires.ftc.teamcode.hardware.GamepadWrapper;
 import org.firstinspires.ftc.teamcode.hardware.LinkedMotors;
 import org.firstinspires.ftc.teamcode.hardware.LinkedServos;
 import org.firstinspires.ftc.teamcode.util.HelperFunctions;
-import org.firstinspires.ftc.teamcode.other.TelemetryLogger;
+import org.firstinspires.ftc.teamcode.threadedPrograms.TelemetryLogger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,10 +78,11 @@ public class RobotContainer {
     public IndicatorLighting.Light indicatorLightRight;
     public IndicatorLighting.Group allIndicatorLights;
 //    public static BNO055IMU.Parameters betterIMUP = new BNO055IMU.Parameters();
-    public GamepadWrapper gamepadEx1;
-    public GamepadWrapper gamepadEx2;
+    public GamepadWrapper driverController;
+    public GamepadWrapper operatorController;
     public Drivetrain drivetrain;
     public Turret turret;
+    public Flywheel flywheel;
     public Intake intake;
     public Tongue tongue;
     public Wings wings;
@@ -210,9 +212,10 @@ public class RobotContainer {
         HardwareDevices.flywheelMotorLeader.setDirection(DcMotorImplEx.Direction.REVERSE);
         flywheelMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelMotors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        positionProvider = new PositionProvider(this, HardwareDevices.pinpoint);
+        positionProvider = new PositionProvider(this);
 
-        turret = new Turret(this, flywheelMotors, HardwareDevices.hoodServo, HardwareDevices.turretMotor);
+        turret = new Turret(this, HardwareDevices.hoodServo, HardwareDevices.turretMotor);
+        flywheel = new Flywheel(this, flywheelMotors);
         intake = new Intake(this, HardwareDevices.intakeMotor);
         tongue = new Tongue(this, tongueServos);
         wings = new Wings(this, wingsServos);
@@ -268,8 +271,8 @@ public class RobotContainer {
     }
 
     public void start(OpMode opmode, boolean teleop) {
-        gamepadEx1 = new GamepadWrapper(opmode.gamepad1);
-        gamepadEx2 = new GamepadWrapper(opmode.gamepad2);
+        driverController = new GamepadWrapper(opmode.gamepad1);
+        operatorController = new GamepadWrapper(opmode.gamepad2);
         Status.isDrivingActive = false;
 
         // Start the required threads
@@ -311,14 +314,14 @@ public class RobotContainer {
 
         // Update Goal Pose
             double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
-            double yMultiplier = Status.currentPose.getY(DistanceUnit.CM) > 0 ? 1: -1;
+            double yMultiplier = Status.currentY > 0 ? 1: -1;
             Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
 
 //        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
 
         if (teleop){
-            gamepadEx1.update();
-            gamepadEx2.update();
+            driverController.update();
+            operatorController.update();
             drivetrain.driveJoystickUpdate();
             drivetrain.update();
             positionProvider.update();
@@ -636,15 +639,17 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("Flywheel");
-                addDataLog("Flywheel Target Velocity", turret.flywheel.targetVelocity, true);
-                addDataLog("Flywheel Current Velocity", turret.flywheel.getFlywheelVelocity(), true);
-                addDataLog("Flywheel Error", turret.flywheelError, true);
+                addDataLog("Flywheel Target Velocity", flywheel.targetVelocity, true);
+                addDataLog("Flywheel Current Velocity", flywheel.getFlywheelVelocity(), true);
+                addDataLog("Flywheel Error", flywheel.error, true);
                 addDataLog("Flywheel Toggle", Status.flywheelToggle, true);
                 addDataLog("Flywheel Leader Current Velocity", HardwareDevices.flywheelMotorLeader.getVelocity(), false);
                 addDataLog("Flywheel Follower Current Velocity", HardwareDevices.flywheelMotorFollower.getVelocity(), false);
             addBlankLine();
 
             addCaptionLine("Turret & Hood");
+                addDataLog("Turret Target Position", turret.getTargetPosition(), true);
+                addDataLog("Turret Target Position Degrees", turret.getTargetPositionDegrees(), true);
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
                 addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getCurrentPosition(), true);
 //                addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
@@ -681,7 +686,7 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("Flywheel Power Draw");
-                addDataLog("Flywheel Total Current", turret.flywheel.getCurrent(), false);
+                addDataLog("Flywheel Total Current", flywheel.getCurrent(), false);
                 addDataLog("Motor Flywheel Leader", HardwareDevices.flywheelMotorLeader.getCurrent(CurrentUnit.AMPS), false);
                 addDataLog("Motor Flywheel Follower", HardwareDevices.flywheelMotorFollower.getCurrent(CurrentUnit.AMPS), false);
             addBlankLine();

@@ -42,25 +42,25 @@ public class TurretPDF {
      * @return The calculated PDF output.
      */
     public double calculate(double positionToFaceGoal, double goalOrientedRX) {
-        if (Math.abs(positionToFaceGoal - turretMotor.getCurrentPosition()) < Constants.Turret.TURRET_TOLERANCE_TICKS) {
+        if (Math.abs(positionToFaceGoal - turretMotor.getCurrentPosition()) < Constants.Turret.TOLERANCE_TICKS) {
             lastTargetPower = 0;
             return 0;
         }
 
-        ffMultiplier = Math.abs(positionToFaceGoal - turretMotor.getCurrentPosition()) < 2.5 * Constants.Turret.TURRET_TOLERANCE_TICKS ? -1 :1;
+        ffMultiplier = Math.abs(positionToFaceGoal - turretMotor.getCurrentPosition()) < 2.5 * Constants.Turret.TOLERANCE_TICKS ? -1 :1;
 
         double error = positionToFaceGoal - turretMotor.getCurrentPosition();
         dt = System.currentTimeMillis() - lastTime;
         goalOrientedRX /= dt;
         errorDiff = (error - lastError) / dt; // differance between the errors scaled by time
 
-            p = Constants.Turret.TURRET_KP * error; // proportional to error
+            p = Constants.Turret.KP * error; // proportional to error
 
-            i += error * Constants.Turret.TURRET_KI;
+            i += error * Constants.Turret.KI;
 
-            d = Constants.Turret.TURRET_KD  * errorDiff; // this slows the acceleration down
+            d = Constants.Turret.KD * errorDiff; // this slows the acceleration down
 
-            ff = Constants.Turret.TURRET_KF * ffMultiplier + (goalOrientedRX / Constants.Turret.TURRET_GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // 1. flat addition to the power 2. extra velocity in ticks per second for the motor
+            ff = Constants.Turret.KF * ffMultiplier + (goalOrientedRX / Constants.Turret.GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // 1. flat addition to the power 2. extra velocity in ticks per second for the motor
 
 
         pid = (p + i + d) + ff * Math.signum(error);

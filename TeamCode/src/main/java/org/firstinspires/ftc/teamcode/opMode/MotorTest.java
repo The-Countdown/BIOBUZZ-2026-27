@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.opMode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 import org.firstinspires.ftc.teamcode.util.TurretPDF;
@@ -54,8 +52,8 @@ public class MotorTest extends OpMode {
     @Override
     public void loop() {
         robotContainer.refreshData();
-        robotContainer.gamepadEx1.update();
-        robotContainer.gamepadEx2.update();
+        robotContainer.driverController.update();
+        robotContainer.operatorController.update();
         defaultMotor();
         switch(motorIndex) {
             case -1:
@@ -114,19 +112,19 @@ public class MotorTest extends OpMode {
                 break;
         }
 
-        if (robotContainer.gamepadEx1.dpadRight.wasJustPressed()) {
+        if (robotContainer.driverController.dpadRight.wasJustPressed()) {
             motorIndex++;
-        } else if (robotContainer.gamepadEx1.dpadLeft.wasJustPressed()) {
+        } else if (robotContainer.driverController.dpadLeft.wasJustPressed()) {
             motorIndex--;
         }
 
-        if (robotContainer.gamepadEx1.dpadUp.wasJustPressed()) {
+        if (robotContainer.driverController.dpadUp.wasJustPressed()) {
             motorPower += 0.1;
-        } else if (robotContainer.gamepadEx1.dpadDown.wasJustPressed()) {
+        } else if (robotContainer.driverController.dpadDown.wasJustPressed()) {
             motorPower -= 0.1;
         }
 
-        if (robotContainer.gamepadEx1.cross.wasJustPressed()) {
+        if (robotContainer.driverController.cross.wasJustPressed()) {
             motorPower = 0;
         }
 

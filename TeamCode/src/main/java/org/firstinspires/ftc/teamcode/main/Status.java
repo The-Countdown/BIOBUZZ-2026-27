@@ -33,7 +33,6 @@ public class Status {
     // Match Info
 
         public static Constants.Game.ALLIANCE alliance = Constants.Game.ALLIANCE.RED;
-        public static Pose2D flowerResetPose;
         public static Pose2D goalPose;
 
     // Data Checks

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
@@ -37,26 +36,26 @@ public class ServoTest extends OpMode {
 
     @Override
     public void loop() {
-        robotContainer.gamepadEx1.update();
-        robotContainer.gamepadEx2.update();
+        robotContainer.driverController.update();
+        robotContainer.operatorController.update();
 
-        if (robotContainer.gamepadEx1.dpadRight.wasJustPressed()) {
+        if (robotContainer.driverController.dpadRight.wasJustPressed()) {
             servoIndex++;
-        } else if (robotContainer.gamepadEx1.dpadLeft.wasJustPressed()) {
+        } else if (robotContainer.driverController.dpadLeft.wasJustPressed()) {
             servoIndex--;
         }
 
-        if (robotContainer.gamepadEx1.dpadUp.wasJustPressed()) {
+        if (robotContainer.driverController.dpadUp.wasJustPressed()) {
             servoPose += 0.025;
-        } else if (robotContainer.gamepadEx1.dpadDown.wasJustPressed()) {
+        } else if (robotContainer.driverController.dpadDown.wasJustPressed()) {
             servoPose -= 0.025;
         }
 
-        if (robotContainer.gamepadEx1.cross.isHeldFor(1.0)) {
+        if (robotContainer.driverController.cross.isHeldFor(1.0)) {
             servoPose = 0.0;
         }
 
-        if (robotContainer.gamepadEx1.cross.wasJustPressed()) {
+        if (robotContainer.driverController.cross.wasJustPressed()) {
             switch (servoIndex) {
                 case -1:
                     telemetry.addLine("stopped");

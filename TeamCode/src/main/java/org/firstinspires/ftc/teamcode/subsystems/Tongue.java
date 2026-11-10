@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
-import org.firstinspires.ftc.teamcode.hardware.BetterServo;
+
 import org.firstinspires.ftc.teamcode.hardware.LinkedServos;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
@@ -23,7 +23,7 @@ public class Tongue extends RobotContainer.HardwareDevices{
     public void update(boolean teleop){
 
         if (teleop) {
-            if (robotContainer.gamepadEx1.rightBumper.isHeld() || robotContainer.gamepadEx2.rightBumper.isHeld()) {
+            if (robotContainer.driverController.rightBumper.isHeld() || robotContainer.operatorController.rightBumper.isHeld()) {
                 up();
             } else if (!Status.tongueDown) {
                 down();

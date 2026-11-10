@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.other;
+package org.firstinspires.ftc.teamcode.threadedPrograms;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -34,7 +34,7 @@ public class TelemetryLogger extends Thread {
         while (Status.opModeIsActive) {
             CURRENT_LOOP_TIME_MS = robotContainer.updateLoopTime("telemetryLogger");
             CURRENT_LOOP_TIME_AVG_MS = robotContainer.getRollingAverageLoopTime("telemetryLogger");
-            // if (robotContainer.gamepadEx2.dpadDown.wasJustPressed() && timer.milliseconds() > 2000) {
+            // if (robotContainer.operatorController.dpadDown.wasJustPressed() && timer.milliseconds() > 2000) {
             //     robotContainer.writeDataLog();
             //     robotContainer.writeEventLog();
             //     timer.reset();

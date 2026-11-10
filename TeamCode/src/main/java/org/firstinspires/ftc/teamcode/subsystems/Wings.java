@@ -21,7 +21,7 @@ public class Wings extends RobotContainer.HardwareDevices {
         if (teleop) {
 
             // Actions to happen when wingsDown boolean was just changed
-            if (robotContainer.gamepadEx1.dpadDown.wasJustPressed() || robotContainer.gamepadEx2.square.wasJustPressed()) {
+            if (robotContainer.driverController.dpadDown.wasJustPressed() || robotContainer.operatorController.square.wasJustPressed()) {
                 Status.wingsDown = !Status.wingsDown;
                 if (Status.wingsDown) {
                     robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.setPosition(Constants.Wings.EXTENDED), 250);

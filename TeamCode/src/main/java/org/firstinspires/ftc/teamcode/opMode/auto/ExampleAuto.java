@@ -25,7 +25,6 @@ import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Our Imports
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
@@ -55,7 +54,6 @@ public class ExampleAuto extends OpMode {
                 // executed on start of command
                 Status.flywheelToggle = true;
                 robotContainer.tongue.up();
-                robotContainer.turret.hood.setPos(Constants.Turret.HOOD_PRESETS[0]);
             })
             .setExecute(() -> {
                 // executed on every loop while command is running

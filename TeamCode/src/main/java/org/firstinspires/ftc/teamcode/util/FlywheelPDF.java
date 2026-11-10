@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import androidx.appcompat.widget.ThemedSpinnerAdapter;
-
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 
@@ -56,17 +54,17 @@ public class FlywheelPDF {
             dropTime = System.currentTimeMillis();
         }
 
-//            s = Math.signum(error)* Math.pow(error, 2) * Constants.Turret.FLYWHEEL_KS; // This is tuned just like p
+//            s = Math.signum(error)* Math.pow(error, 2) * Constants.Flywheel.KS; // This is tuned just like p
 
-            p = Constants.Turret.FLYWHEEL_KP * error; // proportional to error
+            p = Constants.Flywheel.KP * error; // proportional to error
 
-            p = p < 0 ? p / Constants.Turret.FLYWHEEL_KS : p;
+            p = p < 0 ? p / Constants.Flywheel.KS : p;
 
-            i += error * Constants.Turret.FLYWHEEL_KI;
+            i += error * Constants.Flywheel.KI;
 
-            d = Constants.Turret.FLYWHEEL_KD  * -errorDiff; // this slows the acceleration down
+            d = Constants.Flywheel.KD  * -errorDiff; // this slows the acceleration down
 
-            ff = (targetSpeed * Constants.Turret.FLYWHEEL_KF) / Constants.Turret.FLYWHEEL_MAX_VELOCITY; // flat addition to the power
+            ff = (targetSpeed * Constants.Flywheel.KF) / Constants.Flywheel.MAX_VELOCITY; // flat addition to the power
 
 
         pid = (p + i + d) * dt + ff;
