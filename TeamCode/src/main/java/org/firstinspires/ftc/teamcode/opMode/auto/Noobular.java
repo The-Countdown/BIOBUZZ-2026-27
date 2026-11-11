@@ -14,6 +14,7 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import static com.pedropathing.api.Paths.*;
 import static org.firstinspires.ftc.teamcode.main.Status.alliance;
+import static org.firstinspires.ftc.teamcode.main.Status.flywheelToggle;
 import static java.lang.Thread.sleep;
 
 import com.pedropathing.follower.*;
@@ -53,85 +54,84 @@ public class Noobular extends OpMode {
 
     // Poses
     private final Pose start = poseFactory.of(55.1078, 8.3569, 90);
-    private final Pose path1 = poseFactory.of(9.2497, 8.1639, -179.7589);
-    private final Pose point2Start = poseFactory.of(9.2497, 8.1639, 180);
-    private final Pose point2 = poseFactory.of(23.332, 17.8777, 90);
-    private final Pose point2Control1 = poseFactory.of(12.2949, 19.5139, 0);
-    private final Pose point3 = poseFactory.of(46.3906, 124.1394, 55.0967);
-    private final Pose point3Control1 = poseFactory.of(13.381, 76.827, 0);
-    private final Pose point4 = poseFactory.of(46.4471, 130.5162, 89.4921);
-    private final Pose point5 = poseFactory.of(46.348, 123.8845, 89.1437);
-    private final Pose point6Start = poseFactory.of(46.348, 123.8845, 90);
-    private final Pose point6 = poseFactory.of(17.6811, 46.2623, 180);
-    private final Pose point6Control1 = poseFactory.of(26.5018, 98.6829, 0);
-    private final Pose point7 = poseFactory.of(10.6126, 46.2672, 179.9602);
-    private final Pose point8 = poseFactory.of(17.5015, 46.3175, -179.5818);
-    private final Pose point9 = poseFactory.of(10.0877, 97.2652, -81.7205);
+    private final Pose point1 = poseFactory.of(8.4818, 8.5693, 179.739);
+    private final Pose point2Start = poseFactory.of(8.4818, 8.5693, 180);
+    private final Pose point2 = poseFactory.of(55.1751, 8.8685, 90);
+    private final Pose point2Control1 = poseFactory.of(55.0152, 55.5438, 0);
 
     public Path path1() {
-        return Paths.line(start, path1).tangent();
+        return Paths.line(start, point1).tangent();
     }
 
     public Path path2() {
         return Paths.curve(point2Start, point2Control1, point2).linear(point2Start, point2);
     }
 
+
+    private final Pose start2 = poseFactory.of(55.18, 8.87, 90);
+    private final Pose path3 = poseFactory.of(47.0782, 130.5712, 89.8778);
+    private final Pose path3Control1 = poseFactory.of(56.2019, 66.2052, 0);
+    private final Pose path3Control2 = poseFactory.of(66.6805, 58.2095, 0);
+    private final Pose path3Control3 = poseFactory.of(63.4107, 112.2573, 0);
+    private final Pose path3Control4 = poseFactory.of(47.0458, 115.3768, 0);
+    private final Pose point4 = poseFactory.of(47.3048, 119.0366, 91.1256);
+    private final Pose point5Start = poseFactory.of(47.3048, 119.0366, 90);
+    private final Pose point5 = poseFactory.of(47.1546, 118.7439, 270);
+
     public Path path3() {
-        return Paths.curve(point2, point3Control1, point3).tangent();
+        return Paths.curve(start2, path3Control1, path3Control2, path3Control3, path3Control4, path3).tangent();
     }
 
     public Path path4() {
-        return Paths.line(point3, point4).tangent();
+        return Paths.line(path3, point4).reverseTangent();
     }
 
     public Path path5() {
-        return Paths.line(point4, point5).reverseTangent();
+        return Paths.line(point5Start, point5).linear(point5Start, point5);
     }
 
+    private final Pose start3 = poseFactory.of(47.15, 118.74, 270);
+    private final Pose path6 = poseFactory.of(10.3921, 46.2949, 180);
+    private final Pose path6Control1 = poseFactory.of(17.4632, 92.4368, 0);
+    private final Pose path6Control2 = poseFactory.of(37.2515, 40.9704, 0);
+    private final Pose path6Control3 = poseFactory.of(20.6661, 45.8093, 0);
+    private final Pose point7Start = poseFactory.of(10.3921, 46.2949, 180);
+    private final Pose point7 = poseFactory.of(47.15, 118.74, 270);
+    private final Pose point7Control1 = poseFactory.of(21.187, 45.7193, 0);
+    private final Pose point7Control2 = poseFactory.of(37.4038, 40.9973, 0);
+    private final Pose point7Control3 = poseFactory.of(17.578, 92.022, 0);
+    private final Pose point8 = poseFactory.of(11.2896, 116.7166, 3.2294);
+
     public Path path6() {
-        return Paths.curve(point6Start, point6Control1, point6).linear(point6Start, point6);
+        return Paths.curve(start3, path6Control1, path6Control2, path6Control3, path6).linear(start3, path6);
     }
 
     public Path path7() {
-        return Paths.line(point6, point7).tangent();
+        return Paths.curve(point7Start, point7Control1, point7Control2, point7Control3, point7).linear(point7Start, point7);
     }
 
     public Path path8() {
         return Paths.line(point7, point8).reverseTangent();
     }
 
-    public Path path9() {
-        return Paths.line(point8, point9).reverseTangent();
-    }
+    private final Pose start4 = poseFactory.of(47.15, 118.74, 270);
+    private final Pose path9 = poseFactory.of(10.3921, 46.1164, 180);
+    private final Pose path9Control1 = poseFactory.of(13.712, 101.4478, 0);
+    private final Pose path9Control2 = poseFactory.of(34.3195, 45.8985, 0);
+    private final Pose path9Control3 = poseFactory.of(29.8922, 45.436, 0);
+    private final Pose point10 = poseFactory.of(11.5352, 95.9021, -87.0516);
+    private final Pose point10Control1 = poseFactory.of(30.0039, 45.5432, 0);
+    private final Pose point10Control2 = poseFactory.of(34.4614, 45.8394, 0);
+    private final Pose point10Control3 = poseFactory.of(12.8881, 69.6338, 0);
 
-    private final Pose path10 = poseFactory.of(10.1419, 46.7062, 180);
-    private final Pose point11 = poseFactory.of(56.3129, 8.6589, 90.7611);
-    private final Pose point11Control1 = poseFactory.of(22.8556, 46.8857, 0);
-    private final Pose point11Control2 = poseFactory.of(55.8088, 46.6054, 0);
-    private final Pose point12Start = poseFactory.of(56.3129, 8.6589, 90);
-    private final Pose point12 = poseFactory.of(47.0736, 130.248, 90);
-    private final Pose point12Control1 = poseFactory.of(11.8671, 41.5791, 0);
-    private final Pose point12Control2 = poseFactory.of(18.651, 81.2517, 0);
-    private final Pose point12Control3 = poseFactory.of(44.4672, 106.0659, 0);
-    private final Pose point13 = poseFactory.of(13.8672, 119.179, -21.7888);
-    private final Pose point13Control1 = poseFactory.of(46.8954, 124.2191, 0);
-    private final Pose point13Control2 = poseFactory.of(51.4341, 104.1618, 0);
+    public Path path9() {
+        return Paths.curve(start4, path9Control1, path9Control2, path9Control3, path9).linear(start4, path9);
+    }
 
     public Path path10() {
-        return Paths.line(start, path10).linear(start, path10);
+        return Paths.curve(path9, point10Control1, point10Control2, point10Control3, point10).reverseTangent();
     }
 
-    public Path path11() {
-        return Paths.curve(path10, point11Control1, point11Control2, point11).reverseTangent();
-    }
-
-    public Path path12() {
-        return Paths.curve(point12Start, point12Control1, point12Control2, point12Control3, point12).linear(point12Start, point12);
-    }
-
-    public Path path13() {
-        return Paths.curve(point12, point13Control1, point13Control2, point13).reverseTangent();
-    }
     // Action Creation
     Command turretOnOff = Command.build()
             .setStart(() -> {
@@ -172,7 +172,7 @@ public class Noobular extends OpMode {
 
     Command proboscisUp = Command.build()
             .setStart(() -> {
-            robotContainer.proboscis.up();
+                robotContainer.proboscis.up();
             })
             .setExecute(() -> {
 
@@ -183,7 +183,7 @@ public class Noobular extends OpMode {
 
     Command proboscisDown = Command.build()
             .setStart(() -> {
-               robotContainer.proboscis.down();
+                robotContainer.proboscis.down();
             })
             .setExecute(() -> {
 
@@ -192,37 +192,61 @@ public class Noobular extends OpMode {
 
             });
 
-    private Command autoRoutine() {
+    private Command autoRoutine1() {
         return sequential( // list of *commands* to run in a row when executed
-                proboscisDown,
-                follow(follower, path1()),
-                intakeOn,
-                follow(follower, path2()),
-                intakeOff,
                 turretOnOff,
-                follow(follower, path3()),
                 intakeOn,
-                follow(follower, path4()),
-                proboscisUp,
-                follow(follower, path5()),
-                intakeOff
-
+                follow(follower, path1()),
+                intakeOff,
+                follow(follower, path2())
         );
     }
 
     private Command autoRoutine2() {
         return sequential(
-                proboscisDown,
-                follow(follower, path10()),
                 intakeOn,
-                follow(follower, path11()),
-                intakeOff,
                 turretOnOff,
-                follow(follower, path12()),
+                follow(follower,path3()),
+                turretOnOff,
+                follow(follower, path4()),
+                intakeOff,
+                follow(follower, path5())
+        );
+    }
+
+    private Command autoRoutine3() {
+        return sequential(
+                follow(follower,path3()),
                 intakeOn,
-                follow(follower, path13()),
+                turretOnOff,
+                follow(follower, path4()),
+                intakeOff,
+                follow(follower, path5())
+        );
+    }
+
+    private Command autoRoutine4() {
+        return sequential(
+                proboscisDown,
+                follow(follower, path6()),
+                intakeOn,
+                follow(follower, path7()),
+                turretOnOff,
+                proboscisUp,
+                intakeOff,
+                follow(follower,path8())
+        );
+    }
+
+    private Command autoRoutine5() {
+        return sequential(
+                proboscisDown,
+                follow(follower, path9()),
+                intakeOn,
+                follow(follower, path10()),
                 intakeOff,
                 proboscisUp
+
         );
     }
 
@@ -259,23 +283,23 @@ public class Noobular extends OpMode {
     @Override
     public void loop() { // Runs constantly while the opmode is active
         follower.update(); // Updates that pathing follower to make the robot move in auto
-        Status.flywheelToggle = true;
-        robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.up(), 1000);
-        robotContainer.delayedActionManager.schedule(() -> Status.flywheelToggle = false, 2000);
+        schedule(autoRoutine1());
 
-            if (limelight.pipelineSwitch(8)) {
-                schedule(autoRoutine2());
-            }
-            else {
-                schedule(autoRoutine());
-            }
+        if (limelight.pipelineSwitch(8)) {
+            schedule(autoRoutine2());
+            schedule(autoRoutine4());
+        } else {
+            schedule(autoRoutine3());
+            schedule(autoRoutine5());
+        }
 
-            if (limelight.pipelineSwitch(9)) {
-                schedule(autoRoutine2());
-            }
-            else {
-                schedule(autoRoutine());
-            }
+        if (limelight.pipelineSwitch(9)) {
+            schedule(autoRoutine2());
+            schedule(autoRoutine4());
+        } else {
+            schedule(autoRoutine3());
+            schedule(autoRoutine5());
+        }
 
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
 
