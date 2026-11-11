@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode.opMode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
+import org.firstinspires.ftc.teamcode.util.TurretPDF;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "MotorTest", group = "TeleOp")
 //@Disabled
@@ -13,6 +12,7 @@ public class MotorTest extends OpMode {
     private RobotContainer robotContainer;
     private int motorIndex = -1;
     private double motorPower = 0.0;
+    private TurretPDF turretPDF;
 
     public void defaultMotor(){
         RobotContainer.HardwareDevices.rightFront.setPower(0);
@@ -34,6 +34,7 @@ public class MotorTest extends OpMode {
         }
         robotContainer.init();
 
+        turretPDF = new TurretPDF();
         RobotContainer.HardwareDevices.flywheelMotorFollower.start();
         RobotContainer.HardwareDevices.flywheelMotorLeader.start();
         RobotContainer.HardwareDevices.intakeMotor.start();
@@ -50,8 +51,9 @@ public class MotorTest extends OpMode {
 
     @Override
     public void loop() {
-        robotContainer.gamepadEx1.update();
-        robotContainer.gamepadEx2.update();
+        robotContainer.refreshData();
+        robotContainer.driverController.update();
+        robotContainer.operatorController.update();
         defaultMotor();
         switch(motorIndex) {
             case -1:
@@ -78,8 +80,11 @@ public class MotorTest extends OpMode {
                 telemetry.addLine("intakeMotor");
                 break;
             case 5:
-                RobotContainer.HardwareDevices.turretMotor.setPower(motorPower);
+                if (motorPower != 0) {
+                    RobotContainer.HardwareDevices.turretMotor.setPower(turretPDF.calculate(motorPower * 10 * 28, RobotContainer.HardwareDevices.turretMotor.getCurrentPosition(), 0));
+                }
                 telemetry.addLine("turretMotor");
+                telemetry.addData("Position: ", RobotContainer.HardwareDevices.turretMotor.getCurrentPosition());
                 break;
             case 6:
                 RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(motorPower);
@@ -109,19 +114,19 @@ public class MotorTest extends OpMode {
                 break;
         }
 
-        if (robotContainer.gamepadEx1.dpadRight.wasJustPressed()) {
+        if (robotContainer.driverController.dpadRight.wasJustPressed()) {
             motorIndex++;
-        } else if (robotContainer.gamepadEx1.dpadLeft.wasJustPressed()) {
+        } else if (robotContainer.driverController.dpadLeft.wasJustPressed()) {
             motorIndex--;
         }
 
-        if (robotContainer.gamepadEx1.dpadUp.wasJustPressed()) {
+        if (robotContainer.driverController.dpadUp.wasJustPressed()) {
             motorPower += 0.1;
-        } else if (robotContainer.gamepadEx1.dpadDown.wasJustPressed()) {
+        } else if (robotContainer.driverController.dpadDown.wasJustPressed()) {
             motorPower -= 0.1;
         }
 
-        if (robotContainer.gamepadEx1.cross.wasJustPressed()) {
+        if (robotContainer.driverController.cross.wasJustPressed()) {
             motorPower = 0;
         }
 
@@ -129,5 +134,10 @@ public class MotorTest extends OpMode {
 
         telemetry.update();
         Thread.yield();
+    }
+
+    @Override
+    public void stop(){
+        robotContainer.stop();
     }
 }

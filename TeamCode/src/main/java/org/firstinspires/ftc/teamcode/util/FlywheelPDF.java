@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import androidx.appcompat.widget.ThemedSpinnerAdapter;
-
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 
@@ -11,9 +9,6 @@ import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 public class FlywheelPDF {
-    private final RobotContainer robotContainer;
-    private LinkedMotors flywheelMotors;
-
     private double error;
     private double lastError;
     private double p;
@@ -29,9 +24,7 @@ public class FlywheelPDF {
     private double dropTime;
     public TelemetryManager panelsTelemetry;
 
-    public FlywheelPDF(RobotContainer robotContainer, LinkedMotors flywheelMotors) {
-        this.robotContainer = robotContainer;
-        this.flywheelMotors = flywheelMotors;
+    public FlywheelPDF() {
         this.lastTargetPower = 0;
         this.lastTime = 0;
         this.dropTime = 0;
@@ -46,9 +39,10 @@ public class FlywheelPDF {
     public double calculate(double targetSpeed) {
         if (targetSpeed == 0) {
             lastTargetPower = 0;
+            if (Status.debugMode){ panelsTelemetry.addLine("Returned within tolerance"); panelsTelemetry.update(); }
             return 0;
         }
-        double error = targetSpeed - flywheelMotors.getVelocity();
+        double error = targetSpeed - RobotContainer.HardwareDevices.flywheelMotorLeader.getVelocity();
         dt = System.currentTimeMillis() - lastTime + 1;
         errorDiff = (lastError - error) / dt; // differance between the errors scaled by time
 
@@ -56,24 +50,24 @@ public class FlywheelPDF {
             dropTime = System.currentTimeMillis();
         }
 
-//            s = Math.signum(error)* Math.pow(error, 2) * Constants.Turret.FLYWHEEL_KS; // This is tuned just like p
+//            s = Math.signum(error)* Math.pow(error, 2) * Constants.Flywheel.KS; // This is tuned just like p
 
-            p = Constants.Turret.FLYWHEEL_KP * error; // proportional to error
+            p = Constants.Flywheel.KP * error; // proportional to error
 
-            p = p < 0 ? p / Constants.Turret.FLYWHEEL_KS : p;
+            p = p < 0 ? p / Constants.Flywheel.KS : p;
 
-            i += error * Constants.Turret.FLYWHEEL_KI;
+            i += error * Constants.Flywheel.KI;
 
-            d = Constants.Turret.FLYWHEEL_KD  * -errorDiff; // this slows the acceleration down
+            d = Constants.Flywheel.KD  * -errorDiff; // this slows the acceleration down
 
-            ff = (targetSpeed * Constants.Turret.FLYWHEEL_KF) / Constants.Turret.FLYWHEEL_MAX_VELOCITY; // flat addition to the power
+            ff = (targetSpeed * Constants.Flywheel.KF) / Constants.Flywheel.MAX_VELOCITY; // flat addition to the power
 
 
         pid = (p + i + d) * dt + ff;
 
         lastTargetPower = HelperFunctions.clamp(pid, 0, 1);
 
-        if (!Status.competitionMode || Status.debugMode){
+        if (Status.debugMode){
             panelsTelemetry.addData("Power", lastTargetPower);
             panelsTelemetry.addData("P", p);
             panelsTelemetry.addData("I", i);
@@ -83,12 +77,12 @@ public class FlywheelPDF {
             panelsTelemetry.addData("PID", pid);
             panelsTelemetry.addData("DT", dt);
             panelsTelemetry.addData("Drop Time", dropTime);
-            panelsTelemetry.addData("Target", targetSpeed);
-            panelsTelemetry.addData("Velocity", flywheelMotors.getVelocity());
+            panelsTelemetry.addData("Target Velocity", targetSpeed);
+            panelsTelemetry.addData("Velocity", RobotContainer.HardwareDevices.flywheelMotorLeader.getVelocity());
             panelsTelemetry.addData("Error", error);
             panelsTelemetry.addData("error Diff", errorDiff);
 
-        panelsTelemetry.update();
+//        panelsTelemetry.update();
         }
 
         lastError = error;

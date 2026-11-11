@@ -1,10 +1,7 @@
-package org.firstinspires.ftc.teamcode.other;
+package org.firstinspires.ftc.teamcode.threadedPrograms;
 
 import static org.firstinspires.ftc.teamcode.main.RobotContainer.HardwareDevices.pinpoint;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
@@ -37,7 +34,7 @@ public class LocalizationUpdater extends Thread {
             return;
         }
         while (Status.opModeIsActive) {
-//            pinpoint.update();
+            pinpoint.update();
             CURRENT_LOOP_TIME_MS = robotContainer.updateLoopTime("pinpointUpdater");
             CURRENT_LOOP_TIME_AVG_MS = robotContainer.getRollingAverageLoopTime("pinpointUpdater");
             if (Status.isDrivingActive) {

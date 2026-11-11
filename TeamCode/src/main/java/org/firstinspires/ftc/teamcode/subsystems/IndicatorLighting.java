@@ -83,9 +83,9 @@ public class IndicatorLighting {
 
         public void lightsUpdate() {
             double redGreenDifference = Objects.requireNonNull(Constants.LED.COLOR_MAP.get(Constants.LED.COLOR.GREEN)).ANALOG - Objects.requireNonNull(Constants.LED.COLOR_MAP.get(Constants.LED.COLOR.RED)).ANALOG;
-            double flywheelError = Math.abs(robotContainer.turret.flywheelError);
+            double flywheelError = Math.abs(robotContainer.flywheel.error);
             double gradiantPercentage = 1 - (Math.min(flywheelError/Constants.LED.FLYWHEEL_GRADIANT_PERIOD, 1));
-            if (robotContainer.turret.flywheel.targetVelocity > 10) {
+            if (robotContainer.flywheel.targetVelocity > 10) {
                 colorSet = false;
                 robotContainer.allIndicatorLights.setColorAnalog(Objects.requireNonNull(Constants.LED.COLOR_MAP.get(Constants.LED.COLOR.RED)).ANALOG + (redGreenDifference * gradiantPercentage));
             } else {

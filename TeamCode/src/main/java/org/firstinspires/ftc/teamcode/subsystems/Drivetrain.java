@@ -39,11 +39,11 @@ public class Drivetrain {
     }
 
     public void update(){
-        if (robotContainer.gamepadEx1.circle.wasJustPressed() || robotContainer.gamepadEx2.circle.wasJustPressed()) {
+        if (robotContainer.driverController.circle.wasJustPressed() || robotContainer.operatorController.circle.wasJustPressed()) {
             RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.ORIGIN);
 //            RobotContainer.HardwareDevices.betterIMU.resetAngle();
-        } else if (robotContainer.gamepadEx1.triangle.wasJustPressed() || robotContainer.gamepadEx2.circle.isHeldFor(1.0)) {
-//            RobotContainer.HardwareDevices.pinpoint.setPosition(Status.cornerResetPose);
+        } else if (robotContainer.driverController.triangle.wasJustPressed() || robotContainer.operatorController.circle.isHeldFor(1.0)) {
+//            RobotContainer.HardwareDevices.pinpoint.setPosition(Status.flowerResetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
         }
     }
@@ -58,9 +58,9 @@ public class Drivetrain {
 
         double current = getCurrent();
         double currentMultiplier = current > 15 ? 14/current : 1;
-        y = -joystickScaler(robotContainer.gamepadEx1.leftStickY()) * currentMultiplier;
-        x = joystickScaler(robotContainer.gamepadEx1.leftStickX()) * currentMultiplier;
-        rx = (joystickRotationScaler(robotContainer.gamepadEx1.rightStickX()) * currentMultiplier) * Constants.Control.ROTATION_SCALER;
+        y = -joystickScaler(robotContainer.driverController.leftStickY()) * currentMultiplier;
+        x = joystickScaler(robotContainer.driverController.leftStickX()) * currentMultiplier;
+        rx = (joystickRotationScaler(robotContainer.driverController.rightStickX()) * currentMultiplier) * Constants.Control.ROTATION_SCALER;
 
         double currentTime = System.currentTimeMillis()/1000.0;
         double dt = currentTime - lastTime;
@@ -108,7 +108,7 @@ public class Drivetrain {
         double leftBackPower;
         double rightBackPower;
 
-        if (robotContainer.gamepadEx1.ps.wasJustPressed()){
+        if (robotContainer.driverController.ps.wasJustPressed()){
             Status.fieldOriented = !Status.fieldOriented;
         }
 

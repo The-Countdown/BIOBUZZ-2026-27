@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
+
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
@@ -7,18 +8,26 @@ import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 public class Proboscis extends RobotContainer.HardwareDevices {
     private final RobotContainer robotContainer;
+    private final BetterServo proboscisServo;
     public Proboscis(RobotContainer robotContainer, BetterServo proboscisServo) {
         this.robotContainer = robotContainer;
+        this.proboscisServo = proboscisServo;
     }
 
     public void update(boolean teleop) {
         if (teleop) {
-            if (robotContainer.gamepadEx1.leftBumper.wasJustPressed() || robotContainer.gamepadEx2.leftBumper.wasJustPressed()) {
+
+            if (robotContainer.driverController.leftBumper.wasJustPressed() || robotContainer.operatorController.leftBumper.wasJustPressed()) {
                 Status.proboscisDown = !Status.proboscisDown;
-                if (!Status.proboscisDown) {
-                    up();
-                } else {
+            }
+
+            double pos = proboscisServo.getPosition();
+
+            if (pos != Constants.Proboscis.UP || pos != Constants.Proboscis.DOWN) {
+                if (Status.proboscisDown) {
                     down();
+                } else {
+                    up();
                 }
             }
         }

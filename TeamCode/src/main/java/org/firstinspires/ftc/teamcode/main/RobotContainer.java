@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -23,28 +22,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
-import org.firstinspires.ftc.teamcode.hardware.BetterIMU;
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
-import org.firstinspires.ftc.teamcode.other.PositionProvider;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Flywheel;
+import org.firstinspires.ftc.teamcode.util.PositionProvider;
 import org.firstinspires.ftc.teamcode.subsystems.Proboscis;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorLighting;
-import org.firstinspires.ftc.teamcode.other.LocalizationUpdater;
+import org.firstinspires.ftc.teamcode.threadedPrograms.LocalizationUpdater;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Tongue;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.subsystems.Wings;
 import org.firstinspires.ftc.teamcode.util.DelayedActionManager;
-import org.firstinspires.ftc.teamcode.util.GamepadWrapper;
+import org.firstinspires.ftc.teamcode.hardware.GamepadWrapper;
 import org.firstinspires.ftc.teamcode.hardware.LinkedMotors;
 import org.firstinspires.ftc.teamcode.hardware.LinkedServos;
 import org.firstinspires.ftc.teamcode.util.HelperFunctions;
-import org.firstinspires.ftc.teamcode.util.TelemetryLogger;
+import org.firstinspires.ftc.teamcode.threadedPrograms.TelemetryLogger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -84,10 +82,11 @@ public class RobotContainer {
     public IndicatorLighting.Light indicatorLightRight;
     public IndicatorLighting.Group allIndicatorLights;
 //    public static BNO055IMU.Parameters betterIMUP = new BNO055IMU.Parameters();
-    public GamepadWrapper gamepadEx1;
-    public GamepadWrapper gamepadEx2;
+    public GamepadWrapper driverController;
+    public GamepadWrapper operatorController;
     public Drivetrain drivetrain;
     public Turret turret;
+    public Flywheel flywheel;
     public Intake intake;
     public Tongue tongue;
     public Wings wings;
@@ -221,9 +220,11 @@ public class RobotContainer {
         HardwareDevices.flywheelMotorLeader.setDirection(DcMotorImplEx.Direction.REVERSE);
         flywheelMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelMotors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        positionProvider = new PositionProvider(this, HardwareDevices.pinpoint);
+        HardwareDevices.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        positionProvider = new PositionProvider(this);
 
-        turret = new Turret(this, flywheelMotors, HardwareDevices.hoodServo, HardwareDevices.turretMotor);
+        turret = new Turret(this, HardwareDevices.hoodServo, HardwareDevices.turretMotor);
+        flywheel = new Flywheel(this, flywheelMotors);
         intake = new Intake(this, HardwareDevices.intakeMotor);
         tongue = new Tongue(this, tongueServos);
         wings = new Wings(this, wingsServos);
@@ -242,6 +243,8 @@ public class RobotContainer {
         HardwareDevices.allHubs = hardwareMap.getAll(LynxModule.class);
         HardwareDevices.controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
         HardwareDevices.expansionHub = hardwareMap.get(LynxModule.class, "Expansion Hub 2");
+        HardwareDevices.pinpoint.recalibrateIMU();
+        HardwareDevices.pinpoint.resetPosAndIMU();
         for (LynxModule hub : HardwareDevices.allHubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
@@ -279,27 +282,15 @@ public class RobotContainer {
     }
 
     public void start(OpMode opmode, boolean teleop) {
-        gamepadEx1 = new GamepadWrapper(opmode.gamepad1);
-        gamepadEx2 = new GamepadWrapper(opmode.gamepad2);
+        driverController = new GamepadWrapper(opmode.gamepad1);
+        operatorController = new GamepadWrapper(opmode.gamepad2);
         Status.isDrivingActive = false;
-        Status.goalPose =
-                Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.INCH, 70, 70, AngleUnit.DEGREES, -45) :
-                Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.INCH, -70, 70, AngleUnit.DEGREES, 45) :
-                new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0);
-
-        Status.startingPose =
-                Status.alliance == Constants.Game.ALLIANCE.RED ? new Pose2D(DistanceUnit.CM, Constants.Robot.STARTING_X, Constants.Robot.STARTING_Y, AngleUnit.DEGREES, Constants.Robot.STARTING_HEADING) :
-                Status.alliance == Constants.Game.ALLIANCE.BLUE ? new Pose2D(DistanceUnit.CM, Constants.Robot.STARTING_X, -Constants.Robot.STARTING_Y, AngleUnit.DEGREES, -Constants.Robot.STARTING_HEADING) :
-                new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
-
-
 
         // Start the required threads
         telemetryLogger = new TelemetryLogger(this);
         telemetryLogger.start();
         localizationUpdater = new LocalizationUpdater(this, teleop);
         localizationUpdater.start();
-
     }
 
     public void stop() {
@@ -323,6 +314,7 @@ public class RobotContainer {
             try {
                 this.telemetryLogger.join();
             } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -330,32 +322,30 @@ public class RobotContainer {
     public void update(boolean teleop) {
         CURRENT_LOOP_TIME_MS = updateLoopTime("teleOp");
         refreshData();
+
+        // Update Goal Pose
+            double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? 1 : -1;
+            double yMultiplier = Status.currentY > 0 ? 1: -1;
+            Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
+
+//        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
+
         if (teleop){
-            gamepadEx1.update();
-            gamepadEx2.update();
+            driverController.update();
+            operatorController.update();
             drivetrain.driveJoystickUpdate();
             drivetrain.update();
             positionProvider.update();
         }
+
         delayedActionManager.update();
 //        allIndicatorLights.lightsUpdate();
         tongue.update(teleop);
         proboscis.update(teleop);
         turret.update(teleop);
+        flywheel.update(teleop);
         wings.update(teleop);
         intake.update(teleop);
-
-//        Status.currentHeading = Constants.System.USE_BETTER_IMU ? HardwareDevices.betterIMU.getAngle() : Status.currentPose.getHeading(AngleUnit.DEGREES);
-        Status.currentHeading = HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES);
-//        Status.currentVelocityX = HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
-//        Status.currentVelocityY = HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
-//        Status.currentVelocityHeading = HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
-
-//        double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? -1 : 1;
-//        double yMultiplier = Status.currentPose.getY(DistanceUnit.CM) > 0 ? 1: -1;
-//        Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
-
-//        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
 
         PREV_LOOP_TIME_MS = CURRENT_LOOP_TIME_MS;
 
@@ -593,8 +583,8 @@ public class RobotContainer {
 
         if (Status.competitionMode) { // Stuff in competition mode.
             addCaptionLine("Loop Times");
-                addDataLog("OpMode Avg Loop Time", (int) getRollingAverageLoopTime("teleOp") + " ms", true);
-                addDataLog("Pinpoint Avg Loop Time", (int) getRollingAverageLoopTime("pinpointUpdater") + " ms", true);
+                addDataLog("OpMode Avg Loop Time", (int) getLoopTime("teleOp") + " ms", true);
+                addDataLog("Pinpoint Avg Loop Time", (int) getLoopTime("pinpointUpdater") + " ms", true);
             addBlankLine();
 
             addCaptionLine("Current Pull");
@@ -602,14 +592,14 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("Robot Pose");
-                addDataLog("Pinpoint X", Status.currentPose.getX(DistanceUnit.CM) + " cm", true);
-                addDataLog("Pinpoint Y", Status.currentPose.getY(DistanceUnit.CM) + " cm", true);
+                addDataLog("Pinpoint X", Status.currentX + " cm", true);
+                addDataLog("Pinpoint Y", Status.currentY + " cm", true);
                 addDataLog("Robot Heading", Status.currentHeading, true);
             addBlankLine();
 
             addCaptionLine("Robot Headings");
 //                addDataLog("BetterIMU Yaw", HardwareDevices.betterIMU.getAngle(), true); // First angle is the yaw
-                addDataLog("Pinpoint Yaw", HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES), true); // First angle is the yaw
+                addDataLog("Pinpoint Yaw", HardwareDevices.pinpoint.getHeading(AngleUnit.DEGREES), false); // First angle is the yaw
 //                addDataLog("Use Better IMU", Constants.System.USE_BETTER_IMU, true);
             addBlankLine();
 
@@ -632,15 +622,15 @@ public class RobotContainer {
             addCaptionLine("Loop Times");
                 addDataLog("OpMode Loop Time", getLoopTime("teleOp") + " ms", true);
                 addDataLog("Pinpoint Loop Time", (int) getLoopTime("pinpointUpdater") + " ms", false);
-                addDataLog("OpMode Avg Loop Time", (int) getRollingAverageLoopTime("teleOp") + " ms", true);
-                addDataLog("Pinpoint Avg Loop Time", (int) getRollingAverageLoopTime("pinpointUpdater") + " ms", false);
+                addDataLog("OpMode Avg Loop Time", (int) telemetryLogger.CURRENT_LOOP_TIME_AVG_MS + " ms", true);
+                addDataLog("Pinpoint Avg Loop Time", (int) localizationUpdater.CURRENT_LOOP_TIME_AVG_MS + " ms", false);
             addBlankLine();
 
             addCaptionLine("Position & Heading");
                 addDataLog("Robot Heading", Status.currentHeading, true);
                 addDataLog("Robot Position", Status.currentPose, false);
-                addDataLog("Robot X", Status.currentPose.getX(DistanceUnit.CM) + " cm", true);
-                addDataLog("Robot Y", Status.currentPose.getY(DistanceUnit.CM) + " cm", true);
+                addDataLog("Robot X", Status.currentX + " cm", true);
+                addDataLog("Robot Y", Status.currentY + " cm", true);
 //                addDataLog("Use Better IMU", Constants.System.USE_BETTER_IMU, false);
                 addDataLog("Pinpoint Status", RobotContainer.HardwareDevices.pinpoint.getDeviceStatus(), false);
                 addDataLog("Pinpoint Heading", RobotContainer.HardwareDevices.pinpoint.getPosition().getHeading(AngleUnit.DEGREES), false);
@@ -648,31 +638,33 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("General Info");
-                addDataLog("Start Position", Status.startingPose, false);
                 addDataLog("Field Oriented", Status.fieldOriented, false);
                 addDataLog("Goal Position", Status.goalPose, false);
                 addDataLog("Distance to Goal", HelperFunctions.disToGoal(), true);
             addBlankLine();
 
             addCaptionLine("Drivetrain");
-                addDataLog("Drivetrain Y Targets", drivetrain.driveTargets[0], false);
+                addDataLog("Drivetrain Y Target", drivetrain.driveTargets[0], false);
                 addDataLog("Drivetrain Y Output", drivetrain.driveOutputs[0], false);
                 addDataLog("Drivetrain X Target", drivetrain.driveTargets[1], false);
                 addDataLog("Drivetrain X Output", drivetrain.driveOutputs[1], false);
             addBlankLine();
 
             addCaptionLine("Flywheel");
-                addDataLog("Flywheel Target Velocity", turret.flywheel.targetVelocity, true);
-                addDataLog("Flywheel Current Velocity", turret.flywheel.getFlywheelVelocity(), true);
-                addDataLog("Flywheel Error", turret.flywheelError, true);
+                addDataLog("Flywheel Target Velocity", flywheel.targetVelocity, true);
+                addDataLog("Flywheel Current Velocity", flywheel.getFlywheelVelocity(), true);
+                addDataLog("Flywheel Error", flywheel.error, true);
                 addDataLog("Flywheel Toggle", Status.flywheelToggle, true);
                 addDataLog("Flywheel Leader Current Velocity", HardwareDevices.flywheelMotorLeader.getVelocity(), false);
                 addDataLog("Flywheel Follower Current Velocity", HardwareDevices.flywheelMotorFollower.getVelocity(), false);
             addBlankLine();
 
             addCaptionLine("Turret & Hood");
+                addDataLog("Turret Target Position", turret.getTargetPosition(), true);
+                addDataLog("Turret Target Position Degrees", turret.getTargetPositionDegrees(), true);
                 addDataLog("Turret Current Angle", turret.getPositionDegrees(), true);
-                addDataLog("Turret Motor Position", HardwareDevices.turretMotor.getCurrentPosition(), true);
+                addDataLog("Turret Motor Position", turret.getPosition(), true);
+                addDataLog("Turret PID Output", turret.turretPDFOutput, true);
 //                addDataLog("Hood Position", HardwareDevices.hoodServo.getPosition(), true);
             addBlankLine();
 
@@ -707,13 +699,13 @@ public class RobotContainer {
             addBlankLine();
 
             addCaptionLine("Flywheel Power Draw");
-                addDataLog("Flywheel Total Current", turret.flywheel.getCurrent(), false);
+                addDataLog("Flywheel Total Current", flywheel.getCurrent(), false);
                 addDataLog("Motor Flywheel Leader", HardwareDevices.flywheelMotorLeader.getCurrent(CurrentUnit.AMPS), false);
                 addDataLog("Motor Flywheel Follower", HardwareDevices.flywheelMotorFollower.getCurrent(CurrentUnit.AMPS), false);
             addBlankLine();
 
             addCaptionLine("Drivetrain Power Draw");
-                addDataLog("Drivetrain Total Current", drivetrain.getCurrent(), true);
+                addDataLog("Drivetrain Total Current", drivetrain.getCurrent(), false);
                 addDataLog("Drive Motor LF Current", HardwareDevices.leftFront.getCurrent(CurrentUnit.AMPS), false);
                 addDataLog("Drive Motor RF Current", HardwareDevices.rightFront.getCurrent(CurrentUnit.AMPS), false);
                 addDataLog("Drive Motor LB Current", HardwareDevices.leftBack.getCurrent(CurrentUnit.AMPS), false);

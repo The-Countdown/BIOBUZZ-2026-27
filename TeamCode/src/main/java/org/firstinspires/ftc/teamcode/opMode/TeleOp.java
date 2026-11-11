@@ -5,18 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
-
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "TeleOp")
 public class TeleOp extends OpMode {
     private RobotContainer robotContainer;
-    private ElapsedTime tiltActivatedTimer = new ElapsedTime();
 
     @Override
     public void init() {
@@ -31,8 +25,6 @@ public class TeleOp extends OpMode {
         RobotContainer.HardwareDevices.pinpoint.setPosition(Status.currentPose);
 //        RobotContainer.HardwareDevices.betterIMU.resetAngle();
 //        RobotContainer.HardwareDevices.betterIMU.setAngleOffset(-Status.currentHeading);
-
-        tiltActivatedTimer.reset();
     }
 
     @Override
@@ -51,5 +43,10 @@ public class TeleOp extends OpMode {
     public void loop() {
         robotContainer.update(true);
         Thread.yield();
+    }
+
+    @Override
+    public void stop(){
+        robotContainer.stop();
     }
 }

@@ -1,55 +1,42 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
-import org.firstinspires.ftc.teamcode.util.FlywheelPDF;
 import org.firstinspires.ftc.teamcode.util.HelperFunctions;
-import org.firstinspires.ftc.teamcode.hardware.LinkedMotors;
 import org.firstinspires.ftc.teamcode.util.TurretPDF;
 
 public class Turret extends RobotContainer.HardwareDevices {
     private final RobotContainer robotContainer;
-    private final LinkedMotors flyWheelMotors;
     private final BetterDcMotor turretMotor;
     public final BetterServo hoodServo;
-    private FlywheelPDF flywheelPDF;
     private TurretPDF turretPDF;
+    public double currentPosition;
     private double targetPosition;
     private double targetPositionDegrees;
     private double manualTurretPos;
     public double turretAngleOffset;
-    public double turretAngleOffsetFar;
-    private boolean manualHood;
-    public double flywheelError;
-    public double flywheelPowerModifier;
     private double goalAngle;
     public double goalOrientedVelocityX;
     public double goalOrientedVelocityY;
     public double goalOrientedVelocityRX;
     public double angleToFaceGoal;
     public double lastAngleToFaceGoal;
+    public double turretPDFOutput;
 
-    public Turret(RobotContainer robotContainer, LinkedMotors flyWheelMotors, BetterServo hoodServo, BetterDcMotor turretMotor) {
+    public Turret(RobotContainer robotContainer, BetterServo hoodServo, BetterDcMotor turretMotor) {
         this.robotContainer = robotContainer;
-        this.flyWheelMotors = flyWheelMotors;
         this.hoodServo = hoodServo;
         this.turretMotor = turretMotor;
-        this.flywheelPDF = new FlywheelPDF(robotContainer, flyWheelMotors);
-        this.turretPDF = new TurretPDF(robotContainer, turretMotor);
+        this.turretPDF = new TurretPDF();
+        this.turretPDFOutput = 0;
         this.targetPosition = 0;
         this.manualTurretPos = 0;
         this.turretAngleOffset = 0;
-        this.turretAngleOffsetFar = 0;
-        this.flywheelError = 0;
-        this.flywheelPowerModifier = 0;
-        this.manualHood = false;
+        this.currentPosition = turretMotor.getCurrentPosition();
 
         flywheelMotorLeader.start();
         flywheelMotorFollower.start();
@@ -57,26 +44,10 @@ public class Turret extends RobotContainer.HardwareDevices {
     }
 
     public void update(boolean teleop) {
-        Status.flywheelToggleButton.update(Status.flywheelToggle);
         //robotContainer.turret.hood.setPos(HelperFunctions.clamp(tableInterpolate(Constants.Turret.HOOD_TABLE_DISTANCES, Constants.Turret.HOOD_PRESETS, HelperFunctions.disToGoal()), Constants.Turret.HOOD_PRESETS[0], Constants.Turret.HOOD_PRESETS[Constants.Turret.HOOD_PRESETS.length-1]));
+        currentPosition = turretMotor.getCurrentPosition();
 
-        if (Status.flywheelToggle) {
-            flywheel.targetVelocity = 1;
-//            flywheel.targetVelocity = tableInterpolate(Constants.Turret.FLYWHEEL_SPEED_TABLE_DISTANCES, Constants.Turret.FLYWHEEL_SPEED_TABLE, HelperFunctions.disToGoal()) - (goalOrientedVelocityX * Constants.Turret.FLYWHEEL_POWER_VELOCITY_MULTIPLIER);
-        } else {
-            flywheel.targetVelocity = -flywheelPowerModifier;
-        }
-
-        flywheel.targetVelocity = (flywheel.targetVelocity + flywheelPowerModifier) * Constants.Turret.FLYWHEEL_MAX_VELOCITY;
-        if (flywheel.targetVelocity > 10) {
-            flywheel.updateError();
-        } else {
-            flywheelError = 0;
-        }
-        Status.flywheelAtTargetSpeed = robotContainer.turret.flywheel.atTargetVelocity();
-        double targetPower = flywheelPDF.calculate(flywheel.targetVelocity);
-
-        if (Status.currentPose.getX(DistanceUnit.CM) < 0) {
+        if (Status.currentY < 0) {
             goalAngle = 180;
         } else {
             goalAngle = 0;
@@ -84,64 +55,34 @@ public class Turret extends RobotContainer.HardwareDevices {
 
         if (teleop) {
 
-            // This will either increase or decrease the flywheel power by small increments
-            if (robotContainer.gamepadEx2.dpadDown.wasJustPressed()){
-                flywheelPowerModifier -= 0.02;
+            if (robotContainer.operatorController.dpadLeft.wasJustPressed()) {
+                turretAngleOffset -= 2;
             }
 
-            if (robotContainer.gamepadEx2.dpadUp.wasJustPressed()){
-                flywheelPowerModifier += 0.02;
+            if (robotContainer.operatorController.dpadRight.wasJustPressed()) {
+                turretAngleOffset += 1.5;
             }
 
-            if (robotContainer.gamepadEx2.dpadUp.isHeldFor(1.0) || robotContainer.gamepadEx2.dpadDown.isHeldFor(1.0)) {
-                flywheelPowerModifier = 0;
-            }
-
-            if (robotContainer.gamepadEx2.cross.isHeldFor(1.0)) {
-                Status.shootOnTheMove = !Status.shootOnTheMove;
-            }
-
-            if (robotContainer.gamepadEx2.dpadLeft.wasJustPressed()) {
-                if (Status.currentPose.getX(DistanceUnit.CM) > -75) {
-                    turretAngleOffset -= 2;
-                } else {
-                    turretAngleOffsetFar -= 2;
-                }
-            }
-
-            if (robotContainer.gamepadEx2.dpadRight.wasJustPressed()) {
-                if (Status.currentPose.getX(DistanceUnit.CM) > -75) {
-                    turretAngleOffset += 1.5;
-                } else {
-                    turretAngleOffsetFar += 1.5;
-                }
-            }
-
-            if (robotContainer.gamepadEx2.dpadRight.isHeldFor(1.0) || robotContainer.gamepadEx2.dpadLeft.isHeldFor(1.0)) {
+            if (robotContainer.operatorController.dpadRight.isHeldFor(1.0) || robotContainer.operatorController.dpadLeft.isHeldFor(1.0)) {
                 turretAngleOffset = 0;
-                turretAngleOffsetFar = 0;
             }
 
             // Manual Turret Hood
-            if (robotContainer.gamepadEx2.triangle.wasJustPressed()) {
+            if (robotContainer.operatorController.triangle.wasJustPressed()) {
 //                double targetHoodPos = robotContainer.turret.hoodServo.getPosition() == Constants.Turret.HOOD_PRESETS[2]  ? Constants.Turret.HOOD_PRESETS[0] : Constants.Turret.HOOD_PRESETS[1];
 //                robotContainer.turret.hood.setPos(targetHoodPos);
             }
 
-            if (robotContainer.gamepadEx2.triangle.isHeldFor(1.0)){
+            if (robotContainer.operatorController.triangle.isHeldFor(1.0)){
                 Status.manualControl = !Status.manualControl;
             }
 
-            if (robotContainer.gamepadEx1.cross.wasJustPressed() || robotContainer.gamepadEx2.cross.wasJustPressed()) {
-                Status.flywheelToggle = !Status.flywheelToggle;
-            }
-
             // Turret turn - Right stick X
-             if (Status.manualControl && robotContainer.gamepadEx2.rightStickX() != 0) {
+             if (Status.manualControl && robotContainer.operatorController.rightStickX() != 0) {
                  // Manual turret turning
-                 manualTurretPos -= robotContainer.gamepadEx2.rightStickX() != 0 ? (Constants.Turret.SPEED_FACTOR * robotContainer.CURRENT_LOOP_TIME_MS) * Math.pow(robotContainer.gamepadEx2.rightStickX(), 3) : 0;
+                 manualTurretPos -= robotContainer.operatorController.rightStickX() != 0 ? (Constants.Turret.SPEED_FACTOR * robotContainer.CURRENT_LOOP_TIME_MS) * Math.pow(robotContainer.operatorController.rightStickX(), 3) : 0;
                  manualTurretPos = HelperFunctions.clamp(manualTurretPos, Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
-                 robotContainer.turret.setTargetPosition(manualTurretPos);
+                 robotContainer.turret.setTargetAngle(manualTurretPos);
              } else if (!Status.manualControl) {
                  robotContainer.turret.pointAtGoal();
              }
@@ -149,14 +90,7 @@ public class Turret extends RobotContainer.HardwareDevices {
             robotContainer.turret.pointAtGoal();
         }
 
-        flyWheelMotors.setPower(targetPower);
         lastAngleToFaceGoal = angleToFaceGoal;
-    }
-
-    // This is for manual control
-    public void setTargetPosition(double position) {
-        targetPosition = position;
-        turretMotor.setTargetPosition(HelperFunctions.clamp((int)Math.round(position), Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR));
     }
 
     public double getTargetPosition(){ return targetPosition;}
@@ -164,101 +98,31 @@ public class Turret extends RobotContainer.HardwareDevices {
     public double getTargetPositionDegrees(){return targetPositionDegrees;}
 
     public void setTargetAngle(double angleInDegrees) {
-        targetPositionDegrees = angleInDegrees;
-        if (Status.currentPose.getX(DistanceUnit.CM) < -75) {
-            angleInDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffsetFar);
-        } else {
-            angleInDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffset);
-        }
 
-        double currentAngle = motorToAngle(turretMotor.getCurrentPosition());
-        double targetAngle = angleInDegrees;
+        targetPositionDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffset);
+        targetPosition = angleToMotor(targetPositionDegrees);
 
-        double delta = HelperFunctions.normalizeAngle(targetAngle - currentAngle);
+        double position = HelperFunctions.clamp(targetPosition, Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
 
-        double proposedAngle = currentAngle + delta;
+        turretPDFOutput = Status.shootOnTheMove ? turretPDF.calculate(position, currentPosition, goalOrientedVelocityRX) : turretPDF.calculate(position, currentPosition, 0);
 
-        //check mechanical limits
-        if (proposedAngle < Constants.Turret.MIN_ANGLE || proposedAngle > Constants.Turret.MAX_ANGLE) {
-            // take the long way
-            delta = targetAngle - currentAngle;  // no normalization
-            proposedAngle = currentAngle + delta;
-        }
-
-        double position = HelperFunctions.clamp(angleToMotor(proposedAngle), Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
-
-//        if (Status.shootOnTheMove) {
-//            turretMotor.updateSetPower(turretPDF.calculate(position, goalOrientedVelocityRX));
-//        } else {
-//            turretMotor.updateSetPower(turretPDF.calculate(position, 0));
-//        }
-    }
-
-    /**
-     * Interpolates a value from one table given a key from a parallel table.
-     * Uses the same binary-search-style nearest-neighbor interpolation as getPoseToAim.
-     *
-     * @param keyTable   The table to search (e.g. angles or servo positions)
-     * @param valueTable The parallel table to interpolate from
-     * @param key        The input value to look up
-     * @return The interpolated output value
-     */
-    private double tableInterpolate(double[] keyTable, double[] valueTable, double key) {
-        int lowerIndex = 0;
-        int higherIndex = keyTable.length - 1;
-        double lowerKey = keyTable[lowerIndex];
-        double higherKey = keyTable[higherIndex];
-
-        for (int i = keyTable.length - 2; i > 0; i--) {
-            double current = keyTable[i];
-            if (current > key) {
-                if (current < higherKey) {
-                    higherKey = current;
-                    higherIndex = i;
-                }
-            } else if (current < key) {
-                if (current >= lowerKey) {
-                    lowerKey = current;
-                    lowerIndex = i;
-                }
-            } else {
-                // Exact match
-                return valueTable[i];
-            }
-        }
-
-        double lowerValue = valueTable[lowerIndex];
-        double higherValue = valueTable[higherIndex];
-
-        if (higherKey == lowerKey) {
-            return lowerValue;
-        }
-
-        return lowerValue + ((higherValue - lowerValue) * (key - lowerKey) / (higherKey - lowerKey));
+        turretMotor.updateSetPower(turretPDFOutput);
     }
 
     private double angleToMotor(double angle) {
-        return tableInterpolate(
-                Constants.Turret.TURRET_INTERPOLATION_ANGLES,
-                Constants.Turret.TURRET_INTERPOLATION_POSITIONS,
-                angle
-        );
+        return ((HelperFunctions.normalizeAngle(angle) + 180) / Constants.Turret.DEGREES_PER_TICK) + Constants.Turret.MIN_MOTOR;
     }
 
-    private double motorToAngle(double motor) {
-        return tableInterpolate(
-                Constants.Turret.TURRET_INTERPOLATION_POSITIONS,
-                Constants.Turret.TURRET_INTERPOLATION_ANGLES,
-                motor
-        );
+    private double motorToAngle(double motorTicks) {
+        return HelperFunctions.normalizeAngle((motorTicks - Constants.Turret.MIN_MOTOR) * Constants.Turret.DEGREES_PER_TICK);
     }
 
     public double getPosition() {
-        return turretMotor.getCurrentPosition();
+        return currentPosition;
     }
 
     public double getPositionDegrees() {
-        return targetPositionDegrees;
+        return motorToAngle(currentPosition);
     }
 
     public void pointAtGoal() {
@@ -266,17 +130,17 @@ public class Turret extends RobotContainer.HardwareDevices {
         goalOrientedVelocityY = (Status.currentVelocityX * Math.sin(Math.toRadians(goalAngle))) + (Status.currentVelocityY * Math.cos(Math.toRadians(goalAngle)));
 
         double xDiff = Status.alliance == Constants.Game.ALLIANCE.RED ?
-                Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM) :
-                Status.goalPose.getX(DistanceUnit.CM) + Status.currentPose.getX(DistanceUnit.CM);
+                Status.goalPose.getX(DistanceUnit.CM) - Status.currentX :
+                Status.goalPose.getX(DistanceUnit.CM) + Status.currentX;
         xDiff += goalOrientedVelocityX;
 
         double yDiff = Status.alliance == Constants.Game.ALLIANCE.RED ?
-                Status.goalPose.getY(DistanceUnit.CM) + Status.currentPose.getY(DistanceUnit.CM) :
-                Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
+                Status.goalPose.getY(DistanceUnit.CM) + Status.currentY :
+                Status.goalPose.getY(DistanceUnit.CM) - Status.currentY;
         yDiff += goalOrientedVelocityY;
 
-        angleToFaceGoal = ((Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading - 180);
-        goalOrientedVelocityRX =  angleToFaceGoal - lastAngleToFaceGoal;
+        angleToFaceGoal = ((Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading);
+        goalOrientedVelocityRX =  ((angleToFaceGoal - lastAngleToFaceGoal) * 1000 )/ robotContainer.CURRENT_LOOP_TIME_MS;
 
         setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
     }
@@ -284,54 +148,10 @@ public class Turret extends RobotContainer.HardwareDevices {
     public boolean atTarget() {
         return Math.abs(getPosition() - targetPosition) < 10;
     }
-
-    public class Flywheel {
-        public double targetVelocity = 0;
-
-        @Deprecated // Only use/update this for personal challenge
-        public void updateLaunchValues(double distToGoal){
-            double verticalVel = Math.sqrt(2 * Constants.Game.GRAVITY * (Constants.Turret.DESIRED_MAX_HEIGHT - Constants.Turret.FLYWHEEL_HEIGHT));
-            double estimatedTime = (verticalVel + Math.sqrt(verticalVel - 2 * (Constants.Game.GRAVITY) * (Constants.Game.GOAL_HEIGHT - Constants.Turret.FLYWHEEL_HEIGHT))) / Constants.Game.GRAVITY;
-            double horizonalVel = distToGoal / estimatedTime;
-            double hoodAngle = Math.atan(verticalVel / horizonalVel);
-            double xDiff;
-            double yDiff;
-            if (Status.alliance == Constants.Game.ALLIANCE.BLUE){
-                 xDiff = -Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM);
-                 yDiff = Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
-            } else {
-                 xDiff = Status.goalPose.getX(DistanceUnit.CM) - Status.currentPose.getX(DistanceUnit.CM);
-                 yDiff = -Status.goalPose.getY(DistanceUnit.CM) - Status.currentPose.getY(DistanceUnit.CM);
-            }
-            double angleToFaceGoal = Math.atan2(yDiff, xDiff);
-            double initialVel = Math.sqrt(Math.pow((verticalVel), 2) * Math.pow((horizonalVel), 2));
-            double rpm = initialVel * (5000 / 12.5); //TODO: Stephan have fun with your calc IA find that number, 5000/12.5 is an estimate from an online shooter calculator
-            targetVelocity = (rpm / 60) * Constants.Robot.MOTOR_TICKS_PER_REVOLUTION;
-        }
-
-        public boolean atTargetVelocity() {
-            return Math.abs(flywheelError) < 60 && targetVelocity > 10;
-        }
-
-        public void updateError() {
-            flywheelError = targetVelocity - flyWheelMotors.getVelocity();
-        }
-
-        public double getFlywheelVelocity() {
-            return flyWheelMotors.getAverageVelocity();
-        }
-
-        public double getCurrent(){
-            return flyWheelMotors.getCurrent(CurrentUnit.AMPS);
-        }
-    }
-
     public class Hood {
         public void setPos(double pos) {
             hoodServo.updateSetPosition(pos);
         }
     }
-
-    public final Flywheel flywheel = new Flywheel();
     public final Hood hood = new Hood();
 }
