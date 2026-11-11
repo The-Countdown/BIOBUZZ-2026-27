@@ -19,11 +19,11 @@ public class PedroPathingConstants {
     public static MecanumConfig drivetrainConfig = new MecanumConfig(
             c -> {
                 c.frontLeftName.set("leftFront");
-                c.backLeftName.set("leftBack");
+                c.backLeftName.set("rightBack");
                 c.frontRightName.set("rightFront");
-                c.backRightName.set("rightBack");
+                c.backRightName.set("leftBack");
 
-                c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+                c.frontLeftDirection.set(DcMotorSimple.Direction.FORWARD);
                 c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
                 c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
                 c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);

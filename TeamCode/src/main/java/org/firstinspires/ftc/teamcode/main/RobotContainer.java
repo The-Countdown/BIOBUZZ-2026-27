@@ -5,6 +5,7 @@ import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.adafruit.AdafruitBNO055IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -29,6 +30,7 @@ import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.hardware.BetterIMU;
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
 import org.firstinspires.ftc.teamcode.other.PositionProvider;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Proboscis;
 import org.firstinspires.ftc.teamcode.subsystems.IndicatorLighting;
 import org.firstinspires.ftc.teamcode.other.LocalizationUpdater;
@@ -89,6 +91,7 @@ public class RobotContainer {
     public Intake intake;
     public Tongue tongue;
     public Wings wings;
+    public LimeLight limeLight;
     public Proboscis proboscis;
     public double controlHubVoltage;
     public double expansionHubVoltage;
@@ -133,6 +136,7 @@ public class RobotContainer {
         // Wings
         public static BetterServo wingsServoLeader;
         public static BetterServo wingsServoFollower;
+        public static Limelight3A limeLight;
 
     }
 
@@ -210,6 +214,8 @@ public class RobotContainer {
 
         HardwareDevices.proboscisServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "proboscisServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POS_DIFF);
 
+        HardwareDevices.limeLight = hardwareMap.get(Limelight3A.class, "limeLight");
+
         LinkedMotors flywheelMotors = new LinkedMotors(HardwareDevices.flywheelMotorLeader, HardwareDevices.flywheelMotorFollower);
         LinkedServos tongueServos = new LinkedServos(HardwareDevices.tongueServoLeader, HardwareDevices.tongueServoFollower);
         HardwareDevices.flywheelMotorLeader.setDirection(DcMotorImplEx.Direction.REVERSE);
@@ -222,7 +228,7 @@ public class RobotContainer {
         tongue = new Tongue(this, tongueServos);
         wings = new Wings(this, wingsServos);
         proboscis = new Proboscis(this, HardwareDevices.proboscisServo);
-
+        limeLight = new LimeLight(this, HardwareDevices.limeLight);
         drivetrain = new Drivetrain(this, HardwareDevices.leftFront, HardwareDevices.rightFront, HardwareDevices.leftBack, HardwareDevices.rightBack);
 
         registerLoopTimer("teleOp");
@@ -293,6 +299,7 @@ public class RobotContainer {
         telemetryLogger.start();
         localizationUpdater = new LocalizationUpdater(this, teleop);
         localizationUpdater.start();
+
     }
 
     public void stop() {
