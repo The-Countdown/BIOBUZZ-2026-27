@@ -212,6 +212,7 @@ public class RobotContainer {
         HardwareDevices.flywheelMotorLeader.setDirection(DcMotorImplEx.Direction.REVERSE);
         flywheelMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelMotors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        HardwareDevices.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         positionProvider = new PositionProvider(this);
 
         turret = new Turret(this, HardwareDevices.hoodServo, HardwareDevices.turretMotor);
@@ -234,6 +235,8 @@ public class RobotContainer {
         HardwareDevices.allHubs = hardwareMap.getAll(LynxModule.class);
         HardwareDevices.controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
         HardwareDevices.expansionHub = hardwareMap.get(LynxModule.class, "Expansion Hub 2");
+        HardwareDevices.pinpoint.recalibrateIMU();
+        HardwareDevices.pinpoint.resetPosAndIMU();
         for (LynxModule hub : HardwareDevices.allHubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }

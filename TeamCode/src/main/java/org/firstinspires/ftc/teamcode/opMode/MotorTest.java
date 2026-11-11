@@ -80,7 +80,9 @@ public class MotorTest extends OpMode {
                 telemetry.addLine("intakeMotor");
                 break;
             case 5:
-                RobotContainer.HardwareDevices.turretMotor.setPower(turretPDF.calculate(motorPower * 10 * 28, RobotContainer.HardwareDevices.turretMotor.getCurrentPosition(), 0));
+                if (motorPower != 0) {
+                    RobotContainer.HardwareDevices.turretMotor.setPower(turretPDF.calculate(motorPower * 10 * 28, RobotContainer.HardwareDevices.turretMotor.getCurrentPosition(), 0));
+                }
                 telemetry.addLine("turretMotor");
                 telemetry.addData("Position: ", RobotContainer.HardwareDevices.turretMotor.getCurrentPosition());
                 break;

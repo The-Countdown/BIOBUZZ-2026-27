@@ -159,10 +159,10 @@ public class Constants {
             MAX_ANGLE = 180,
             MIN_ANGLE = -180,
             SPEED_FACTOR = 0.0003,
-            KP = 0.005,
+            KP = 0.002,
             KI = 0.0,
-            KD = 0.005,
-            KF = 0.15,
+            KD = 0.05,
+            KF = 0.2,
             TOLERANCE_DEGREES = 3,
             GEAR_SLOP = 0.5,
             TOLERANCE_TICKS = (TOLERANCE_DEGREES - GEAR_SLOP) / DEGREES_PER_TICK;

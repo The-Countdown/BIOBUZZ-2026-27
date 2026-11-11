@@ -33,7 +33,7 @@ public class TelemetryLogger extends Thread {
         }
         while (Status.opModeIsActive) {
             CURRENT_LOOP_TIME_MS = robotContainer.updateLoopTime("telemetryLogger");
-            CURRENT_LOOP_TIME_AVG_MS = robotContainer.getRollingAverageLoopTime("telemetryLogger");
+//            CURRENT_LOOP_TIME_AVG_MS = robotContainer.getRollingAverageLoopTime("telemetryLogger");
             // if (robotContainer.operatorController.dpadDown.wasJustPressed() && timer.milliseconds() > 2000) {
             //     robotContainer.writeDataLog();
             //     robotContainer.writeEventLog();
