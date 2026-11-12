@@ -142,7 +142,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         angleToFaceGoal = ((Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading);
         goalOrientedVelocityRX =  ((angleToFaceGoal - lastAngleToFaceGoal) * 1000 )/ robotContainer.CURRENT_LOOP_TIME_MS;
 
-        setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
+//        setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
     }
 
     public boolean atTarget() {

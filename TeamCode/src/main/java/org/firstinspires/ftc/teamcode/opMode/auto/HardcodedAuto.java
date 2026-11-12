@@ -32,7 +32,6 @@ public class HardcodedAuto extends OpMode {
     // File Variables
     boolean end = false;
     ElapsedTime pathTimer = new ElapsedTime();
-    int pathNumber = 1;
 
 
     @Override

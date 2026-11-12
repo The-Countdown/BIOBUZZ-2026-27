@@ -44,9 +44,9 @@ public class PedroPathingConstants {
 
     public static ForesightConfig foresightConfig = new ForesightConfig(
             c -> {
-                Controller primaryTranslationalForward = Controller.proportional(0.3);
+                Controller primaryTranslationalForward = Controller.proportional(0.1);
                 Controller secondaryTranslationalForward = Controller.proportional(0.1);
-                Controller primaryTranslationalLateral = Controller.proportional(0.3);
+                Controller primaryTranslationalLateral = Controller.proportional(0.1);
                 Controller secondaryTranslationalLateral = Controller.proportional(0.1);
 
                 c.forwardTranslational.set(Controller.piecewise(secondaryTranslationalForward).put(2.5, primaryTranslationalForward));
