@@ -5,15 +5,17 @@ import com.pedropathing.revhub.drivetrains.Mecanum;
 import com.pedropathing.revhub.localizers.PinpointLocalizer;
 import com.pedropathing.tuning.autotune.Procedure;
 import com.pedropathing.tuning.autotune.Tuner;
+
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.pedro.procedures.ForesightTuner;
 import org.firstinspires.ftc.teamcode.pedro.procedures.Tests;
 import org.firstinspires.ftc.teamcode.pedro.procedures.MecanumTuner;
 
 public class Tuning {
     // Tuners go here
-    @Tuner // AutoTune: http://192.168.43.1:10158
+    @Tuner
     public static Procedure foresightTuner() {
-        return new ForesightTuner((hardwareMap) -> new PinpointLocalizer(hardwareMap, PedroPathingConstants.localizerConfig), (hardwareMap) -> new Mecanum(hardwareMap, PedroPathingConstants.drivetrainConfig));
+        return new ForesightTuner((hardwareMap) -> new PinpointLocalizer(hardwareMap, Constants.localizerConfig), (hardwareMap) -> new Mecanum(hardwareMap, Constants.drivetrainConfig));
     }
 
     @Tuner

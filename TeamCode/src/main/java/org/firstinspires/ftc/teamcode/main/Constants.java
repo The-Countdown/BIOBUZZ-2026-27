@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.main;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.revhub.drivetrains.MecanumConfig;
+import com.pedropathing.revhub.localizers.PinpointConfig;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -16,6 +18,9 @@ import java.util.HashMap;
  * Configurableurations used throughout the robot's code.
  */
 public class Constants {
+
+    public static PinpointConfig localizerConfig;
+    public static MecanumConfig drivetrainConfig;
 
     @Configurable
     public static class Game {
@@ -65,12 +70,12 @@ public class Constants {
             TELEMETRY_COMP_UPDATE_INTERVAL_MS = 750,
             PINPOINT_UPDATE_DELAY_MS = 50;
         public static final double
-            PINPOINT_X_OFFSET_MM = 0,
-            PINPOINT_Y_OFFSET_MM = 0,
+            PINPOINT_X_OFFSET_MM = 31,
+            PINPOINT_Y_OFFSET_MM = 2.0,
             IMU_PER_ROTATION_OFFSET = 3.1;
         public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
         public static final GoBildaPinpointDriver.EncoderDirection
-            PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.REVERSED,
+            PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.FORWARD,
             PINPOINT_Y_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.REVERSED;
 
     }

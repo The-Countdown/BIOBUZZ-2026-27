@@ -23,8 +23,8 @@ public class PedroPathingConstants {
                 c.frontRightName.set("rightFront");
                 c.backRightName.set("rightBack");
 
-                c.frontLeftDirection.set(DcMotorSimple.Direction.FORWARD);
-                c.backLeftDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+                c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
                 c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
                 c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
 
@@ -44,9 +44,9 @@ public class PedroPathingConstants {
 
     public static ForesightConfig foresightConfig = new ForesightConfig(
             c -> {
-                Controller primaryTranslationalForward = Controller.proportional(0.3);
+                Controller primaryTranslationalForward = Controller.proportional(0.1);
                 Controller secondaryTranslationalForward = Controller.proportional(0.1);
-                Controller primaryTranslationalLateral = Controller.proportional(0.3);
+                Controller primaryTranslationalLateral = Controller.proportional(0.1);
                 Controller secondaryTranslationalLateral = Controller.proportional(0.1);
 
                 c.forwardTranslational.set(Controller.piecewise(secondaryTranslationalForward).put(2.5, primaryTranslationalForward));
