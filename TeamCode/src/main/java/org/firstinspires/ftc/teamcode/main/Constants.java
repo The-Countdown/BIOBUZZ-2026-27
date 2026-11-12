@@ -164,16 +164,17 @@ public class Constants {
             MAX_ANGLE = 180,
             MIN_ANGLE = -180,
             SPEED_FACTOR = 0.0003,
-            KP = 0.002,
+            KP = 0.02,
             KI = 0.0,
-            KD = 0.05,
-            KF = 0.2,
+            KD = 1.0,
+            KF = 0.1,
             TOLERANCE_DEGREES = 3,
             GEAR_SLOP = 0.5,
             TOLERANCE_TICKS = (TOLERANCE_DEGREES - GEAR_SLOP) / DEGREES_PER_TICK;
         public static int
-            MAX_MOTOR = 666,
-            MIN_MOTOR = 67;
+            ZERO_DEGREE_POSITION = 0,
+            MAX_MOTOR = ZERO_DEGREE_POSITION + 300,
+            MIN_MOTOR = ZERO_DEGREE_POSITION - 300;
         public static double[]
             HOOD_PRESETS = {0.58, 0.7, 0.95},
             HOOD_TABLE_DISTANCES = {50, 90, 130};

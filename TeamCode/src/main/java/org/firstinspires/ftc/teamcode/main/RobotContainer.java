@@ -197,7 +197,7 @@ public class RobotContainer {
         HardwareDevices.rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 //        HardwareDevices.hoodServo = new BetterServo(getHardwareDevice(ServoImplEx.class, "hoodServo"), Constants.Robot.SERVO_UPDATE_TIME, Constants.Robot.SERVO_UPDATE_MIN_POWER_DIFF);
-        HardwareDevices.turretMotor = new BetterDcMotor(getHardwareDevice(DcMotorImplEx.class, "turretMotor"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
+        HardwareDevices.turretMotor = new BetterDcMotor(getHardwareDevice(DcMotorImplEx.class, "turretMotor"), 0, 0, 0);
 
         HardwareDevices.intakeMotor = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "intakeMotor"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
 

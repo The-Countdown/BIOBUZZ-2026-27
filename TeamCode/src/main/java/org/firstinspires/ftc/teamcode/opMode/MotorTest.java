@@ -20,7 +20,6 @@ public class MotorTest extends OpMode {
         RobotContainer.HardwareDevices.rightBack.setPower(0);
         RobotContainer.HardwareDevices.leftBack.setPower(0);
         RobotContainer.HardwareDevices.intakeMotor.setPower(0);
-        RobotContainer.HardwareDevices.turretMotor.setPower(0);
         RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
         RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
     }
@@ -47,6 +46,7 @@ public class MotorTest extends OpMode {
     public void start() {
         Status.opModeIsActive = true;
         robotContainer.start(this, true);
+        robotContainer.registerLoopTimer("teleop");
     }
 
     @Override
@@ -131,6 +131,8 @@ public class MotorTest extends OpMode {
         }
 
         telemetry.addData("motorPower", motorPower);
+        robotContainer.updateLoopTime("teleop");
+        telemetry.addData("Loop Time", robotContainer.getLoopTime("teleop"));
 
         telemetry.update();
         Thread.yield();

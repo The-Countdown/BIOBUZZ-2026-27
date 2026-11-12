@@ -54,7 +54,10 @@ public class DelayedActionManager {
         if (enabled) {
             for (int i = 0; i < delayedActions.toArray().length; i++) {
                 Action delayedAction = delayedActions.get(i);
-                if (delayedAction.shouldExecute()) {
+                if (delayedAction.cancelled || delayedAction.executed){
+                    delayedActions.remove(i);
+                    i--;
+                } else if (delayedAction.shouldExecute()) {
                     delayedAction.execute();
                 }
             }

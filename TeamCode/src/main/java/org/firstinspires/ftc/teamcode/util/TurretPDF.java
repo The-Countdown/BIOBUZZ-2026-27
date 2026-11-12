@@ -43,8 +43,6 @@ public class TurretPDF {
             return 0;
         }
 
-        ffMultiplier = Math.abs(target - currentPosition) < 2.5 * Constants.Turret.TOLERANCE_TICKS ? -1 :1;
-
         double error = target - currentPosition;
         dt = System.currentTimeMillis() - lastTime;
         goalOrientedRX /= dt;
@@ -56,10 +54,10 @@ public class TurretPDF {
 
             d = Constants.Turret.KD * errorDiff; // this slows the acceleration down
 
-            ff = Constants.Turret.KF * ffMultiplier + (goalOrientedRX / Constants.Turret.GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // 1. flat addition to the power 2. extra velocity in ticks per second for the motor
+            ff = Constants.Turret.KF * Math.signum(error) + (goalOrientedRX / Constants.Turret.GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // 1. flat addition to the power 2. extra velocity in ticks per second for the motor
 
 
-        pid = (p + i + d) + ff * Math.signum(error);
+        pid = (p + i + d) + ff;
 
         lastTargetPower = pid;
 
