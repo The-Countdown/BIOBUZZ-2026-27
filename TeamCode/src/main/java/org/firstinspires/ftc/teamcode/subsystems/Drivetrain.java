@@ -70,7 +70,7 @@ public class Drivetrain {
             driveTargets[i] = i == 0 ? y : x;
             double powerError = driveTargets[i] - lastDriveOutputs[i];
             if (Math.signum(powerError) == Math.signum(driveTargets[i]) && Math.signum(driveTargets[i]) != 0) {
-                double delta = Math.copySign(Math.min(Math.abs(powerError), maxAcceleration), powerError);
+                double delta = Math.copySign(Math.min(powerError, maxAcceleration), powerError);
                 driveOutputs[i] += delta;
             } else {
                 driveOutputs[i] = driveTargets[i];
@@ -94,10 +94,10 @@ public class Drivetrain {
             double rightPower = y + rx;
 
             leftFront.setPower(leftPower);
-            leftBack.setPower(leftPower);
+            leftBack.setPower(rightPower);
 
             rightFront.setPower(rightPower);
-            rightBack.setPower(rightPower);
+            rightBack.setPower(leftPower);
 
             return;
         }
