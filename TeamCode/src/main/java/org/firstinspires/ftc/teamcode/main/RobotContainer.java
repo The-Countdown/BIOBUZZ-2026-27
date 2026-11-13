@@ -631,6 +631,7 @@ public class RobotContainer {
                 addDataLog("Robot Position", Status.currentPose, false);
                 addDataLog("Robot X", Status.currentX + " cm", true);
                 addDataLog("Robot Y", Status.currentY + " cm", true);
+                addDataLog("Goal Pose", Status.goalPose, true);
 //                addDataLog("Use Better IMU", Constants.System.USE_BETTER_IMU, false);
                 addDataLog("Pinpoint Status", RobotContainer.HardwareDevices.pinpoint.getDeviceStatus(), false);
                 addDataLog("Pinpoint Heading", RobotContainer.HardwareDevices.pinpoint.getPosition().getHeading(AngleUnit.DEGREES), false);

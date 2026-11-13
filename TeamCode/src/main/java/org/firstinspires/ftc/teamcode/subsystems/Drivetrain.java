@@ -84,7 +84,8 @@ public class Drivetrain {
         lastDriveOutputs = driveOutputs;
 
         if (!Status.parked && Math.abs(y) < 0.1 && Math.abs(x) < 0.1 && Math.abs(rx) < 0.1) {
-            robotContainer.delayedActionManager.schedule(() -> parkingCheck(), 500);
+//            robotContainer.delayedActionManager.schedule(() -> parkingCheck(), 500);
+            parkingCheck();
         } else if (Status.parked) {
             Status.parked = false;
         }

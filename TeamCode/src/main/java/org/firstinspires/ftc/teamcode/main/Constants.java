@@ -71,7 +71,7 @@ public class Constants {
             PINPOINT_UPDATE_DELAY_MS = 50;
         public static final double
             PINPOINT_X_OFFSET_MM = 31,
-            PINPOINT_Y_OFFSET_MM = 2.0,
+            PINPOINT_Y_OFFSET_MM = -2.0,
             IMU_PER_ROTATION_OFFSET = 3.1;
         public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
         public static final GoBildaPinpointDriver.EncoderDirection

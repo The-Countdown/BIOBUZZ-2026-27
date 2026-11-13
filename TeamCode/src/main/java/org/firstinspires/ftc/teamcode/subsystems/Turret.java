@@ -129,17 +129,14 @@ public class Turret extends RobotContainer.HardwareDevices {
         goalOrientedVelocityX = (Status.currentVelocityX * Math.cos(Math.toRadians(goalAngle))) - (Status.currentVelocityY * Math.sin(Math.toRadians(goalAngle)));
         goalOrientedVelocityY = (Status.currentVelocityX * Math.sin(Math.toRadians(goalAngle))) + (Status.currentVelocityY * Math.cos(Math.toRadians(goalAngle)));
 
-        double xDiff = Status.alliance == Constants.Game.ALLIANCE.RED ?
-                Status.goalPose.getX(DistanceUnit.CM) - Status.currentX :
-                Status.goalPose.getX(DistanceUnit.CM) + Status.currentX;
+        double xDiff = (Status.goalPose.getX(DistanceUnit.CM) - Status.currentX);
         if (Status.shootOnTheMove) { xDiff += goalOrientedVelocityX; }
 
-        double yDiff = Status.alliance == Constants.Game.ALLIANCE.RED ?
-                Status.goalPose.getY(DistanceUnit.CM) + Status.currentY :
-                Status.goalPose.getY(DistanceUnit.CM) - Status.currentY;
-         if (Status.shootOnTheMove) { yDiff += goalOrientedVelocityY; }
+        double yDiff = (Status.goalPose.getY(DistanceUnit.CM) - Status.currentY);
+        if (Status.shootOnTheMove) { yDiff += goalOrientedVelocityY; }
 
-        angleToFaceGoal = ((Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading);
+        angleToFaceGoal = -(Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading;
+        angleToFaceGoal += xDiff > 0 ? 90 : -90;
         goalOrientedVelocityRX =  ((angleToFaceGoal - lastAngleToFaceGoal) * 1000)/ robotContainer.CURRENT_LOOP_TIME_MS;
 
         setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));

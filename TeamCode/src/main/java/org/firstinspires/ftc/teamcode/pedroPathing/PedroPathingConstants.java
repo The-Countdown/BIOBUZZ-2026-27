@@ -32,12 +32,12 @@ public class PedroPathingConstants {
     public static PinpointConfig localizerConfig = new PinpointConfig(c -> {
         c.name.set("pinpoint");
         c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        c.xPodOffset.set(3.035843015655758);
-        c.yPodOffset.set(-0.5732701519342858);
-        c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        c.globalDistanceUnit.set(DistanceUnit.INCH);
-        c.offsetUnits.set(DistanceUnit.INCH);
+        c.xPodOffset.set(Constants.System.PINPOINT_X_OFFSET_MM);
+        c.yPodOffset.set(Constants.System.PINPOINT_Y_OFFSET_MM);
+        c.xPodDirection.set(Constants.System.PINPOINT_X_ENCODER_DIRECTION);
+        c.yPodDirection.set(Constants.System.PINPOINT_Y_ENCODER_DIRECTION);
+        c.globalDistanceUnit.set(DistanceUnit.CM);
+        c.offsetUnits.set(DistanceUnit.MM);
     });
 
     public static ForesightConfig foresightConfig = new ForesightConfig(

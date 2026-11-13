@@ -31,8 +31,8 @@ public class PositionProvider {
 
     public void update() {
         Status.currentPose = RobotContainer.HardwareDevices.pinpoint.getPosition();
-        Status.currentX = Status.currentPose.getX(DistanceUnit.CM);
-        Status.currentY = Status.currentPose.getY(DistanceUnit.CM);
+        Status.currentX = -Status.currentPose.getY(DistanceUnit.CM);
+        Status.currentY = Status.currentPose.getX(DistanceUnit.CM);
         Status.currentHeading = Status.currentPose.getHeading(AngleUnit.DEGREES);
         Status.currentVelocityX = RobotContainer.HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
         Status.currentVelocityY = RobotContainer.HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
