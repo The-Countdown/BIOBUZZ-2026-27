@@ -153,7 +153,8 @@ public class Constants {
         public static double
             UP = 0.15,
             DOWN = 0.575,
-            FOLLOWER_OFFSET = 0.075;
+            FOLLOWER_OFFSET = 0.075,
+            POSITION_CHANGE_TIME = 250;
     }
 
     @Configurable
@@ -192,7 +193,7 @@ public class Constants {
         public static double KS = 3;
         public static double[] SPEED_TABLE = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         public static double[] SPEED_TABLE_DISTANCES = {40, 56, 90, 95, 103, 180, 205};
-        public static int SPINUP_MS = 0;
+        public static int SPINUP_MS = 1000;
         public static double HEIGHT = 0.0;
         public static double DESIRED_MAX_HEIGHT = 0.0;
         public static double POWER_VELOCITY_MULTIPLIER = 1;

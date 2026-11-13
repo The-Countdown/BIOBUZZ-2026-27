@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import static com.pedropathing.api.Paths.*;
@@ -16,6 +18,8 @@ import com.pedropathing.follower.*;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
 import com.pedropathing.paths.*;
+
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PedroPathingConstants;
 
 // Panels Imports
@@ -63,6 +67,28 @@ public class ExampleAuto extends OpMode {
                 // executed at the end of the command
                 pathNumber++;
             });
+    Command exampleShoot() {
+        return sequential(
+            instant(() -> {
+                Status.flywheelToggle = true;
+                robotContainer.intake.on();
+            }),
+
+            waitMs(Constants.Flywheel.SPINUP_MS),
+
+            instant(() -> {
+                robotContainer.tongue.up();
+            }),
+
+            waitMs(Constants.Tongue.POSITION_CHANGE_TIME),
+
+            instant(() -> {
+                robotContainer.tongue.down();
+                Status.flywheelToggle = false;
+                robotContainer.intake.off();
+            })
+        );
+    }
 
     // Path methods
         private Path lineExample() {
@@ -80,6 +106,7 @@ public class ExampleAuto extends OpMode {
 
     private Command autoRoutineExample() {
         return sequential( // list of *commands* to run in a row when executed
+                exampleShoot(),
                 follow(follower, lineExample()),
                 exampleCommand,
                 follow(follower, throughExample()),
