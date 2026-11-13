@@ -48,34 +48,15 @@ public class PushZaRobot extends OpMode {
     int pathNumber = 1;
 
     // Poses
-    private final Pose start = poseFactory.of(8.8928, 59.3897, 270);
-    private final Pose path1 = poseFactory.of(15.3165, 59.3752, 270);
-    private final Pose point2Start = poseFactory.of(15.3165, 59.3752, 270);
-    private final Pose point2 = poseFactory.of(9.1336, 59.162, 270);
-    private final Pose point3 = poseFactory.of(9.4833, 93.2152, -90.5884);
-    private final Pose point4Start = poseFactory.of(9.4833, 93.2152, 270);
-    private final Pose point4 = poseFactory.of(10.0817, 93.5006, 270);
+    private final Pose start = poseFactory.of(56, 8, 90);
+    private final Pose path1 = poseFactory.of(55.6422, 39.3989, 180);
 
     public Path path1() {
         return Paths.line(start, path1).linear(start, path1);
     }
-
-    public Path path2() {
-        return Paths.line(point2Start, point2).linear(point2Start, point2);
-    }
-
-    public Path path3() {
-        return Paths.line(point2, point3).reverseTangent();
-    }
-
-    public Path path4() {
-        return Paths.line(point4Start, point4).linear(point4Start, point4);
-    }
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
-                follow(follower, path1()),
-                follow(follower, path2()),
-                follow(follower, path3())
+                follow(follower, path1())
         );
     }
 
