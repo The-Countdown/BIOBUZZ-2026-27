@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.opMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
+import org.firstinspires.ftc.teamcode.util.FlywheelPDF;
 import org.firstinspires.ftc.teamcode.util.TurretPDF;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "MotorTest", group = "TeleOp")
@@ -13,6 +15,7 @@ public class MotorTest extends OpMode {
     private int motorIndex = -1;
     private double motorPower = 0.0;
     private TurretPDF turretPDF;
+    private FlywheelPDF flywheelPDF;
 
     public void defaultMotor(){
         RobotContainer.HardwareDevices.rightFront.setPower(0);
@@ -20,8 +23,6 @@ public class MotorTest extends OpMode {
         RobotContainer.HardwareDevices.rightBack.setPower(0);
         RobotContainer.HardwareDevices.leftBack.setPower(0);
         RobotContainer.HardwareDevices.intakeMotor.setPower(0);
-        RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
-        RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
     }
 
     @Override
@@ -32,14 +33,8 @@ public class MotorTest extends OpMode {
             throw new RuntimeException(e);
         }
         robotContainer.init();
-
+        flywheelPDF = new FlywheelPDF();
         turretPDF = new TurretPDF();
-        RobotContainer.HardwareDevices.flywheelMotorFollower.start();
-        RobotContainer.HardwareDevices.flywheelMotorLeader.start();
-        RobotContainer.HardwareDevices.intakeMotor.start();
-        RobotContainer.HardwareDevices.turretMotor.start();
-
-
     }
 
     @Override
@@ -55,6 +50,16 @@ public class MotorTest extends OpMode {
         robotContainer.driverController.update();
         robotContainer.operatorController.update();
         defaultMotor();
+
+        if (motorIndex != 8){
+            RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
+            RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
+        }
+
+        if (motorIndex != 5) {
+            RobotContainer.HardwareDevices.turretMotor.setPower(0);
+        }
+
         switch(motorIndex) {
             case -1:
                 telemetry.addLine("stopped");
@@ -82,6 +87,8 @@ public class MotorTest extends OpMode {
             case 5:
                 if (motorPower != 0) {
                     RobotContainer.HardwareDevices.turretMotor.setPower(turretPDF.calculate(motorPower * 10 * 28, RobotContainer.HardwareDevices.turretMotor.getCurrentPosition(), 0));
+                } else {
+                    RobotContainer.HardwareDevices.turretMotor.setPower(0);
                 }
                 telemetry.addLine("turretMotor");
                 telemetry.addData("Position: ", RobotContainer.HardwareDevices.turretMotor.getCurrentPosition());
@@ -95,8 +102,14 @@ public class MotorTest extends OpMode {
                 telemetry.addLine("flyWheelMotorFollower");
                 break;
             case 8:
-                RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(motorPower);
-                RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(motorPower);
+                if (motorPower != 0) {
+                    double power = flywheelPDF.calculate(motorPower * Constants.Flywheel.MAX_VELOCITY);
+                    RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(power);
+                    RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(power);
+                } else {
+                    RobotContainer.HardwareDevices.flywheelMotorFollower.setPower(0);
+                    RobotContainer.HardwareDevices.flywheelMotorLeader.setPower(0);
+                }
                 telemetry.addLine("Flywheel motors");
                 break;
             case 9:

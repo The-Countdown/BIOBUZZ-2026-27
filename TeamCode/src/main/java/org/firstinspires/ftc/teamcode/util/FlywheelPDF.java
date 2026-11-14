@@ -19,74 +19,65 @@ public class FlywheelPDF {
     private double pid;
     private double dt;
     private double errorDiff;
+    private double velocity;
     private double lastTime;
     private double lastTargetPower;
-    private double dropTime;
     public TelemetryManager panelsTelemetry;
 
     public FlywheelPDF() {
         this.lastTargetPower = 0;
         this.lastTime = 0;
-        this.dropTime = 0;
+        this.velocity = 0;
         this.i = 0;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
     }
 
-    /**
-     * Calculates the PDF output for the servo.
-     * @return The calculated PDF output.
-     */
-    public double calculate(double targetSpeed) {
-        if (targetSpeed == 0) {
-            lastTargetPower = 0;
-            if (Status.debugMode){ panelsTelemetry.addLine("Returned within tolerance"); panelsTelemetry.update(); }
-            return 0;
+            /**
+             * Calculates the PDF output for the Flywheel Motor.
+             * @return The calculated PDF output.
+             */
+            public double calculate(double target) {
+                velocity = RobotContainer.HardwareDevices.flywheelMotorLeader.getVelocity();
+
+                error = target - velocity;
+                dt = System.currentTimeMillis() - lastTime;
+                errorDiff = (error - lastError) / dt; // differance between the errors scaled by time
+
+                s = Math.signum(error)* Math.pow(error, 2) * Constants.Flywheel.KS; // This is tuned just like p
+
+                p = Constants.Flywheel.KP * error; // proportional to error
+
+                i += error * Constants.Flywheel.KI; // accounts for error over time
+
+                d = Constants.Flywheel.KD * errorDiff; // this slows the acceleration down
+
+                ff = (Constants.Flywheel.KF * target) / Constants.Flywheel.MAX_VELOCITY; // 1. flat addition to the power
+
+
+                pid = (s + p + i + d) + ff;
+
+                lastTargetPower = pid;
+
+                lastTargetPower = HelperFunctions.clamp(lastTargetPower, 0, 1);
+
+                if (Status.debugMode){
+                    panelsTelemetry.addData("Power", lastTargetPower);
+                    panelsTelemetry.addData("S", s);
+                    panelsTelemetry.addData("P", p);
+                    panelsTelemetry.addData("I", i);
+                    panelsTelemetry.addData("D", d);
+                    panelsTelemetry.addData("FF", ff);
+                    panelsTelemetry.addData("PID", pid);
+                    panelsTelemetry.addData("DT", dt);
+                    panelsTelemetry.addData("Target Velocity", target);
+                    panelsTelemetry.addData("Velocity", velocity);
+                    panelsTelemetry.addData("Error", error);
+                    panelsTelemetry.addData("error Diff", errorDiff);
+                    panelsTelemetry.update();
+                }
+
+                lastError = error;
+                lastTime += dt;
+                return lastTargetPower;
+            }
         }
-        double error = targetSpeed - RobotContainer.HardwareDevices.flywheelMotorLeader.getVelocity();
-        dt = System.currentTimeMillis() - lastTime + 1;
-        errorDiff = (lastError - error) / dt; // differance between the errors scaled by time
-
-        if (errorDiff < -4 & System.currentTimeMillis() - dropTime > 250 ){
-            dropTime = System.currentTimeMillis();
-        }
-
-//            s = Math.signum(error)* Math.pow(error, 2) * Constants.Flywheel.KS; // This is tuned just like p
-
-            p = Constants.Flywheel.KP * error; // proportional to error
-
-            p = p < 0 ? p / Constants.Flywheel.KS : p;
-
-            i += error * Constants.Flywheel.KI;
-
-            d = Constants.Flywheel.KD  * -errorDiff; // this slows the acceleration down
-
-            ff = (targetSpeed * Constants.Flywheel.KF) / Constants.Flywheel.MAX_VELOCITY; // flat addition to the power
-
-
-        pid = (p + i + d) * dt + ff;
-
-        lastTargetPower = HelperFunctions.clamp(pid, 0, 1);
-
-        if (Status.debugMode){
-            panelsTelemetry.addData("Power", lastTargetPower);
-            panelsTelemetry.addData("P", p);
-            panelsTelemetry.addData("I", i);
-            panelsTelemetry.addData("D", d);
-    //        panelsTelemetry.addData("S", s);
-            panelsTelemetry.addData("FF", ff);
-            panelsTelemetry.addData("PID", pid);
-            panelsTelemetry.addData("DT", dt);
-            panelsTelemetry.addData("Drop Time", dropTime);
-            panelsTelemetry.addData("Target Velocity", targetSpeed);
-            panelsTelemetry.addData("Velocity", RobotContainer.HardwareDevices.flywheelMotorLeader.getVelocity());
-            panelsTelemetry.addData("Error", error);
-            panelsTelemetry.addData("error Diff", errorDiff);
-
-//        panelsTelemetry.update();
-        }
-
-        lastError = error;
-        lastTime += dt;
-        return lastTargetPower;
-    }
-}

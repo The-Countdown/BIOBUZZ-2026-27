@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.hardware.BetterServo;
@@ -144,6 +145,10 @@ public class Turret extends RobotContainer.HardwareDevices {
 
     public boolean atTarget() {
         return Math.abs(getPosition() - targetPosition) < 10;
+    }
+
+    public double getCurrent(){
+        return turretMotor.getCurrent(CurrentUnit.AMPS);
     }
     public class Hood {
         public void setPos(double pos) {

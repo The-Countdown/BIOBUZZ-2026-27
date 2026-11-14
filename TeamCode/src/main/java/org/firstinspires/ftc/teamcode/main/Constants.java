@@ -186,11 +186,11 @@ public class Constants {
     public static class Flywheel {
         public static double GEAR_RATIO = 3.0/4.0;
         public static int MAX_VELOCITY = (int) (6000 * GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60; // 2100
-        public static double KP = 0.000008;
-        public static double KI = 0.0;
-        public static double KD = 0.001;
-        public static double KF = 0.95;
-        public static double KS = 3;
+        public static double KP = 0.0;
+        public static double KI = 0.00001;
+        public static double KD = 0.035;
+        public static double KF = 0.0;
+        public static double KS = 0.00001;
         public static double[] SPEED_TABLE = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         public static double[] SPEED_TABLE_DISTANCES = {40, 56, 90, 95, 103, 180, 205};
         public static int SPINUP_MS = 1000;
