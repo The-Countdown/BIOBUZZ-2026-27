@@ -64,18 +64,18 @@ public class TurretPDF {
         lastTargetPower = HelperFunctions.clamp(lastTargetPower, -1, 1);
 
          if (Status.debugMode){
-            panelsTelemetry.addData("Power", lastTargetPower);
-            panelsTelemetry.addData("P", p);
-            panelsTelemetry.addData("I", i);
-            panelsTelemetry.addData("D", d);
-            panelsTelemetry.addData("FF", ff);
-            panelsTelemetry.addData("PID", pid);
-            panelsTelemetry.addData("DT", dt);
-            panelsTelemetry.addData("Target Position", target);
-            panelsTelemetry.addData("Position", currentPosition);
-            panelsTelemetry.addData("Error", error);
-            panelsTelemetry.addData("error Diff", errorDiff);
-            panelsTelemetry.update();
+//            panelsTelemetry.addData("Power", lastTargetPower);
+//            panelsTelemetry.addData("P", p);
+//            panelsTelemetry.addData("I", i);
+//            panelsTelemetry.addData("D", d);
+//            panelsTelemetry.addData("FF", ff);
+//            panelsTelemetry.addData("PID", pid);
+//            panelsTelemetry.addData("DT", dt);
+//            panelsTelemetry.addData("Target Position", target);
+//            panelsTelemetry.addData("Position", currentPosition);
+//            panelsTelemetry.addData("Error", error);
+//            panelsTelemetry.addData("error Diff", errorDiff);
+//            panelsTelemetry.update();
         }
 
         lastError = error;

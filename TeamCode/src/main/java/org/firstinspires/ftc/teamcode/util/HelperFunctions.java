@@ -111,7 +111,7 @@ public class HelperFunctions {
      * @param key        The input value to look up
      * @return The interpolated output value
      */
-    private double tableInterpolate(double[] keyTable, double[] valueTable, double key) {
+    public static double tableInterpolate(double[] keyTable, double[] valueTable, double key) {
         int lowerIndex = 0;
         int higherIndex = keyTable.length - 1;
         double lowerKey = keyTable[lowerIndex];

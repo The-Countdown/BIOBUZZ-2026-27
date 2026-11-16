@@ -1,20 +1,18 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 
 public class PositionProvider {
-    private RobotContainer robotContainer;
 
-    public PositionProvider(RobotContainer robotContainer) {
-        this.robotContainer = robotContainer;
+    public PositionProvider() {
+
     }
 
     public void getRotatedRobotPose() {
@@ -31,8 +29,8 @@ public class PositionProvider {
 
     public void update() {
         Status.currentPose = RobotContainer.HardwareDevices.pinpoint.getPosition();
-        Status.currentX = -Status.currentPose.getY(DistanceUnit.CM);
-        Status.currentY = Status.currentPose.getX(DistanceUnit.CM);
+        Status.currentX = -Status.currentPose.getY(DistanceUnit.CM) * Constants.System.PINPOINT_X_SCALER;
+        Status.currentY = Status.currentPose.getX(DistanceUnit.CM) * Constants.System.PINPOINT_Y_SCALER;
         Status.currentHeading = Status.currentPose.getHeading(AngleUnit.DEGREES);
         Status.currentVelocityX = RobotContainer.HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
         Status.currentVelocityY = RobotContainer.HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
