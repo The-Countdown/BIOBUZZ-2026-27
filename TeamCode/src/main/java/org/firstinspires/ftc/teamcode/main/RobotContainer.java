@@ -219,9 +219,9 @@ public class RobotContainer {
         LinkedServos tongueServos = new LinkedServos(HardwareDevices.tongueServoLeader, HardwareDevices.tongueServoFollower);
         HardwareDevices.flywheelMotorLeader.setDirection(DcMotorImplEx.Direction.REVERSE);
         flywheelMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        flywheelMotors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flywheelMotors.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         HardwareDevices.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        positionProvider = new PositionProvider(this);
+        positionProvider = new PositionProvider();
 
         turret = new Turret(this, HardwareDevices.hoodServo, HardwareDevices.turretMotor);
         flywheel = new Flywheel(this, flywheelMotors);

@@ -19,7 +19,7 @@ public class Intake {
 
     public void update(boolean teleop) {
         if (teleop) {
-            setPower((robotContainer.driverController.rightTriggerRaw() + robotContainer.operatorController.rightTriggerRaw()) - (robotContainer.driverController.leftTriggerRaw() + robotContainer.operatorController.leftTriggerRaw()));
+            setPower((robotContainer.driverController.rightTriggerRaw() + robotContainer.operatorController.rightTriggerRaw()) - (robotContainer.driverController.leftTriggerRaw() + robotContainer.operatorController.leftTriggerRaw()) / 2.0);
         } else {
             setPower(power);
         }

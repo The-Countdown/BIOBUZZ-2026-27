@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 import org.firstinspires.ftc.teamcode.util.FlywheelPDF;
-
+import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 public class Flywheel {
     private final LinkedMotors flyWheelMotors;
     private final RobotContainer robotContainer;
@@ -27,9 +27,10 @@ public class Flywheel {
 
     public void update(boolean teleop){
         if (Status.flywheelToggle) {
-            targetVelocity = 1; // tableInterpolate(Constants.Flywheel.SPEED_TABLE_DISTANCES, Constants.Flywheel.SPEED_TABLE, HelperFunctions.disToGoal()) - (goalOrientedVelocityX * Constants.Turret.FLYWHEEL_POWER_VELOCITY_MULTIPLIER);
+            targetVelocity = HelperFunctions.tableInterpolate(Constants.Flywheel.SPEED_TABLE_DISTANCES, Constants.Flywheel.SPEED_TABLE, HelperFunctions.disToGoal()) + powerModifier;
+            targetVelocity += Status.shootOnTheMove ? - (robotContainer.turret.goalOrientedVelocityX * Constants.Flywheel.POWER_VELOCITY_MULTIPLIER) : 0;
         } else {
-            targetVelocity = -powerModifier;
+            targetVelocity = 0;
         }
 
         if (teleop) {
@@ -55,7 +56,7 @@ public class Flywheel {
             }
         }
 
-        targetVelocity = (targetVelocity + powerModifier) * Constants.Flywheel.MAX_VELOCITY;
+        targetVelocity = (targetVelocity) * Constants.Flywheel.MAX_VELOCITY;
 
         if (targetVelocity > 10) {
             updateError();
@@ -64,6 +65,7 @@ public class Flywheel {
         }
 
         Status.flywheelAtTargetSpeed = atTargetVelocity();
+
 
         flyWheelMotors.setPower(flywheelPDF.calculate(targetVelocity));
     }

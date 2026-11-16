@@ -37,13 +37,15 @@ public class FlywheelPDF {
              * @return The calculated PDF output.
              */
             public double calculate(double target) {
+                if (target < 10) {
+                    return 0;
+                }
+
                 velocity = RobotContainer.HardwareDevices.flywheelMotorLeader.getVelocity();
 
                 error = target - velocity;
                 dt = System.currentTimeMillis() - lastTime;
                 errorDiff = (error - lastError) / dt; // differance between the errors scaled by time
-
-                s = Math.signum(error)* Math.pow(error, 2) * Constants.Flywheel.KS; // This is tuned just like p
 
                 p = Constants.Flywheel.KP * error; // proportional to error
 
@@ -62,7 +64,6 @@ public class FlywheelPDF {
 
                 if (Status.debugMode){
                     panelsTelemetry.addData("Power", lastTargetPower);
-                    panelsTelemetry.addData("S", s);
                     panelsTelemetry.addData("P", p);
                     panelsTelemetry.addData("I", i);
                     panelsTelemetry.addData("D", d);

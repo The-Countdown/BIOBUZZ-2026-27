@@ -72,7 +72,9 @@ public class Constants {
         public static final double
             PINPOINT_X_OFFSET_MM = 31,
             PINPOINT_Y_OFFSET_MM = -2.0,
-            IMU_PER_ROTATION_OFFSET = 3.1;
+            IMU_PER_ROTATION_OFFSET = 3.1,
+            PINPOINT_X_SCALER = ((120.0 * 2.54) / 457.0),
+            PINPOINT_Y_SCALER = ((120.0 * 2.54) / 460.0);
         public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
         public static final GoBildaPinpointDriver.EncoderDirection
             PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.FORWARD,
@@ -86,7 +88,7 @@ public class Constants {
             JOYSTICK_SCALER_EXPONENT = 3.0,
             JOYSTICK_ROTATION_SCALER_EXPONENT = 3.0,
             MAX_DRIVE_ACCELERATION = 3,
-            ROTATION_SCALER = 0.75;
+            ROTATION_SCALER = 0.6;
     }
 
     @Configurable
@@ -186,13 +188,12 @@ public class Constants {
     public static class Flywheel {
         public static double GEAR_RATIO = 3.0/4.0;
         public static int MAX_VELOCITY = (int) (6000 * GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60; // 2100
-        public static double KP = 0.0;
-        public static double KI = 0.00001;
-        public static double KD = 0.035;
-        public static double KF = 0.0;
-        public static double KS = 0.00001;
-        public static double[] SPEED_TABLE = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-        public static double[] SPEED_TABLE_DISTANCES = {40, 56, 90, 95, 103, 180, 205};
+        public static double KP = 0.01;
+        public static double KI = 0.0;
+        public static double KD = 0.0001;
+        public static double KF = 1.0;
+        public static double[] SPEED_TABLE = {0.49, 0.51, 0.52, 0.54, 0.56, 0.6, 0.62};
+        public static double[] SPEED_TABLE_DISTANCES = {90, 120, 135, 150, 185, 230, 250};
         public static int SPINUP_MS = 1000;
         public static double HEIGHT = 0.0;
         public static double DESIRED_MAX_HEIGHT = 0.0;
