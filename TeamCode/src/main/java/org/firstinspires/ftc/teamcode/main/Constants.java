@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.main;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.revhub.drivetrains.MecanumConfig;
-import com.pedropathing.revhub.localizers.PinpointConfig;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -19,9 +17,6 @@ import java.util.HashMap;
  */
 public class Constants {
 
-    public static PinpointConfig localizerConfig;
-    public static MecanumConfig drivetrainConfig;
-
     @Configurable
     public static class Game {
         public enum ALLIANCE {
@@ -29,8 +24,8 @@ public class Constants {
             RED
         }
 
-        public static
-            Pose2D ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
+        public static Pose2D
+            ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
             FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
         public static double
             GRAVITY = 9.811,
@@ -156,9 +151,10 @@ public class Constants {
         public static double
             UP = 0.15,
             DOWN = 0.575,
-            FOLLOWER_OFFSET = 0.075,
-            POSITION_CHANGE_MS = 250;
-        public static int TICK_NUMBER = 8;
+            FOLLOWER_OFFSET = 0.075;
+        public static int
+            POSITION_CHANGE_MS = 250,
+            TICK_NUMBER = 8;
     }
 
     @Configurable
@@ -188,25 +184,29 @@ public class Constants {
 
     @Configurable
     public static class Flywheel {
-        public static double GEAR_RATIO = 3.0/4.0;
-        public static int MAX_VELOCITY = (int) (6000 * GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60; // 2100
-        public static double KP = 0.005;
-        public static double KI = 0.0;
-        public static double KD = 0.0;
-        public static double KF = 1.1;
-        public static double[] SPEED_TABLE = {0.49, 0.51, 0.52, 0.54, 0.56, 0.6, 0.62};
-        public static double[] SPEED_TABLE_DISTANCES = {90, 120, 135, 150, 185, 230, 250};
-        public static int SPINUP_MS = 1000;
-        public static int SHOOT_MS = 1000;
-        public static double HEIGHT = 0.0;
-        public static double DESIRED_MAX_HEIGHT = 0.0;
-        public static double POWER_VELOCITY_MULTIPLIER = 1;
+        public static double
+            GEAR_RATIO = 3.0/4.0,
+            KP = 0.005,
+            KI = 0.0,
+            KD = 0.0,
+            KF = 1.1,
+            HEIGHT = 0.0,
+            DESIRED_MAX_HEIGHT = 0.0,
+            POWER_VELOCITY_MULTIPLIER = 1;
+        public static double[]
+            SPEED_TABLE = {0.49, 0.51, 0.52, 0.54, 0.56, 0.6, 0.62},
+            SPEED_TABLE_DISTANCES = {90, 120, 135, 150, 185, 230, 250};
+        public static int
+            MAX_VELOCITY = (int) (6000 * GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60, // 2100
+            SPINUP_MS = 1000,
+            SHOOT_MS = 1000;
     }
 
     @Configurable
     public static class Intake {
-        public static double TOP_SPEED = 1;
-        public static double BEST_INTAKE_SPEED = 1;
-        public static double REVERSE_TOP_SPEED = 0.5;
+        public static double
+            TOP_SPEED = 1,
+            BEST_INTAKE_SPEED = 1,
+            REVERSE_TOP_SPEED = 0.5;
     }
 }

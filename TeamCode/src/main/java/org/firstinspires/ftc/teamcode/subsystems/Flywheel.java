@@ -76,8 +76,8 @@ public class Flywheel {
         robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.down(), Constants.Wings.DELAY_EXTENSION_MS);
         robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.tick(), Constants.Flywheel.SPINUP_MS);
         robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.off(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
-        robotContainer.delayedActionManager.schedule(() -> Status.flywheelToggle = false, Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
-        robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.up(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
+        robotContainer.delayedActionManager.schedule(() -> Status.flywheelToggle = false, Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS);
+        robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.up(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2);
 
     }
 
