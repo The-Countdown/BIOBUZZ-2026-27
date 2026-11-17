@@ -91,17 +91,15 @@ public class Comp_2 extends OpMode {
     Command shoot() {
         return sequential(
                 instant(() -> {
+                    robotContainer.turret.pointAtGoal();
                     Status.flywheelToggle = true;
                     robotContainer.intake.on();
                 }),
 
-                waitMs(Constants.Flywheel.SPINUP_MS),
-
                 instant(() -> {
-                    robotContainer.tongue.tick();
+                    waitMs(Constants.Flywheel.SPINUP_MS);
+                   robotContainer.tongue.tick();
                 }),
-
-                waitMs(Constants.Tongue.POSITION_CHANGE_MS),
 
                 instant(() -> {
                     Status.flywheelToggle = false;
@@ -161,9 +159,8 @@ public class Comp_2 extends OpMode {
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
                 shoot(),
-                intakeOn(),
                 follow(follower, path1()),
-                intakeOff(),
+                intake(),
                 follow(follower, path2()),
                 shoot(),
                follow(follower, path3()),
