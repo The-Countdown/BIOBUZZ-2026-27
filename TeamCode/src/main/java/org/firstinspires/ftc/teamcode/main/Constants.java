@@ -157,6 +157,7 @@ public class Constants {
             DOWN = 0.575,
             FOLLOWER_OFFSET = 0.075,
             POSITION_CHANGE_TIME = 250;
+        public static int TICK_NUMBER = 8;
     }
 
     @Configurable
@@ -188,10 +189,10 @@ public class Constants {
     public static class Flywheel {
         public static double GEAR_RATIO = 3.0/4.0;
         public static int MAX_VELOCITY = (int) (6000 * GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60; // 2100
-        public static double KP = 0.01;
+        public static double KP = 0.005;
         public static double KI = 0.0;
-        public static double KD = 0.0001;
-        public static double KF = 1.0;
+        public static double KD = 0.0;
+        public static double KF = 1.1;
         public static double[] SPEED_TABLE = {0.49, 0.51, 0.52, 0.54, 0.56, 0.6, 0.62};
         public static double[] SPEED_TABLE_DISTANCES = {90, 120, 135, 150, 185, 230, 250};
         public static int SPINUP_MS = 1000;
