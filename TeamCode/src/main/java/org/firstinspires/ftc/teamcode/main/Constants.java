@@ -198,7 +198,7 @@ public class Constants {
             SPEED_TABLE_DISTANCES = {90, 120, 135, 150, 185, 230, 250};
         public static int
             MAX_VELOCITY = (int) (6000 * GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60, // 2100
-            SPINUP_MS = 1000,
+            SPINUP_MS = 2000,
             SHOOT_MS = 1000;
     }
 

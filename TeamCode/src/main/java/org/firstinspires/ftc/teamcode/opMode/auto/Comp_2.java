@@ -88,67 +88,66 @@ public class Comp_2 extends OpMode {
     }
 
     // Action Creation
-    Command Shoot() {
+    Command shoot() {
         return sequential(
                 instant(() -> {
+                    robotContainer.turret.pointAtGoal();
                     Status.flywheelToggle = true;
                     robotContainer.intake.on();
                 }),
 
-                waitMs(Constants.Flywheel.SPINUP_MS),
-
                 instant(() -> {
-                    robotContainer.tongue.up();
+                    waitMs(Constants.Flywheel.SPINUP_MS);
+                   robotContainer.tongue.tick();
                 }),
 
-                waitMs(Constants.Tongue.POSITION_CHANGE_MS),
-
                 instant(() -> {
-                    robotContainer.tongue.down();
                     Status.flywheelToggle = false;
                     robotContainer.intake.off();
                 })
         );
     }
-    Command IntakeOn() {
+    Command intakeOn() {
         return sequential(
                 instant(() -> {
                     robotContainer.intake.on();
+                    robotContainer.tongue.down();
                 })
         );
     }
 
-    Command IntakeOff() {
-        return sequential(
-        instant(() -> {
-            robotContainer.intake.off();
-        })
-       );
-    }
-
-    Command Intake() {
-        return sequential(
-        instant(() -> {
-            robotContainer.intake.on();
-        }),
-
-        waitMs(1000),
-
-        instant(() -> {
-            robotContainer.intake.off();
-        })
-        );
-    }
-
-    Command ProboscisDown() {
+    Command intakeOff() {
         return sequential(
                 instant(() -> {
-                  robotContainer.proboscis.down();
+                    robotContainer.intake.off();
                 })
         );
     }
 
-    Command ProboscisUp() {
+    Command intake() {
+        return sequential(
+                instant(() -> {
+                    robotContainer.intake.on();
+                    robotContainer.tongue.down();
+                }),
+
+                waitMs(1000),
+
+                instant(() -> {
+                    robotContainer.intake.off();
+                })
+        );
+    }
+
+    Command proboscisDown() {
+        return sequential(
+          instant(() -> {
+              robotContainer.proboscis.down();
+          })
+        );
+    }
+
+    Command proboscisUp() {
         return sequential(
                 instant(() -> {
                     robotContainer.proboscis.up();
@@ -159,18 +158,17 @@ public class Comp_2 extends OpMode {
     // Path methods
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
-                Shoot(),
-                IntakeOn(),
+                shoot(),
                 follow(follower, path1()),
-                IntakeOff(),
+                intake(),
                 follow(follower, path2()),
-                Shoot(),
-                follow(follower, path3()),
-                ProboscisDown(),
+                shoot(),
+               follow(follower, path3()),
+                proboscisDown(),
                 follow(follower, path4()),
-                Intake(),
+                intake(),
                 follow(follower, path5()),
-                ProboscisUp(),
+                proboscisUp(),
                 follow(follower, path6())
         );
     }
