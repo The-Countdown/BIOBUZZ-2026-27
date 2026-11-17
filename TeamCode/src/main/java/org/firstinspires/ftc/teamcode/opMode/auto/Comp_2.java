@@ -20,7 +20,10 @@ import static com.pedropathing.api.Paths.*;
 import com.pedropathing.math.*;
         import com.pedropathing.paths.*;
 
-        import org.firstinspires.ftc.teamcode.main.Constants;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PedroPathingConstants;
 
 // Panels Imports
@@ -198,6 +201,7 @@ public class Comp_2 extends OpMode {
     @Override
     public void start() { // Runs when the start button is pressed on the driver station
         robotContainer.start(this, false);
+        RobotContainer.HardwareDevices.pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, 61.5455, 9.0733, AngleUnit.DEGREES, 180));
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
     }
 
@@ -207,7 +211,6 @@ public class Comp_2 extends OpMode {
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
-
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());
         panelsTelemetry.debug("Turret Target Degrees", robotContainer.turret.getTargetPositionDegrees());
@@ -220,7 +223,14 @@ public class Comp_2 extends OpMode {
         panelsTelemetry.debug("Current Pose", Status.currentPose);
         panelsTelemetry.update(telemetry);
 
+
+
         telemetry.addData("Follower Mode", follower.mode());
         telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        blackboard.put("Robot Pose", Status.currentPose);
     }
 }

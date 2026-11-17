@@ -332,11 +332,11 @@ public class RobotContainer {
             operatorController.update();
             drivetrain.driveJoystickUpdate();
             drivetrain.update();
-            positionProvider.update();
         }
 
         delayedActionManager.update();
 //        allIndicatorLights.lightsUpdate();
+        positionProvider.update();
         tongue.update(teleop);
         proboscis.update(teleop);
         turret.update(teleop);
