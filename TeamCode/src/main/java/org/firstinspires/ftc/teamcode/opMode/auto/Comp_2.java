@@ -93,6 +93,8 @@ public class Comp_2 extends OpMode {
             robotContainer.flywheel.shootSequence()
         );
     }
+
+
     Command intakeOn() {
         return instant(() -> {
             robotContainer.intake.on();
@@ -176,6 +178,7 @@ public class Comp_2 extends OpMode {
 
     @Override
     public void start() { // Runs when the start button is pressed on the driver station
+        follower.setPose(start);
         robotContainer.start(this, false);
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
     }
