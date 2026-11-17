@@ -166,4 +166,8 @@ public class ExampleAuto extends OpMode {
         telemetry.addData("Follower Mode", follower.mode());
         telemetry.update();
     }
+    @Override
+    public void stop() {
+        blackboard.put("Robot Pose", Status.currentPose);
+    }
 }
