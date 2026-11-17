@@ -45,7 +45,6 @@ public class Comp_2 extends OpMode {
     private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     private final PoseFactory poseFactory = PoseFactory.degrees(); // Makes the creation of poses easier
     private RobotContainer robotContainer; // Robot container sets up all necessary hardware and software so that it can be immediately used in any code across the codebase without having to set it up in every file
-
     // File Variables
     boolean holding = false;
     ElapsedTime pathTimer = new ElapsedTime();
@@ -91,22 +90,12 @@ public class Comp_2 extends OpMode {
     Command shoot() {
         return sequential(
                 instant(() -> {
-                    robotContainer.turret.pointAtGoal();
-                    Status.flywheelToggle = true;
-                    robotContainer.intake.on();
-                }),
-
-                instant(() -> {
-                    waitMs(Constants.Flywheel.SPINUP_MS);
-                   robotContainer.tongue.tick();
-                }),
-
-                instant(() -> {
-                    Status.flywheelToggle = false;
-                    robotContainer.intake.off();
+                    robotContainer.flywheel.shootSequence();
                 })
         );
     }
+
+
     Command intakeOn() {
         return sequential(
                 instant(() -> {
@@ -198,6 +187,7 @@ public class Comp_2 extends OpMode {
 
     @Override
     public void start() { // Runs when the start button is pressed on the driver station
+        follower.setPose(start);
         robotContainer.start(this, false);
         RobotContainer.HardwareDevices.pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, 61.5455, 9.0733, AngleUnit.DEGREES, 180));
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
