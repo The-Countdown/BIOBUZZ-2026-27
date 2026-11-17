@@ -89,39 +89,21 @@ public class Comp_2 extends OpMode {
 
     // Action Creation
     Command shoot() {
-        return sequential(
-                instant(() -> {
-                    robotContainer.turret.pointAtGoal();
-                    Status.flywheelToggle = true;
-                    robotContainer.intake.on();
-                }),
-
-                instant(() -> {
-                    waitMs(Constants.Flywheel.SPINUP_MS);
-                   robotContainer.tongue.tick();
-                }),
-
-                instant(() -> {
-                    Status.flywheelToggle = false;
-                    robotContainer.intake.off();
-                })
+        return instant(() ->
+            robotContainer.flywheel.shootSequence()
         );
     }
     Command intakeOn() {
-        return sequential(
-                instant(() -> {
-                    robotContainer.intake.on();
-                    robotContainer.tongue.down();
-                })
-        );
+        return instant(() -> {
+            robotContainer.intake.on();
+            robotContainer.tongue.down();
+        });
     }
 
     Command intakeOff() {
-        return sequential(
-                instant(() -> {
-                    robotContainer.intake.off();
-                })
-        );
+        return instant(() -> {
+            robotContainer.intake.off();
+        });
     }
 
     Command intake() {
@@ -140,19 +122,15 @@ public class Comp_2 extends OpMode {
     }
 
     Command proboscisDown() {
-        return sequential(
-          instant(() -> {
+          return instant(() -> {
               robotContainer.proboscis.down();
-          })
-        );
+          });
     }
 
     Command proboscisUp() {
-        return sequential(
-                instant(() -> {
-                    robotContainer.proboscis.up();
-                })
-        );
+        return instant(() -> {
+            robotContainer.proboscis.up();
+        });
     }
 
     // Path methods
@@ -163,7 +141,7 @@ public class Comp_2 extends OpMode {
                 intake(),
                 follow(follower, path2()),
                 shoot(),
-               follow(follower, path3()),
+                follow(follower, path3()),
                 proboscisDown(),
                 follow(follower, path4()),
                 intake(),
@@ -199,7 +177,6 @@ public class Comp_2 extends OpMode {
     @Override
     public void start() { // Runs when the start button is pressed on the driver station
         robotContainer.start(this, false);
-        RobotContainer.HardwareDevices.pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, 61.5455, 9.0733, AngleUnit.DEGREES, 180));
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
     }
 
@@ -209,6 +186,8 @@ public class Comp_2 extends OpMode {
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
+        robotContainer.positionProvider.updatePose(new Pose2D(DistanceUnit.INCH, follower.pose().x(), follower.pose().y(), AngleUnit.DEGREES, follower.pose().heading()));
+
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());
         panelsTelemetry.debug("Turret Target Degrees", robotContainer.turret.getTargetPositionDegrees());
@@ -220,8 +199,6 @@ public class Comp_2 extends OpMode {
         panelsTelemetry.debug("Heading", follower.pose().heading());
         panelsTelemetry.debug("Current Pose", Status.currentPose);
         panelsTelemetry.update(telemetry);
-
-
 
         telemetry.addData("Follower Mode", follower.mode());
         telemetry.update();

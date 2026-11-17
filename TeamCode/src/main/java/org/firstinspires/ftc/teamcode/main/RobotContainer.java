@@ -335,11 +335,12 @@ public class RobotContainer {
             operatorController.update();
             drivetrain.driveJoystickUpdate();
             drivetrain.update();
+            updateTelemetry();
+            positionProvider.update();
         }
 
         delayedActionManager.update();
 //        allIndicatorLights.lightsUpdate();
-        positionProvider.update();
         tongue.update(teleop);
         proboscis.update(teleop);
         turret.update(teleop);
@@ -348,8 +349,6 @@ public class RobotContainer {
         intake.update(teleop);
 
         PREV_LOOP_TIME_MS = CURRENT_LOOP_TIME_MS;
-
-        updateTelemetry();
     }
 
     /**
