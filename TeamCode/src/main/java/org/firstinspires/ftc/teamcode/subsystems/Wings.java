@@ -24,11 +24,11 @@ public class Wings extends RobotContainer.HardwareDevices {
             if (robotContainer.driverController.dpadDown.wasJustPressed() || robotContainer.operatorController.square.wasJustPressed()) {
                 Status.wingsDown = !Status.wingsDown;
                 if (Status.wingsDown) {
-                    robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.setPosition(Constants.Wings.EXTENDED), 250);
+                    robotContainer.delayedActionManager.schedule(() -> down(), Constants.Wings.DELAY_EXTENSION_MS);
 //                } else if (Status.parked) {
-//                    robotContainer.wings.setPosition(Constants.Wings.PARK);
+//                    park();
                 } else {
-                    robotContainer.wings.setPosition(Constants.Wings.MIN);
+                    up();
                 }
             }
         }
@@ -37,6 +37,22 @@ public class Wings extends RobotContainer.HardwareDevices {
     // This is for manual control
     public void setPosition(double position) {
         wingServos.setPosition(HelperFunctions.clamp(position, Constants.Wings.MIN, Constants.Wings.MAX), Constants.Wings.FOLLOWER_OFFSET);
+    }
+
+    public void park(){
+        robotContainer.wings.setPosition(Constants.Wings.PARK);
+        Status.wingsDown = true;
+
+    }
+
+    public void up(){
+        robotContainer.wings.setPosition(Constants.Wings.MIN);
+        Status.wingsDown = false;
+    }
+
+    public void down(){
+        robotContainer.wings.setPosition(Constants.Wings.EXTENDED);
+        Status.wingsDown = true;
     }
 
     public double getPosition() {

@@ -14,8 +14,8 @@ import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
-import static com.pedropathing.api.Paths.*;
-        import com.pedropathing.follower.*;
+
+import com.pedropathing.follower.*;
         import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
         import com.pedropathing.paths.*;
@@ -101,7 +101,7 @@ public class Comp_2 extends OpMode {
                     robotContainer.tongue.up();
                 }),
 
-                waitMs(Constants.Tongue.POSITION_CHANGE_TIME),
+                waitMs(Constants.Tongue.POSITION_CHANGE_MS),
 
                 instant(() -> {
                     robotContainer.tongue.down();

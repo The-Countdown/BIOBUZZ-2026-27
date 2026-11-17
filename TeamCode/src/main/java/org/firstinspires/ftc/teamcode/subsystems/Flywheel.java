@@ -70,6 +70,17 @@ public class Flywheel {
         flyWheelMotors.setPower(flywheelPDF.calculate(targetVelocity));
     }
 
+    public void shootSequence(){
+        Status.flywheelToggle = true;
+        robotContainer.intake.on();
+        robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.down(), Constants.Wings.DELAY_EXTENSION_MS);
+        robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.tick(), Constants.Flywheel.SPINUP_MS);
+        robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.off(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
+        robotContainer.delayedActionManager.schedule(() -> Status.flywheelToggle = false, Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
+        robotContainer.delayedActionManager.schedule(() -> robotContainer.wings.up(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
+
+    }
+
     public boolean atTargetVelocity() {
         return Math.abs(error) < 60 && targetVelocity > 10;
     }

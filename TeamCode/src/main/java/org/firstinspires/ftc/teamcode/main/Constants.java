@@ -56,8 +56,8 @@ public class Constants {
 
         public static final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
                 )
         );
     }
@@ -141,6 +141,7 @@ public class Constants {
             MIN = 0.325,
             PARK = 0.41,
             FOLLOWER_OFFSET = 0.625;
+        public static int DELAY_EXTENSION_MS = 250;
     }
 
     @Configurable
@@ -156,7 +157,7 @@ public class Constants {
             UP = 0.15,
             DOWN = 0.575,
             FOLLOWER_OFFSET = 0.075,
-            POSITION_CHANGE_TIME = 250;
+            POSITION_CHANGE_MS = 250;
         public static int TICK_NUMBER = 8;
     }
 
@@ -196,6 +197,7 @@ public class Constants {
         public static double[] SPEED_TABLE = {0.49, 0.51, 0.52, 0.54, 0.56, 0.6, 0.62};
         public static double[] SPEED_TABLE_DISTANCES = {90, 120, 135, 150, 185, 230, 250};
         public static int SPINUP_MS = 1000;
+        public static int SHOOT_MS = 1000;
         public static double HEIGHT = 0.0;
         public static double DESIRED_MAX_HEIGHT = 0.0;
         public static double POWER_VELOCITY_MULTIPLIER = 1;

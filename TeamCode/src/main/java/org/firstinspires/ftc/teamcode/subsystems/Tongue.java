@@ -40,15 +40,15 @@ public class Tongue extends RobotContainer.HardwareDevices{
     }
 
     public void tick(){
+        if (tickNum != Constants.Tongue.TICK_NUMBER + 1) {
+            robotContainer.delayedActionManager.schedule(() -> tick(), Constants.Flywheel.SHOOT_MS / Constants.Tongue.TICK_NUMBER);
+        }
+
         tickNum %= Constants.Tongue.TICK_NUMBER + 1;
         double tickDiff = (Constants.Tongue.DOWN - Constants.Tongue.UP);
         double servoPose = (tickDiff / Constants.Tongue.TICK_NUMBER) * tickNum + Constants.Tongue.UP;
         double inverseServoPos = Constants.Tongue.DOWN - (tickDiff / Constants.Tongue.TICK_NUMBER) * tickNum;
         tongueServos.setOffsetMirroredPositions(inverseServoPos, servoPose, Constants.Tongue.FOLLOWER_OFFSET);
-
-        if (tickNum != Constants.Tongue.TICK_NUMBER) {
-            robotContainer.delayedActionManager.schedule(() -> tick(), 1000 / Constants.Tongue.TICK_NUMBER);
-        }
 
         tickNum++;
     }
