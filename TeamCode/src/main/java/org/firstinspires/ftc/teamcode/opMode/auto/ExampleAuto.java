@@ -80,7 +80,7 @@ public class ExampleAuto extends OpMode {
                 robotContainer.tongue.up();
             }),
 
-            waitMs(Constants.Tongue.POSITION_CHANGE_TIME),
+            waitMs(Constants.Tongue.POSITION_CHANGE_MS),
 
             instant(() -> {
                 robotContainer.tongue.down();

@@ -69,10 +69,10 @@ public class Turret extends RobotContainer.HardwareDevices {
             }
 
             // Manual Turret Hood
-            if (robotContainer.operatorController.triangle.wasJustPressed()) {
+//            if (robotContainer.operatorController.triangle.wasJustPressed()) {
 //                double targetHoodPos = robotContainer.turret.hoodServo.getPosition() == Constants.Turret.HOOD_PRESETS[2]  ? Constants.Turret.HOOD_PRESETS[0] : Constants.Turret.HOOD_PRESETS[1];
 //                robotContainer.turret.hood.setPos(targetHoodPos);
-            }
+//            }
 
             if (robotContainer.operatorController.triangle.isHeldFor(1.0)){
                 Status.manualControl = !Status.manualControl;

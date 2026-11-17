@@ -42,8 +42,8 @@ public class Drivetrain {
         if (robotContainer.driverController.circle.wasJustPressed() || robotContainer.operatorController.circle.wasJustPressed()) {
             RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.ORIGIN);
 //            RobotContainer.HardwareDevices.betterIMU.resetAngle();
-        } else if (robotContainer.driverController.triangle.wasJustPressed() || robotContainer.operatorController.circle.isHeldFor(1.0)) {
-//            RobotContainer.HardwareDevices.pinpoint.setPosition(Status.flowerResetPose);
+        } else if (robotContainer.driverController.triangle.wasJustPressed() || robotContainer.operatorController.triangle.wasJustPressed()) {
+            RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.FLOWER_RESET_POSE);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
         }
     }
