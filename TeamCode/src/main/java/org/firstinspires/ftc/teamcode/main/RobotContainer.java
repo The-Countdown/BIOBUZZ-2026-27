@@ -279,6 +279,9 @@ public class RobotContainer {
     }
 
     public void start(OpMode opmode, boolean teleop) {
+
+        Status.goalPose = Constants.Game.ORIGIN;
+
         driverController = new GamepadWrapper(opmode.gamepad1);
         operatorController = new GamepadWrapper(opmode.gamepad2);
         Status.isDrivingActive = false;
