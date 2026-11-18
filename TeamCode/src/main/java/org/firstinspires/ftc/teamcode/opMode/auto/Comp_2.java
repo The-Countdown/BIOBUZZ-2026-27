@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // Our Imports
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
+import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 @Autonomous
 @Configurable // Allows you to configure in panels
@@ -55,10 +56,10 @@ public class Comp_2 extends OpMode {
     private final Pose start = poseFactory.of(61.5455, 9.0733, 180);
     private final Pose path1 = poseFactory.of(0, 9.1669, 180);
     private final Pose point2 = poseFactory.of(61.5235, 9.1571, 179.9909);
-    private final Pose point3 = poseFactory.of(19.0289, 46.4956, 85.6574);
+    private final Pose point3 = poseFactory.of(19.2078, 51.6833, 85.9617);
     private final Pose point3Control1 = poseFactory.of(16.3645, 11.4094, 0);
-    private final Pose point4 = poseFactory.of(9.8114, 46.425, -179.5616);
-    private final Pose point5 = poseFactory.of(18.9583, 46.4364, -179.9285);
+    private final Pose point4 = poseFactory.of(9.0958, 51.255, -177.5746);
+    private final Pose point5 = poseFactory.of(18.9583, 51.2664, -179.9337);
     private final Pose point6 = poseFactory.of(9.6909, 95.0851, -90.7818);
     private final Pose point6Control1 = poseFactory.of(15.6, 60.6195, 0);
     private final Pose point6Control2 = poseFactory.of(9.2168, 60.3423, 0);
@@ -114,7 +115,7 @@ public class Comp_2 extends OpMode {
                     robotContainer.tongue.down();
                 }),
 
-                waitMs(1000),
+                waitMs(1500),
 
                 instant(() -> {
                     robotContainer.intake.off();
@@ -141,7 +142,12 @@ public class Comp_2 extends OpMode {
                 waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
                 intakeOn(),
                 follow(follower, path1()),
-                intakeOff()
+                intakeOff(),
+                follow(follower, path2()),
+                shoot(),
+                follow(follower, path3()),
+                follow(follower, path4()),
+                intake()
         );
     }
 
@@ -181,7 +187,7 @@ public class Comp_2 extends OpMode {
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
-        robotContainer.positionProvider.updatePose(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 1.5 - 72, follower.pose().y() - 20.5 - 72, AngleUnit.DEGREES, Math.toDegrees(follower.pose().heading()) - 180));
+        robotContainer.positionProvider.updatePose(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 1.5 - 72, follower.pose().y() - 20.5 - 72, AngleUnit.DEGREES, HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
 
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());
