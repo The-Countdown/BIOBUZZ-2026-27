@@ -52,7 +52,7 @@ public class PedroPathingConstants {
                 c.coast.set(Controller.proportionalFeedforward(0.0085));
                 c.brake.set(Controller.proportionalFeedforward(0.0075));
 
-                c.headingFeedback.set(Controller.proportional(7.5));
+                c.headingFeedback.set(Controller.proportional(5.5));
                 c.headingBrakeCoefficients.set(Vector2D.cartesian(0.055, 0.005));
 
                 c.linearBrakeCoefficients.set(Matrix.diag(0.075, 0.0495));

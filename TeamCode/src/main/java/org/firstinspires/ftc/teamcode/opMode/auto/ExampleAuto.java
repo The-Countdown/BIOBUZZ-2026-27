@@ -126,7 +126,6 @@ public class ExampleAuto extends OpMode {
         robotContainer.init();
 
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry(); // creates a new instance of panels
-        robotContainer.init();
         Scheduler.reset(); // resets the command scheduler for the ivy follower
 
         follower = PedroPathingConstants.create(hardwareMap);

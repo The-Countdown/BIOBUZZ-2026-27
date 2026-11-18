@@ -10,15 +10,20 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
-import static com.pedropathing.api.Paths.*;
-import static java.lang.Thread.sleep;
 
 import com.pedropathing.follower.*;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
 import com.pedropathing.paths.*;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PedroPathingConstants;
 
 // Panels Imports
@@ -28,7 +33,6 @@ import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Our Imports
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
@@ -48,12 +52,62 @@ public class PushZaRobot extends OpMode {
     int pathNumber = 1;
 
     // Poses
-    private final Pose start = poseFactory.of(56, 8, 90);
-    private final Pose path1 = poseFactory.of(55.6422, 39.3989, 180);
+    private final Pose start = poseFactory.of(61.5455, 8.7155, 90);
+    private final Pose path1 = poseFactory.of(72, 72, 90);
+
 
     public Path path1() {
-        return Paths.line(start, path1).linear(start, path1);
+        return Paths.line(start, path1).constant(Math.toRadians(90));
     }
+
+    // Action Creation
+    Command shoot() {
+        return instant(() -> {
+            robotContainer.flywheel.shootSequence();
+        });
+    }
+
+    Command intakeOn() {
+        return instant(() -> {
+            robotContainer.intake.on();
+        });
+    }
+
+    Command intakeOff() {
+        return instant(() -> {
+            waitMs(1000);;
+            robotContainer.intake.off();
+        });
+    }
+
+    Command intake() {
+        return sequential(
+                instant(() -> {
+                    robotContainer.intake.on();
+                    robotContainer.tongue.down();
+                }),
+
+                waitMs(1000),
+
+                instant(() -> {
+                    robotContainer.intake.off();
+                })
+        );
+    }
+
+    Command proboscisDown() {
+        return instant(() -> {
+            robotContainer.proboscis.down();
+        });
+    }
+
+    Command proboscisUp() {
+        return instant(() -> {
+            robotContainer.proboscis.up();
+        });
+    }
+
+    // Path methods
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
                 follow(follower, path1())
@@ -71,7 +125,6 @@ public class PushZaRobot extends OpMode {
         robotContainer.init();
 
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry(); // creates a new instance of panels
-        robotContainer.init();
         Scheduler.reset(); // resets the command scheduler for the ivy follower
 
         follower = PedroPathingConstants.create(hardwareMap);
@@ -95,6 +148,7 @@ public class PushZaRobot extends OpMode {
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
+        robotContainer.positionProvider.updatePose(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 72, follower.pose().y() - 72, AngleUnit.DEGREES, Math.toDegrees(follower.pose().heading() - 180)));
 
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());
@@ -110,5 +164,10 @@ public class PushZaRobot extends OpMode {
 
         telemetry.addData("Follower Mode", follower.mode());
         telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        blackboard.put("Robot Pose", Status.currentPose);
     }
 }
