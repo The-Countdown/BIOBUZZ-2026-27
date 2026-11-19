@@ -60,7 +60,7 @@ public class Comp_2 extends OpMode {
     private final Pose point3Control1 = poseFactory.of(16.3645, 11.4094, 0);
     private final Pose point4 = poseFactory.of(9.0958, 51.255, -177.5746);
     private final Pose point5 = poseFactory.of(18.9583, 51.2664, -179.9337);
-    private final Pose point6 = poseFactory.of(9.6909, 95.0851, -90.7818);
+    private final Pose point6 = poseFactory.of(9.6909, 101.525, -90.6596);
     private final Pose point6Control1 = poseFactory.of(15.6, 60.6195, 0);
     private final Pose point6Control2 = poseFactory.of(9.2168, 60.3423, 0);
 
@@ -138,16 +138,21 @@ public class Comp_2 extends OpMode {
     // Path methods
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
-                shoot(),
-                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
-                intakeOn(),
-                follow(follower, path1()),
-                intakeOff(),
-                follow(follower, path2()),
-                shoot(),
-                follow(follower, path3()),
-                follow(follower, path4()),
-                intake()
+//                shoot(),
+//                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
+//                intakeOn(),
+//                follow(follower, path1()),
+//                intakeOff(),
+//                follow(follower, path2()),
+//                shoot(),
+//                follow(follower, path3()),
+//                proboscisDown(),
+//                follow(follower, path4()),
+//                intake(),
+//                follow(follower,path5()),
+//                proboscisUp(),
+//                follow(follower, path6())
+
         );
     }
 
