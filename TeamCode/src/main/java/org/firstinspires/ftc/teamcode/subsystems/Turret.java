@@ -46,7 +46,7 @@ public class Turret extends RobotContainer.HardwareDevices {
 
     public void update(boolean teleop) {
         //robotContainer.turret.hood.setPos(HelperFunctions.clamp(tableInterpolate(Constants.Turret.HOOD_TABLE_DISTANCES, Constants.Turret.HOOD_PRESETS, HelperFunctions.disToGoal()), Constants.Turret.HOOD_PRESETS[0], Constants.Turret.HOOD_PRESETS[Constants.Turret.HOOD_PRESETS.length-1]));
-        currentPosition = turretMotor.getCurrentPosition();
+        currentPosition = turretMotor.getCurrentPosition() - Status.turretZeroOffset;
 
         if (Status.currentY < 0) {
             goalAngle = 180;

@@ -42,6 +42,7 @@ public class Status {
         public static boolean wingsDown = false;
         public static boolean tongueDown = false;
         public static boolean proboscisDown = false;
+        public static double turretZeroOffset = 0;
     // Robot Toggles
         public static boolean useBetterIMU = false;
         public static boolean fieldOriented = false;

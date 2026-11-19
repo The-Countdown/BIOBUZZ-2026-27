@@ -187,7 +187,7 @@ public class Comp_2 extends OpMode {
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
-        robotContainer.positionProvider.updatePose(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 1.5 - 72, follower.pose().y() - 20.5 - 72, AngleUnit.DEGREES, HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
+        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 1.5 - 72, follower.pose().y() - 20.5 - 72, AngleUnit.DEGREES, HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
 
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());

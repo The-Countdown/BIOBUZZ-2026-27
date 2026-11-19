@@ -26,7 +26,7 @@ public class Constants {
 
         public static Pose2D
             ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
-            FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
+            FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 163 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
         public static double
             GRAVITY = 9.811,
             GOAL_HEIGHT = 144.78,
@@ -171,7 +171,9 @@ public class Constants {
             KF = 0.1,
             TOLERANCE_DEGREES = 3,
             GEAR_SLOP = 0.5,
-            TOLERANCE_TICKS = (TOLERANCE_DEGREES - GEAR_SLOP) / DEGREES_PER_TICK;
+            TOLERANCE_TICKS = (TOLERANCE_DEGREES - GEAR_SLOP) / DEGREES_PER_TICK,
+            Y_THRESHOLD = 36 * 2.54,
+            X_THRESHOLD = 12 * 2.54;
         public static int
             ZERO_DEGREE_POSITION = 0,
             MAX_MOTOR = ZERO_DEGREE_POSITION + 300,

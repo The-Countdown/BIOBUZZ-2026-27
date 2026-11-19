@@ -23,7 +23,6 @@ import com.pedropathing.paths.*;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.PedroPathingConstants;
 
 // Panels Imports
@@ -148,7 +147,7 @@ public class PushZaRobot extends OpMode {
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
-        robotContainer.positionProvider.updatePose(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 72, follower.pose().y() - 72, AngleUnit.DEGREES, Math.toDegrees(follower.pose().heading() - 180)));
+        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 72, follower.pose().y() - 72, AngleUnit.DEGREES, Math.toDegrees(follower.pose().heading() - 180)));
 
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());

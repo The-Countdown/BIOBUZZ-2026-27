@@ -323,11 +323,6 @@ public class RobotContainer {
         CURRENT_LOOP_TIME_MS = updateLoopTime("teleOp");
         refreshData();
 
-        // Update Goal Pose
-            double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? 1 : -1;
-            double yMultiplier = Status.currentY > 0 ? 1: -1;
-            Status.goalPose = new Pose2D(DistanceUnit.CM, Constants.Game.CELL_POSITION_X * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
-
 //        switchCurrent = (HardwareDevices.switchCurrentSensor.getVoltage() / 3.3) * 80;
 
         if (teleop){
@@ -336,7 +331,7 @@ public class RobotContainer {
             drivetrain.driveJoystickUpdate();
             drivetrain.update();
             updateTelemetry();
-            positionProvider.update();
+            positionProvider.updateRobotPose();
         }
 
         delayedActionManager.update();
