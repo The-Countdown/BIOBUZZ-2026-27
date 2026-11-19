@@ -56,13 +56,13 @@ public class Comp_2 extends OpMode {
     // Poses
     private Pose start = poseFactory.of(61.5455, 9.0733, 180);
     private Pose startPose = poseFactory.of(61, 9, 180);
-    private Pose point1 = poseFactory.of(0, 9.1669, 180);
-    private Pose point2 = poseFactory.of(61.5235, 9.1571, 179.9909);
-    private Pose point3 = poseFactory.of(19.2078, 51.6833, 85.9617);
+    private Pose point1 = poseFactory.of(-10, 9.1669, 180);
+    private Pose point2 = poseFactory.of(61.5455, 9.0733, 180);
+    private Pose point3 = poseFactory.of(22, 55, 85.9617);
     private Pose point3Control1 = poseFactory.of(16.3645, 11.4094, 0);
-    private Pose point4 = poseFactory.of(9.0958, 51.255, -177.5746);
-    private Pose point5 = poseFactory.of(18.9583, 51.2664, -179.9337);
-    private Pose point6 = poseFactory.of(9.6909, 101.525, -90.6596);
+    private Pose point4 = poseFactory.of(12, 55, -177.5746);
+    private Pose point5 = poseFactory.of(22, 55, -177.5746);
+    private Pose point6 = poseFactory.of(10, 102, -90.6596);
     private Pose point6Control1 = poseFactory.of(15.6, 60.6195, 0);
     private Pose point6Control2 = poseFactory.of(9.2168, 60.3423, 0);
 
@@ -149,15 +149,21 @@ public class Comp_2 extends OpMode {
                 waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
                 intakeOn(),
                 follow(follower, path1()),
+                waitMs(500),
                 intakeOff(),
                 follow(follower, path2()),
+                waitMs(500),
                 shoot(),
+                waitMs(500),
                 follow(follower, path3()),
                 proboscisDown(),
+                waitMs(300),
                 follow(follower, path4()),
                 intake(),
+                waitMs(1000),
                 follow(follower,path5()),
                 proboscisUp(),
+                waitMs(500),
                 follow(follower, path6())
 
         );
