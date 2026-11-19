@@ -52,24 +52,30 @@ public class Comp_2 extends OpMode {
     ElapsedTime pathTimer = new ElapsedTime();
     int pathNumber = 1;
 
+
     // Poses
-    private final Pose start = poseFactory.of(61.5455, 9.0733, 180);
-    private final Pose path1 = poseFactory.of(0, 9.1669, 180);
-    private final Pose point2 = poseFactory.of(61.5235, 9.1571, 179.9909);
-    private final Pose point3 = poseFactory.of(19.2078, 51.6833, 85.9617);
-    private final Pose point3Control1 = poseFactory.of(16.3645, 11.4094, 0);
-    private final Pose point4 = poseFactory.of(9.0958, 51.255, -177.5746);
-    private final Pose point5 = poseFactory.of(18.9583, 51.2664, -179.9337);
-    private final Pose point6 = poseFactory.of(9.6909, 101.525, -90.6596);
-    private final Pose point6Control1 = poseFactory.of(15.6, 60.6195, 0);
-    private final Pose point6Control2 = poseFactory.of(9.2168, 60.3423, 0);
+    private Pose start = poseFactory.of(61.5455, 9.0733, 180);
+    private Pose startPose = poseFactory.of(61, 9, 180);
+    private Pose point1 = poseFactory.of(0, 9.1669, 180);
+    private Pose point2 = poseFactory.of(61.5235, 9.1571, 179.9909);
+    private Pose point3 = poseFactory.of(19.2078, 51.6833, 85.9617);
+    private Pose point3Control1 = poseFactory.of(16.3645, 11.4094, 0);
+    private Pose point4 = poseFactory.of(9.0958, 51.255, -177.5746);
+    private Pose point5 = poseFactory.of(18.9583, 51.2664, -179.9337);
+    private Pose point6 = poseFactory.of(9.6909, 101.525, -90.6596);
+    private Pose point6Control1 = poseFactory.of(15.6, 60.6195, 0);
+    private Pose point6Control2 = poseFactory.of(9.2168, 60.3423, 0);
+
+    public Path startPath() {
+        return Paths.line(start, startPose).constant(start);
+    }
 
     public Path path1() {
-        return Paths.line(start, path1).linear(start, path1);
+        return Paths.line(start, point1).linear(start, point1);
     }
 
     public Path path2() {
-        return Paths.line(path1, point2).reverseTangent();
+        return Paths.line(point1, point2).reverseTangent();
     }
 
     public Path path3() {
@@ -138,20 +144,21 @@ public class Comp_2 extends OpMode {
     // Path methods
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
-//                shoot(),
-//                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
-//                intakeOn(),
-//                follow(follower, path1()),
-//                intakeOff(),
-//                follow(follower, path2()),
-//                shoot(),
-//                follow(follower, path3()),
-//                proboscisDown(),
-//                follow(follower, path4()),
-//                intake(),
-//                follow(follower,path5()),
-//                proboscisUp(),
-//                follow(follower, path6())
+                follow(follower, startPath()),
+                shoot(),
+                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
+                intakeOn(),
+                follow(follower, path1()),
+                intakeOff(),
+                follow(follower, path2()),
+                shoot(),
+                follow(follower, path3()),
+                proboscisDown(),
+                follow(follower, path4()),
+                intake(),
+                follow(follower,path5()),
+                proboscisUp(),
+                follow(follower, path6())
 
         );
     }
@@ -164,10 +171,23 @@ public class Comp_2 extends OpMode {
             throw new RuntimeException(e);
         }
 
+        if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
+            start = HelperFunctions.mirror(start);
+            startPose = HelperFunctions.mirror(startPose);
+            point1 = HelperFunctions.mirror(point1);
+            point2 = HelperFunctions.mirror(point2);
+            point3 = HelperFunctions.mirror(point3);
+            point3Control1 = HelperFunctions.mirror(point3Control1);
+            point4 = HelperFunctions.mirror(point4);
+            point5 = HelperFunctions.mirror(point5);
+            point6 = HelperFunctions.mirror(point6);
+            point6Control1 = HelperFunctions.mirror(point6Control1);
+            point6Control2 = HelperFunctions.mirror(point6Control2);
+        }
+
         robotContainer.init();
 
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry(); // creates a new instance of panels
-        robotContainer.init();
         Scheduler.reset(); // resets the command scheduler for the ivy follower
 
         follower = PedroPathingConstants.create(hardwareMap);
@@ -191,23 +211,33 @@ public class Comp_2 extends OpMode {
         follower.update(); // Updates that pathing follower to make the robot move in auto
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
+        robotContainer.positionProvider.updateGoalPose();
+        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, follower.pose().y() - 72, (follower.pose().x() - 72), AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
-        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 1.5 - 72, follower.pose().y() - 20.5 - 72, AngleUnit.DEGREES, HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
 
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());
         panelsTelemetry.debug("Turret Target Degrees", robotContainer.turret.getTargetPositionDegrees());
         panelsTelemetry.debug("Path Timer", pathTimer.milliseconds());
         panelsTelemetry.debug("Holding", holding);
+
         panelsTelemetry.debug("Path Number", pathNumber);
         panelsTelemetry.debug("X", follower.pose().x());
         panelsTelemetry.debug("Y", follower.pose().y());
         panelsTelemetry.debug("Heading", follower.pose().heading());
         panelsTelemetry.debug("Current Pose", Status.currentPose);
+        panelsTelemetry.debug("Goal Pose", Status.goalPose);
+        panelsTelemetry.debug("Goal Pose get X", Status.goalPose.getX(DistanceUnit.CM));
+        panelsTelemetry.debug("Goal Pose get Y", Status.goalPose.getY(DistanceUnit.CM));
+        panelsTelemetry.debug("Current Pose X", Status.currentX);
+        panelsTelemetry.debug("Current Pose Y", Status.currentY);
+        panelsTelemetry.debug("Current Heading", Status.currentHeading);
+        panelsTelemetry.debug("angle to face the goal", robotContainer.turret.angleToFaceGoal);
+
+        panelsTelemetry.addData("Follower Mode", follower.mode());
         panelsTelemetry.update(telemetry);
 
-        telemetry.addData("Follower Mode", follower.mode());
-        telemetry.update();
+
     }
 
     @Override
