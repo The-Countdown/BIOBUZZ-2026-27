@@ -160,10 +160,9 @@ public class ExampleAuto extends OpMode {
         panelsTelemetry.debug("Y", follower.pose().y());
         panelsTelemetry.debug("Heading", follower.pose().heading());
         panelsTelemetry.debug("Current Pose", Status.currentPose);
-        panelsTelemetry.update(telemetry);
 
-        telemetry.addData("Follower Mode", follower.mode());
-        telemetry.update();
+        panelsTelemetry.addData("Follower Mode", follower.mode());
+        panelsTelemetry.update(telemetry);
     }
     @Override
     public void stop() {

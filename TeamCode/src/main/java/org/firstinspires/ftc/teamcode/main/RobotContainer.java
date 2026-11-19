@@ -331,7 +331,7 @@ public class RobotContainer {
             drivetrain.driveJoystickUpdate();
             drivetrain.update();
             updateTelemetry();
-            positionProvider.updateRobotPose();
+            positionProvider.update();
         }
 
         delayedActionManager.update();

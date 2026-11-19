@@ -29,8 +29,8 @@ public class PositionProvider {
 
     public void updateWithPose2D(Pose2D pose){
         Status.currentPose = pose;
-        Status.currentX = -Status.currentPose.getY(DistanceUnit.CM);
-        Status.currentY = Status.currentPose.getX(DistanceUnit.CM);
+        Status.currentX = Status.currentPose.getX(DistanceUnit.CM);
+        Status.currentY = Status.currentPose.getY(DistanceUnit.CM);
         Status.currentHeading = Status.currentPose.getHeading(AngleUnit.DEGREES);
         Status.currentVelocityX = RobotContainer.HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
         Status.currentVelocityY = RobotContainer.HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);

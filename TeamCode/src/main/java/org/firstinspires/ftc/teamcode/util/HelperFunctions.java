@@ -23,7 +23,7 @@ public class HelperFunctions {
     }
 
     public static Pose mirror(Pose point) {
-        return new Pose(Math.abs(point.x() - 144), point.y(), Math.PI - point.heading());
+        return new Pose(Math.abs(point.x() - 144), Math.abs(point.y() - 144), Math.PI - point.heading());
     }
 
     public static double mirrorAngle90(double angle, boolean degrees){
