@@ -53,7 +53,7 @@ public class PositionProvider {
         // Update Goal Pose
         double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? 1 : -1;
         double yMultiplier = Math.signum(Status.currentY);
-        double xShift = (Math.abs(Status.currentY) > Constants.Turret.Y_THRESHOLD && Math.abs(Status.goalPose.getX(DistanceUnit.CM) + Status.currentX) > Constants.Turret.X_THRESHOLD) ? 25 * Math.signum(Status.currentX) : 0;
+        double xShift = (Math.abs(Status.currentY) > Constants.Turret.Y_THRESHOLD && Math.abs(Status.goalPose.getX(DistanceUnit.CM) + Status.currentX) > Constants.Turret.X_THRESHOLD) ? - 25 * Math.signum(Status.currentX) : 0;
         Status.goalPose = new Pose2D(DistanceUnit.CM, (Constants.Game.CELL_POSITION_X + xShift) * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
 
     }

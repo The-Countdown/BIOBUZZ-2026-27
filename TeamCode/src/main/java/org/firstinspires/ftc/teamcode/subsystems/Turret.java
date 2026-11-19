@@ -127,6 +127,7 @@ public class Turret extends RobotContainer.HardwareDevices {
     }
 
     public void pointAtGoal() {
+        if (Math.abs(Status.currentY) > 24 * 2.54) {
         goalOrientedVelocityX = (Status.currentVelocityX * Math.cos(Math.toRadians(goalAngle))) - (Status.currentVelocityY * Math.sin(Math.toRadians(goalAngle)));
         goalOrientedVelocityY = (Status.currentVelocityX * Math.sin(Math.toRadians(goalAngle))) + (Status.currentVelocityY * Math.cos(Math.toRadians(goalAngle)));
 
@@ -141,6 +142,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         goalOrientedVelocityRX =  ((angleToFaceGoal - lastAngleToFaceGoal) * 1000)/ robotContainer.CURRENT_LOOP_TIME_MS;
 
         setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
+        }
     }
 
     public boolean atTarget() {
