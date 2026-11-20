@@ -26,6 +26,7 @@ public class Constants {
 
         public static Pose2D
             ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
+            CORNER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0),
             FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
         public static double
             GRAVITY = 9.811,
@@ -33,8 +34,6 @@ public class Constants {
             CELL_POSITION_X = 38.5,
             CELL_POSITION_Y = 48.5,
             GOAL_POSITION_VELOCITY_MULTIPLIER = 1;
-
-
     }
 
     @Configurable
