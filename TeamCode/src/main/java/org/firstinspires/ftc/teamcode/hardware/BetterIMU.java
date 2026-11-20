@@ -24,7 +24,7 @@ public class BetterIMU {
 
     // Return the yaw in degrees
     public double getAngle() {
-        return imu.getAngularOrientation().firstAngle - angleOffset + ((RobotContainer.HardwareDevices.pinpoint.getHeading(UnnormalizedAngleUnit.DEGREES) / 360) * Constants.System.IMU_PER_ROTATION_OFFSET);
+        return imu.getAngularOrientation().firstAngle - angleOffset + ((RobotContainer.HardwareDevices.pinpoint.getHeading(UnnormalizedAngleUnit.DEGREES) / 360) * Constants.System.BETTER_IMU_PER_ROTATION_OFFSET);
     }
 
     public void resetAngle() {

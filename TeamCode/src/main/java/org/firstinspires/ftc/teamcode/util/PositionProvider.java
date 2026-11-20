@@ -41,7 +41,7 @@ public class PositionProvider {
         Status.currentPose = RobotContainer.HardwareDevices.pinpoint.getPosition();
         Status.currentX = -Status.currentPose.getY(DistanceUnit.CM) * Constants.System.PINPOINT_Y_SCALER;
         Status.currentY = Status.currentPose.getX(DistanceUnit.CM) * Constants.System.PINPOINT_X_SCALER;
-        Status.currentHeading = Status.currentPose.getHeading(AngleUnit.DEGREES);
+        Status.currentHeading = Status.currentPose.getHeading(AngleUnit.DEGREES) - ((RobotContainer.HardwareDevices.pinpoint.getHeading(UnnormalizedAngleUnit.DEGREES) / 360) * Constants.System.PINPOINT_PER_ROTATION_OFFSET);
         Status.currentVelocityX = RobotContainer.HardwareDevices.pinpoint.getVelX(DistanceUnit.CM);
         Status.currentVelocityY = RobotContainer.HardwareDevices.pinpoint.getVelY(DistanceUnit.CM);
         Status.currentVelocityHeading = RobotContainer.HardwareDevices.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
@@ -53,7 +53,8 @@ public class PositionProvider {
         // Update Goal Pose
         double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? 1 : -1;
         double yMultiplier = Math.signum(Status.currentY);
-        double xShift = (Math.abs(Status.currentY) > Constants.Turret.Y_THRESHOLD && Math.abs(Status.goalPose.getX(DistanceUnit.CM) + Status.currentX) > Constants.Turret.X_THRESHOLD) ? - 25 * Math.signum(Status.currentX) : 0;
+        double xDiff = (Constants.Game.CELL_POSITION_X) * xMultiplier - Status.currentX;
+        double xShift = 0;//(Constants.Turret.GOAL_SHIFT * Math.signum(xDiff)) * Math.min(Math.abs(xDiff) / Constants.Turret.X_THRESHOLD, 1);
         Status.goalPose = new Pose2D(DistanceUnit.CM, (Constants.Game.CELL_POSITION_X + xShift) * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
 
     }
