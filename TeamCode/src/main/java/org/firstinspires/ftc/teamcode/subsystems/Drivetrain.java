@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
+import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 public class Drivetrain {
     private final RobotContainer robotContainer;
@@ -59,8 +60,8 @@ public class Drivetrain {
         double current = getCurrent();
         double currentMultiplier = current > 15 ? 14/current : 1;
         y = -joystickScaler(robotContainer.driverController.leftStickY()) * currentMultiplier;
-        x = joystickScaler(robotContainer.driverController.leftStickX()) * currentMultiplier;
-        rx = (joystickRotationScaler(robotContainer.driverController.rightStickX()) * currentMultiplier) * Constants.Control.ROTATION_SCALER;
+        x = -joystickScaler(robotContainer.driverController.leftStickX()) * currentMultiplier;
+        rx = -(joystickRotationScaler(robotContainer.driverController.rightStickX()) * currentMultiplier) * Constants.Control.ROTATION_SCALER;
 
         double currentTime = System.currentTimeMillis()/1000.0;
         double dt = currentTime - lastTime;
@@ -91,14 +92,14 @@ public class Drivetrain {
         }
 
         if (Status.wingsDown){
-            double leftPower = y - rx;
-            double rightPower = y + rx;
+            double leftPower = y + rx;
+            double rightPower = y - rx;
 
             leftFront.setPower(leftPower);
-            leftBack.setPower(rightPower);
+            leftBack.setPower(leftPower);
 
             rightFront.setPower(rightPower);
-            rightBack.setPower(leftPower);
+            rightBack.setPower(rightPower);
 
             return;
         }
@@ -137,10 +138,16 @@ public class Drivetrain {
             rightBackPower = (y + x - rx) / denominator;
         }
 
+            leftFrontPower = Math.abs(leftFrontPower) < 0.1 ? 0 : leftFrontPower;
+            rightFrontPower = Math.abs(rightFrontPower) < 0.1 ? 0 : rightFrontPower;
+            leftBackPower = Math.abs(leftBackPower) < 0.1 ? 0 : leftBackPower;
+            rightBackPower = Math.abs(rightBackPower) < 0.1 ? 0 : rightBackPower;
+
+
             leftFront.setPower(leftFrontPower);
             rightFront.setPower(rightFrontPower);
-            leftBack.setPower(rightBackPower);
-            rightBack.setPower(leftBackPower);
+            leftBack.setPower(leftBackPower);
+            rightBack.setPower(rightBackPower);
     }
 
     /**

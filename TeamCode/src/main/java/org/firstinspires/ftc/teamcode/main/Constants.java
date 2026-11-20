@@ -26,12 +26,12 @@ public class Constants {
 
         public static Pose2D
             ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
-            FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 163 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
+            FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
         public static double
             GRAVITY = 9.811,
             GOAL_HEIGHT = 144.78,
-            CELL_POSITION_X = 35.56,
-            CELL_POSITION_Y = 30.48,
+            CELL_POSITION_X = 38.5,
+            CELL_POSITION_Y = 48.5,
             GOAL_POSITION_VELOCITY_MULTIPLIER = 1;
 
 
@@ -67,7 +67,8 @@ public class Constants {
         public static final double
             PINPOINT_X_OFFSET_MM = 31,
             PINPOINT_Y_OFFSET_MM = -2.0,
-            IMU_PER_ROTATION_OFFSET = 3.1,
+            BETTER_IMU_PER_ROTATION_OFFSET = 3.1,
+            PINPOINT_PER_ROTATION_OFFSET = 0.8,
             PINPOINT_X_SCALER = ((120.0 * 2.54) / 457.0),
             PINPOINT_Y_SCALER = ((120.0 * 2.54) / 460.0);
         public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
@@ -81,8 +82,8 @@ public class Constants {
     public static class Control {
         public static double
             JOYSTICK_SCALER_EXPONENT = 3.0,
-            JOYSTICK_ROTATION_SCALER_EXPONENT = 3.0,
-            MAX_DRIVE_ACCELERATION = 3,
+            JOYSTICK_ROTATION_SCALER_EXPONENT = 4.0,
+            MAX_DRIVE_ACCELERATION = 4,
             ROTATION_SCALER = 0.6;
     }
 
@@ -172,6 +173,7 @@ public class Constants {
             TOLERANCE_DEGREES = 3,
             GEAR_SLOP = 0.5,
             TOLERANCE_TICKS = (TOLERANCE_DEGREES - GEAR_SLOP) / DEGREES_PER_TICK,
+            GOAL_SHIFT = 25,
             Y_THRESHOLD = 36 * 2.54,
             X_THRESHOLD = 12 * 2.54;
         public static int

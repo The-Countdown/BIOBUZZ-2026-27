@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -186,7 +187,7 @@ public class RobotContainer {
         HardwareDevices.leftBack = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "leftBack"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
         HardwareDevices.rightBack = new BetterDcMotor(hardwareMap.get(DcMotorImplEx.class, "rightBack"), Constants.Robot.MOTOR_UPDATE_TIME, Constants.Robot.MOTOR_UPDATE_MIN_POWER_DIFF, Constants.Robot.MOTOR_UPDATE_MIN_VELOCITY_DIFF);
 
-        HardwareDevices.leftFront.setDirection(DcMotorImplEx.Direction.FORWARD);
+        HardwareDevices.leftFront.setDirection(DcMotorImplEx.Direction.REVERSE);
         HardwareDevices.rightFront.setDirection(DcMotorImplEx.Direction.FORWARD);
         HardwareDevices.leftBack.setDirection(DcMotorImplEx.Direction.REVERSE);
         HardwareDevices.rightBack.setDirection(DcMotorImplEx.Direction.FORWARD);
