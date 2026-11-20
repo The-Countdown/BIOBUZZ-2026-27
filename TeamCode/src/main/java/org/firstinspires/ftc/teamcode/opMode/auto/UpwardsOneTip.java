@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 @Autonomous
 @Configurable // Allows you to configure in panels
-public class OneTip extends OpMode {
+public class UpwardsOneTip extends OpMode {
 
     // Objects that need initialising
     private Follower follower;
@@ -56,103 +56,53 @@ public class OneTip extends OpMode {
     // Poses
     private Pose start = poseFactory.of(63, 6.5, 180);
     private Pose startPose = poseFactory.of(59, 9, 180);
-    private Pose garden1 = poseFactory.of(5, 7, 180);
-    private Pose garden2 = poseFactory.of(2, 7, 180);
-    private Pose shootAfterGarden = poseFactory.of(61.5455, 9.0733, 180);
-    private Pose moveInFrontOfFlower = poseFactory.of(22, 50, 85.9617);
-    private Pose moveInFrontOfFlowerControl1 = poseFactory.of(16.3645, 11.4094, 0);
-    private Pose intakeFromFlower = poseFactory.of(13, 50, -177.5746);
-    private Pose backAwayFromFlower = poseFactory.of(22, 55, -177.5746);
-    private Pose park = poseFactory.of(10, 105, -90.6596);
-    private Pose parkControlPoint1 = poseFactory.of(15.6, 60.6195, 0);
-    private Pose parkControlPoint2 = poseFactory.of(9.2168, 60.3423, 0);
-    private Pose movingInAndOutOfTheFlower = poseFactory.of(16, 50, -177.5746);
-    private Pose testPoint7 = poseFactory.of(59, 60, 180);
+    private Pose beforeGarden = poseFactory.of(15, 7, 180);
+    private Pose garden = poseFactory.of(7.5, 7, 180);
+    private Pose shootAfterGarden = poseFactory.of(61, 9, 180);
+    private Pose moveInFrontOfFlower = poseFactory.of(22, 50, 85);
+    private Pose moveInFrontOfFlowerControl1 = poseFactory.of(16, 11, 0);
+    private Pose intakeFromFlower = poseFactory.of(13, 50, -180);
+    private Pose backAwayFromFlower = poseFactory.of(17, 50, -180);
+    private Pose park = poseFactory.of(10, 105, -90);
+    private Pose parkControlPoint1 = poseFactory.of(15.6, 60, 0);
+    private Pose parkControlPoint2 = poseFactory.of(9, 60, 0);
 
     public Path startPath() {
         return Paths.line(start, startPose).constant(start);
     }
-
-    public Path dontPinch() {
-        return Paths.line(start, garden2).linear(start, garden2);
+    public Path startToBeforeGarden() {
+        return Paths.line(start, beforeGarden).linear(start, beforeGarden);
     }
 
-    public Path gardenThenShoot() {
-        return Paths.line(garden1, shootAfterGarden).reverseTangent();
+    public Path toGarden() {
+        return Paths.line(beforeGarden, garden).linear(beforeGarden, garden);
     }
 
-    public Path positionInFrontOfFlower() {
+    public Path gardenToShoot() {
+        return Paths.line(garden, shootAfterGarden).reverseTangent();
+    }
+
+    public Path shootToFlower() {
         return Paths.curve(shootAfterGarden, moveInFrontOfFlowerControl1, moveInFrontOfFlower).tangent();
     }
 
-    public Path intakeFlower() {
+    public Path intakeFromFlower() {
         return Paths.line(moveInFrontOfFlower, intakeFromFlower).tangent();
     }
 
-    public Path movingInAndOut() {
+    public Path backUpFromFlower() {
         return Paths.line(intakeFromFlower, backAwayFromFlower).reverseTangent();
     }
 
-    public Path parkAfterIntaking() {
+    public Path goToPark() {
         return Paths.curve(backAwayFromFlower, parkControlPoint1, parkControlPoint2, park).reverseTangent();
-    }
-
-    public Path movingInAndOutAndInAndOut1() {
-        return Paths.line(intakeFromFlower, movingInAndOutOfTheFlower).reverseTangent();
-    }
-
-    public Path path8() {
-        return Paths.line(startPose, testPoint7).constant(Math.toRadians(180));
-    }
-
-    public Path intakeRestOfBalls() {
-        return Paths.line(garden2, garden1).tangent();
-    }
-
-    public Path dontPinch1() {
-        return Paths.line(garden1, garden2).reverseTangent();
-    }
-
-    public Path movingInAndOutAndInAndOut2() {
-        return Paths.line(movingInAndOutOfTheFlower, intakeFromFlower).reverseTangent();
     }
 
     // Action Creation
     Command shoot() {
-
         return instant(() -> {
-            robotContainer.intake.on();
             robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.tick(), Constants.Flywheel.SPINUP_MS);
-            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.off(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
         });
-    }
-
-    Command intakeOn() {
-        return instant(() -> {
-            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.on(), 1000);
-        });
-    }
-
-    Command intakeOff() {
-        return instant(() -> {
-            waitMs(1000);
-            robotContainer.intake.off();
-        });
-    }
-
-    Command intake() {
-        return sequential(
-                instant(() -> {
-                    robotContainer.intake.on();
-                    robotContainer.tongue.down();
-                }),
-
-                waitMs(1500),
-
-                instant(() -> {
-                    robotContainer.intake.off();
-                })
-        );
     }
 
     Command proboscisDown() {
@@ -167,49 +117,43 @@ public class OneTip extends OpMode {
         });
     }
 
+    Command startSequence() {
+        return instant(() -> {
+            robotContainer.proboscis.up();
+            robotContainer.wings.up();
+            robotContainer.tongue.down();
+            robotContainer.intake.on();
+            Status.flywheelToggle = true;
+        });
+    }
+
     // Path methods
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
+                startSequence(),
                 follow(follower, startPath()),
                 shoot(),
                 waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
-                intakeOn(),
-                follow(follower, intakeRestOfBalls()),
-                waitMs(150),
-                follow(follower, dontPinch()),
-                waitMs(150),
-//                follow(follower, dontPinch1()),
-//                waitMs(150),
-//                follow(follower, intakeRestOfBalls()),
-//                waitMs(500),
-                intakeOff(),
-                follow(follower, gardenThenShoot()),
+                follow(follower, startToBeforeGarden()),
+                waitMs(500),
+                follow(follower, toGarden()),
+                waitMs(500),
+                follow(follower, gardenToShoot()),
                 waitMs(500),
                 shoot(),
+                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
                 waitMs(500),
-                follow(follower, positionInFrontOfFlower()),
-                proboscisDown(),
-                waitMs(150),
-                intakeOn(),
+                follow(follower, shootToFlower()),
                 waitMs(300),
-                follow(follower, intakeFlower()),
-                waitMs(150),
-                follow(follower, movingInAndOutAndInAndOut1()),
-                waitMs(150),
-                follow(follower, intakeFlower()),
-                waitMs(150),
-                follow(follower, movingInAndOutAndInAndOut2()),
-                waitMs(150),
-                follow(follower, movingInAndOutAndInAndOut1()),
-                waitMs(150),
-                follow(follower, movingInAndOutAndInAndOut2()),
-                waitMs(150),
-                follow(follower, movingInAndOutAndInAndOut1()),
-                waitMs(150),
-                follow(follower,movingInAndOut()),
+                proboscisDown(),
+                follow(follower, intakeFromFlower()),
+                follow(follower, backUpFromFlower()),
+                follow(follower, intakeFromFlower()),
+                waitMs(1000),
+                follow(follower, backUpFromFlower()),
                 proboscisUp(),
                 waitMs(500),
-                follow(follower, parkAfterIntaking())
+                follow(follower, goToPark())
 
         );
     }
@@ -224,7 +168,8 @@ public class OneTip extends OpMode {
 
         start = HelperFunctions.scalePose(start, start);
         startPose = HelperFunctions.scalePose(startPose,start);
-        garden1 = HelperFunctions.scalePose(garden1, start);
+        beforeGarden = HelperFunctions.scalePose(beforeGarden, start);
+        garden = HelperFunctions.scalePose(garden, start);
         shootAfterGarden = HelperFunctions.scalePose(shootAfterGarden, start);
         moveInFrontOfFlower = HelperFunctions.scalePose(moveInFrontOfFlower, start);
         moveInFrontOfFlowerControl1 = HelperFunctions.scalePose(moveInFrontOfFlowerControl1, start);
@@ -233,13 +178,12 @@ public class OneTip extends OpMode {
         park = HelperFunctions.scalePose(park, start);
         parkControlPoint1 = HelperFunctions.scalePose(parkControlPoint1, start);
         parkControlPoint2 = HelperFunctions.scalePose(parkControlPoint2, start);
-        movingInAndOutOfTheFlower = HelperFunctions.scalePose(movingInAndOutOfTheFlower, start);
-        garden2 = HelperFunctions.scalePose(garden2, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
             start = HelperFunctions.mirror(start);
             startPose = HelperFunctions.mirror(startPose);
-            garden1 = HelperFunctions.mirror(garden1);
+            beforeGarden = HelperFunctions.mirror(beforeGarden);
+            garden = HelperFunctions.mirror(garden);
             shootAfterGarden = HelperFunctions.mirror(shootAfterGarden);
             moveInFrontOfFlower = HelperFunctions.mirror(moveInFrontOfFlower);
             moveInFrontOfFlowerControl1 = HelperFunctions.mirror(moveInFrontOfFlowerControl1);
@@ -248,8 +192,6 @@ public class OneTip extends OpMode {
             park = HelperFunctions.mirror(park);
             parkControlPoint1 = HelperFunctions.mirror(parkControlPoint1);
             parkControlPoint2 = HelperFunctions.mirror(parkControlPoint2);
-            movingInAndOutOfTheFlower = HelperFunctions.mirror(moveInFrontOfFlower);
-            garden2 = HelperFunctions.mirror(garden2);
         }
 
         robotContainer.init();
@@ -272,7 +214,6 @@ public class OneTip extends OpMode {
         robotContainer.start(this, false);
         RobotContainer.HardwareDevices.turretMotor.setPower(0);
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
-        Status.flywheelToggle = true;
 
     }
 
@@ -313,6 +254,7 @@ public class OneTip extends OpMode {
 
     @Override
     public void stop() {
-        blackboard.put("Robot Pose", new Pose2D(DistanceUnit.INCH, (follower.pose().x() - 72) / Constants.System.AUTO_X_SCALER, (follower.pose().y() - 72) / Constants.System.AUTO_Y_SCALER, AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
+        Pose scaledPose = HelperFunctions.scalePose(follower.pose(), start);
+        blackboard.put("Robot Pose", new Pose2D(DistanceUnit.INCH, (scaledPose.x() - 72), (scaledPose.y() - 72), AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
     }
 }

@@ -39,7 +39,7 @@ public class TurretPDF {
     public double calculate(double target, double currentPosition, double goalOrientedRX) {
         if (Math.abs(target - currentPosition) < Constants.Turret.TOLERANCE_TICKS) {
             lastTargetPower = 0;
-            if (Status.debugMode){ panelsTelemetry.addLine("Returned within tolerance"); panelsTelemetry.update(); }
+//            if (Status.debugMode){ panelsTelemetry.addLine("Returned within tolerance"); panelsTelemetry.update(); }
             return 0;
         }
 

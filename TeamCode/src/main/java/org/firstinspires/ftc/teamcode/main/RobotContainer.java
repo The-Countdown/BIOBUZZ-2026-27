@@ -331,7 +331,7 @@ public class RobotContainer {
             operatorController.update();
             drivetrain.driveJoystickUpdate();
             drivetrain.update();
-            updateTelemetry();
+            if(!Status.debugMode) updateTelemetry();
             positionProvider.update();
         }
 
