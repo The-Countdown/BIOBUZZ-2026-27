@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 @Autonomous
 @Configurable // Allows you to configure in panels
-public class Comp_2 extends OpMode {
+public class UpwardsOneTip extends OpMode {
 
     // Objects that need initialising
     private Follower follower;
@@ -56,90 +56,53 @@ public class Comp_2 extends OpMode {
     // Poses
     private Pose start = poseFactory.of(63, 6.5, 180);
     private Pose startPose = poseFactory.of(59, 9, 180);
-    private Pose garden = poseFactory.of(5, 7, 180);
-    private Pose shootAfterGarden = poseFactory.of(61.5455, 9.0733, 180);
-    private Pose moveInFrontOfFlower = poseFactory.of(22, 53, 85.9617);
-    private Pose moveInFrontOfFlowerControl1 = poseFactory.of(16.3645, 11.4094, 0);
-    private Pose intakeFromFlower = poseFactory.of(13, 53, -177.5746);
-    private Pose backAwayFromFlower = poseFactory.of(22, 55, -177.5746);
-    private Pose park = poseFactory.of(10, 105, -90.6596);
-    private Pose parkControlPoint1 = poseFactory.of(15.6, 60.6195, 0);
-    private Pose parkControlPoint2 = poseFactory.of(9.2168, 60.3423, 0);
-    private Pose moveingInAndOutOfTheFlower = poseFactory.of(16, 53, -177.5746);
-    private Pose testPoint7 = poseFactory.of(59, 60, 180);
+    private Pose beforeGarden = poseFactory.of(15, 7, 180);
+    private Pose garden = poseFactory.of(7.5, 7, 180);
+    private Pose shootAfterGarden = poseFactory.of(61, 9, 180);
+    private Pose moveInFrontOfFlower = poseFactory.of(22, 50, 85);
+    private Pose moveInFrontOfFlowerControl1 = poseFactory.of(16, 11, 0);
+    private Pose intakeFromFlower = poseFactory.of(13, 50, -180);
+    private Pose backAwayFromFlower = poseFactory.of(17, 50, -180);
+    private Pose park = poseFactory.of(10, 105, -90);
+    private Pose parkControlPoint1 = poseFactory.of(15.6, 60, 0);
+    private Pose parkControlPoint2 = poseFactory.of(9, 60, 0);
 
     public Path startPath() {
         return Paths.line(start, startPose).constant(start);
     }
-
-    public Path path1() {
-        return Paths.line(start, garden).linear(start, garden);
+    public Path startToBeforeGarden() {
+        return Paths.line(start, beforeGarden).linear(start, beforeGarden);
     }
 
-    public Path path2() {
+    public Path toGarden() {
+        return Paths.line(beforeGarden, garden).linear(beforeGarden, garden);
+    }
+
+    public Path gardenToShoot() {
         return Paths.line(garden, shootAfterGarden).reverseTangent();
     }
 
-    public Path path3() {
+    public Path shootToFlower() {
         return Paths.curve(shootAfterGarden, moveInFrontOfFlowerControl1, moveInFrontOfFlower).tangent();
     }
 
-    public Path path4() {
+    public Path intakeFromFlower() {
         return Paths.line(moveInFrontOfFlower, intakeFromFlower).tangent();
     }
 
-    public Path path5() {
+    public Path backUpFromFlower() {
         return Paths.line(intakeFromFlower, backAwayFromFlower).reverseTangent();
     }
 
-    public Path path6() {
+    public Path goToPark() {
         return Paths.curve(backAwayFromFlower, parkControlPoint1, parkControlPoint2, park).reverseTangent();
-    }
-
-    public Path path7() {
-        return Paths.line(intakeFromFlower, moveInFrontOfFlower).tangent();
-    }
-
-    public Path path8() {
-        return Paths.line(startPose, testPoint7).constant(Math.toRadians(180));
     }
 
     // Action Creation
     Command shoot() {
-
         return instant(() -> {
-            robotContainer.intake.on();
             robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.tick(), Constants.Flywheel.SPINUP_MS);
-            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.off(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
         });
-    }
-
-    Command intakeOn() {
-        return instant(() -> {
-            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.on(), 1000);
-        });
-    }
-
-    Command intakeOff() {
-        return instant(() -> {
-            waitMs(1000);
-            robotContainer.intake.off();
-        });
-    }
-
-    Command intake() {
-        return sequential(
-                instant(() -> {
-                    robotContainer.intake.on();
-                    robotContainer.tongue.down();
-                }),
-
-                waitMs(1500),
-
-                instant(() -> {
-                    robotContainer.intake.off();
-                })
-        );
     }
 
     Command proboscisDown() {
@@ -154,43 +117,43 @@ public class Comp_2 extends OpMode {
         });
     }
 
+    Command startSequence() {
+        return instant(() -> {
+            robotContainer.proboscis.up();
+            robotContainer.wings.up();
+            robotContainer.tongue.down();
+            robotContainer.intake.on();
+            Status.flywheelToggle = true;
+        });
+    }
+
     // Path methods
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
+                startSequence(),
                 follow(follower, startPath()),
                 shoot(),
                 waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
-                intakeOn(),
-                follow(follower, path1()),
+                follow(follower, startToBeforeGarden()),
                 waitMs(500),
-                intakeOff(),
-                follow(follower, path2()),
+                follow(follower, toGarden()),
+                waitMs(500),
+                follow(follower, gardenToShoot()),
                 waitMs(500),
                 shoot(),
                 waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
                 waitMs(500),
-                follow(follower, path3()),
-                proboscisDown(),
+                follow(follower, shootToFlower()),
                 waitMs(300),
-                follow(follower, path4()),
-                intake(),
-                follow(follower, path7()),
-                intake(),
-                follow(follower, path4()),
-                intake(),
-                follow(follower, path7()),
-                intake(),
-                follow(follower, path4()),
-                intake(),
-                follow(follower, path7()),
-                intake(),
-                follow(follower, path4()),
-                intake(),
+                proboscisDown(),
+                follow(follower, intakeFromFlower()),
+                follow(follower, backUpFromFlower()),
+                follow(follower, intakeFromFlower()),
                 waitMs(1000),
-                follow(follower,path5()),
+                follow(follower, backUpFromFlower()),
                 proboscisUp(),
                 waitMs(500),
-                follow(follower, path6())
+                follow(follower, goToPark())
 
         );
     }
@@ -205,6 +168,7 @@ public class Comp_2 extends OpMode {
 
         start = HelperFunctions.scalePose(start, start);
         startPose = HelperFunctions.scalePose(startPose,start);
+        beforeGarden = HelperFunctions.scalePose(beforeGarden, start);
         garden = HelperFunctions.scalePose(garden, start);
         shootAfterGarden = HelperFunctions.scalePose(shootAfterGarden, start);
         moveInFrontOfFlower = HelperFunctions.scalePose(moveInFrontOfFlower, start);
@@ -218,6 +182,7 @@ public class Comp_2 extends OpMode {
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
             start = HelperFunctions.mirror(start);
             startPose = HelperFunctions.mirror(startPose);
+            beforeGarden = HelperFunctions.mirror(beforeGarden);
             garden = HelperFunctions.mirror(garden);
             shootAfterGarden = HelperFunctions.mirror(shootAfterGarden);
             moveInFrontOfFlower = HelperFunctions.mirror(moveInFrontOfFlower);
@@ -249,7 +214,6 @@ public class Comp_2 extends OpMode {
         robotContainer.start(this, false);
         RobotContainer.HardwareDevices.turretMotor.setPower(0);
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
-        Status.flywheelToggle = true;
 
     }
 
@@ -290,6 +254,7 @@ public class Comp_2 extends OpMode {
 
     @Override
     public void stop() {
-        blackboard.put("Robot Pose", new Pose2D(DistanceUnit.INCH, (follower.pose().x() - 72) / Constants.System.AUTO_X_SCALER, (follower.pose().y() - 72) / Constants.System.AUTO_Y_SCALER, AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
+        Pose scaledPose = HelperFunctions.scalePose(follower.pose(), start);
+        blackboard.put("Robot Pose", new Pose2D(DistanceUnit.INCH, (scaledPose.x() - 72), (scaledPose.y() - 72), AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
     }
 }
