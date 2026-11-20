@@ -55,7 +55,7 @@ public class Comp_2 extends OpMode {
 
     // Poses
     private Pose start = poseFactory.of(61.5455, 9.0733, 180);
-    private Pose startPose = poseFactory.of(61, 9, 180);
+    private Pose startPose = poseFactory.of(59, 9, 180);
     private Pose point1 = poseFactory.of(-10, 9.1669, 180);
     private Pose point2 = poseFactory.of(61.5455, 9.0733, 180);
     private Pose point3 = poseFactory.of(22, 55, 85.9617);
@@ -65,6 +65,7 @@ public class Comp_2 extends OpMode {
     private Pose point6 = poseFactory.of(10, 102, -90.6596);
     private Pose point6Control1 = poseFactory.of(15.6, 60.6195, 0);
     private Pose point6Control2 = poseFactory.of(9.2168, 60.3423, 0);
+    private Pose point7 = poseFactory.of(59, 60, 180);
 
     public Path startPath() {
         return Paths.line(start, startPose).constant(start);
@@ -92,6 +93,9 @@ public class Comp_2 extends OpMode {
 
     public Path path6() {
         return Paths.curve(point5, point6Control1, point6Control2, point6).reverseTangent();
+    }
+    public Path path7() {
+        return Paths.line(startPose,point7).constant(Math.toRadians(180));
     }
 
     // Action Creation
@@ -145,26 +149,27 @@ public class Comp_2 extends OpMode {
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
                 follow(follower, startPath()),
-                shoot(),
-                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
-                intakeOn(),
-                follow(follower, path1()),
-                waitMs(500),
-                intakeOff(),
-                follow(follower, path2()),
-                waitMs(500),
-                shoot(),
-                waitMs(500),
-                follow(follower, path3()),
-                proboscisDown(),
-                waitMs(300),
-                follow(follower, path4()),
-                intake(),
-                waitMs(1000),
-                follow(follower,path5()),
-                proboscisUp(),
-                waitMs(500),
-                follow(follower, path6())
+//                shoot(),
+//                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
+//                intakeOn(),
+//                follow(follower, path1()),
+//                waitMs(500),
+//                intakeOff(),
+//                follow(follower, path2()),
+//                waitMs(500),
+//                shoot(),
+//                waitMs(500),
+//                follow(follower, path3()),
+//                proboscisDown(),
+//                waitMs(300),
+//                follow(follower, path4()),
+//                intake(),
+//                waitMs(1000),
+//                follow(follower,path5()),
+//                proboscisUp(),
+//                waitMs(500),
+//                follow(follower, path6())
+                follow(follower,path7())
 
         );
     }
@@ -209,17 +214,18 @@ public class Comp_2 extends OpMode {
     public void start() { // Runs when the start button is pressed on the driver station
         follower.setPose(start);
         robotContainer.start(this, false);
+        RobotContainer.HardwareDevices.turretMotor.setPower(0);
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
     }
 
     @Override
     public void loop() { // Runs constantly while the opmode is active
         follower.update(); // Updates that pathing follower to make the robot move in auto
+        robotContainer.positionProvider.updateGoalPose();
+        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, (follower.pose().y() - 72) * Constants.System.AUTO_X_SCALER, (follower.pose().x() - 72) * Constants.System.AUTO_Y_SCALER, AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
+        robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
-        robotContainer.positionProvider.updateGoalPose();
-        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, follower.pose().y() - 72, (follower.pose().x() - 72), AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
-        robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
 
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());

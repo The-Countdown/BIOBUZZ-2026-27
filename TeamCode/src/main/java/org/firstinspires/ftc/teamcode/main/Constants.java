@@ -69,7 +69,9 @@ public class Constants {
             PINPOINT_Y_OFFSET_MM = -2.0,
             IMU_PER_ROTATION_OFFSET = 3.1,
             PINPOINT_X_SCALER = ((120.0 * 2.54) / 457.0),
-            PINPOINT_Y_SCALER = ((120.0 * 2.54) / 460.0);
+            PINPOINT_Y_SCALER = ((120.0 * 2.54) / 460.0),
+            AUTO_Y_SCALER = ((51)/34.5),
+            AUTO_X_SCALER = (53)/(53-5.5);
         public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
         public static final GoBildaPinpointDriver.EncoderDirection
             PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.FORWARD,
