@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
@@ -44,8 +47,14 @@ public class Drivetrain {
             RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.ORIGIN);
 //            RobotContainer.HardwareDevices.betterIMU.resetAngle();
         } else if (robotContainer.driverController.triangle.wasJustPressed() || robotContainer.operatorController.triangle.wasJustPressed()) {
-            RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.FLOWER_RESET_POSE);
+            Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.FLOWER_RESET_POSE : new Pose2D(DistanceUnit.CM, -Constants.Game.FLOWER_RESET_POSE.getX(DistanceUnit.CM), -Constants.Game.FLOWER_RESET_POSE.getY(DistanceUnit.CM), AngleUnit.DEGREES, 180 + Constants.Game.FLOWER_RESET_POSE.getHeading(AngleUnit.DEGREES));
+            RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
+        } else if (robotContainer.driverController.square.wasJustPressed() || robotContainer.operatorController.ps.wasJustPressed()){
+            Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.CORNER_RESET_POSE : new Pose2D(DistanceUnit.CM, -Constants.Game.CORNER_RESET_POSE.getX(DistanceUnit.CM), -Constants.Game.CORNER_RESET_POSE.getY(DistanceUnit.CM), AngleUnit.DEGREES, 180 + Constants.Game.CORNER_RESET_POSE.getHeading(AngleUnit.DEGREES));
+            RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
+//            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
+
         }
     }
 

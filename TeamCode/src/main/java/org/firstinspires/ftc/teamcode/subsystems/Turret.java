@@ -57,14 +57,17 @@ public class Turret extends RobotContainer.HardwareDevices {
         if (teleop) {
 
             if (robotContainer.operatorController.dpadLeft.wasJustPressed()) {
-                turretAngleOffset -= 2;
+                turretAngleOffset -= 1.5;
+                Status.turretZeroOffset -= 1.5;
             }
 
             if (robotContainer.operatorController.dpadRight.wasJustPressed()) {
                 turretAngleOffset += 1.5;
+                Status.turretZeroOffset += 1.5;
             }
 
             if (robotContainer.operatorController.dpadRight.isHeldFor(1.0) || robotContainer.operatorController.dpadLeft.isHeldFor(1.0)) {
+                Status.turretZeroOffset -= turretAngleOffset;
                 turretAngleOffset = 0;
             }
 
@@ -100,7 +103,7 @@ public class Turret extends RobotContainer.HardwareDevices {
 
     public void setTargetAngle(double angleInDegrees) {
 
-        targetPositionDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffset);
+        targetPositionDegrees = HelperFunctions.normalizeAngle(angleInDegrees);
         targetPosition = angleToMotor(targetPositionDegrees);
 
         double position = HelperFunctions.clamp(targetPosition, Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);

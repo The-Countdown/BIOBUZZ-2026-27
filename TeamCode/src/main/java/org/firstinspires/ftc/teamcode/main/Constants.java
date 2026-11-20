@@ -26,7 +26,7 @@ public class Constants {
 
         public static Pose2D
             ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
-            CORNER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0),
+            CORNER_RESET_POSE = new Pose2D(DistanceUnit.CM, - 166.5 / System.PINPOINT_Y_SCALER, - 159.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0),
             FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
         public static double
             GRAVITY = 9.811,
@@ -82,9 +82,9 @@ public class Constants {
     @Configurable
     public static class Control {
         public static double
-            JOYSTICK_SCALER_EXPONENT = 3.0,
+            JOYSTICK_SCALER_EXPONENT = 1.0,
             JOYSTICK_ROTATION_SCALER_EXPONENT = 4.0,
-            MAX_DRIVE_ACCELERATION = 4,
+            MAX_DRIVE_ACCELERATION = 2,
             ROTATION_SCALER = 0.6;
     }
 
@@ -174,9 +174,9 @@ public class Constants {
             TOLERANCE_DEGREES = 3,
             GEAR_SLOP = 0.5,
             TOLERANCE_TICKS = (TOLERANCE_DEGREES - GEAR_SLOP) / DEGREES_PER_TICK,
-            GOAL_SHIFT = 25,
+            GOAL_SHIFT = 10,
             Y_THRESHOLD = 36 * 2.54,
-            X_THRESHOLD = 12 * 2.54;
+            X_THRESHOLD = 24 * 2.54;
         public static int
             ZERO_DEGREE_POSITION = 0,
             MAX_MOTOR = ZERO_DEGREE_POSITION + 300,

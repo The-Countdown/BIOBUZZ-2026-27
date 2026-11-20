@@ -58,7 +58,7 @@ public class UpwardsOneTip extends OpMode {
     private Pose startPose = poseFactory.of(59, 9, 180);
     private Pose beforeGarden = poseFactory.of(15, 7, 180);
     private Pose garden = poseFactory.of(7.5, 7, 180);
-    private Pose shootAfterGarden = poseFactory.of(61, 9, 180);
+    private Pose shootAfterGarden = poseFactory.of(55, 9, 180);
     private Pose moveInFrontOfFlower = poseFactory.of(22, 50, 85);
     private Pose moveInFrontOfFlowerControl1 = poseFactory.of(16, 11, 0);
     private Pose intakeFromFlower = poseFactory.of(13, 50, -180);
