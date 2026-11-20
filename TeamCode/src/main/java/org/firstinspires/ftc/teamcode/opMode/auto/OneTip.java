@@ -16,9 +16,9 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.follower.*;
-        import com.pedropathing.api.PoseFactory;
+import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
-        import com.pedropathing.paths.*;
+import com.pedropathing.paths.*;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 @Autonomous
 @Configurable // Allows you to configure in panels
-public class Comp_2 extends OpMode {
+public class OneTip extends OpMode {
 
     // Objects that need initialising
     private Follower follower;
@@ -56,52 +56,65 @@ public class Comp_2 extends OpMode {
     // Poses
     private Pose start = poseFactory.of(63, 6.5, 180);
     private Pose startPose = poseFactory.of(59, 9, 180);
-    private Pose garden = poseFactory.of(5, 7, 180);
+    private Pose garden1 = poseFactory.of(5, 7, 180);
+    private Pose garden2 = poseFactory.of(2, 7, 180);
     private Pose shootAfterGarden = poseFactory.of(61.5455, 9.0733, 180);
-    private Pose moveInFrontOfFlower = poseFactory.of(22, 53, 85.9617);
+    private Pose moveInFrontOfFlower = poseFactory.of(22, 50, 85.9617);
     private Pose moveInFrontOfFlowerControl1 = poseFactory.of(16.3645, 11.4094, 0);
-    private Pose intakeFromFlower = poseFactory.of(13, 53, -177.5746);
+    private Pose intakeFromFlower = poseFactory.of(13, 50, -177.5746);
     private Pose backAwayFromFlower = poseFactory.of(22, 55, -177.5746);
     private Pose park = poseFactory.of(10, 105, -90.6596);
     private Pose parkControlPoint1 = poseFactory.of(15.6, 60.6195, 0);
     private Pose parkControlPoint2 = poseFactory.of(9.2168, 60.3423, 0);
-    private Pose moveingInAndOutOfTheFlower = poseFactory.of(16, 53, -177.5746);
+    private Pose movingInAndOutOfTheFlower = poseFactory.of(16, 50, -177.5746);
     private Pose testPoint7 = poseFactory.of(59, 60, 180);
 
     public Path startPath() {
         return Paths.line(start, startPose).constant(start);
     }
 
-    public Path path1() {
-        return Paths.line(start, garden).linear(start, garden);
+    public Path dontPinch() {
+        return Paths.line(start, garden2).linear(start, garden2);
     }
 
-    public Path path2() {
-        return Paths.line(garden, shootAfterGarden).reverseTangent();
+    public Path gardenThenShoot() {
+        return Paths.line(garden1, shootAfterGarden).reverseTangent();
     }
 
-    public Path path3() {
+    public Path positionInFrontOfFlower() {
         return Paths.curve(shootAfterGarden, moveInFrontOfFlowerControl1, moveInFrontOfFlower).tangent();
     }
 
-    public Path path4() {
+    public Path intakeFlower() {
         return Paths.line(moveInFrontOfFlower, intakeFromFlower).tangent();
     }
 
-    public Path path5() {
+    public Path movingInAndOut() {
         return Paths.line(intakeFromFlower, backAwayFromFlower).reverseTangent();
     }
 
-    public Path path6() {
+    public Path parkAfterIntaking() {
         return Paths.curve(backAwayFromFlower, parkControlPoint1, parkControlPoint2, park).reverseTangent();
     }
 
-    public Path path7() {
-        return Paths.line(intakeFromFlower, moveInFrontOfFlower).tangent();
+    public Path movingInAndOutAndInAndOut1() {
+        return Paths.line(intakeFromFlower, movingInAndOutOfTheFlower).reverseTangent();
     }
 
     public Path path8() {
         return Paths.line(startPose, testPoint7).constant(Math.toRadians(180));
+    }
+
+    public Path intakeRestOfBalls() {
+        return Paths.line(garden2, garden1).tangent();
+    }
+
+    public Path dontPinch1() {
+        return Paths.line(garden1, garden2).reverseTangent();
+    }
+
+    public Path movingInAndOutAndInAndOut2() {
+        return Paths.line(movingInAndOutOfTheFlower, intakeFromFlower).reverseTangent();
     }
 
     // Action Creation
@@ -143,9 +156,9 @@ public class Comp_2 extends OpMode {
     }
 
     Command proboscisDown() {
-          return instant(() -> {
-              robotContainer.proboscis.down();
-          });
+        return instant(() -> {
+            robotContainer.proboscis.down();
+        });
     }
 
     Command proboscisUp() {
@@ -161,36 +174,42 @@ public class Comp_2 extends OpMode {
                 shoot(),
                 waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
                 intakeOn(),
-                follow(follower, path1()),
-                waitMs(500),
+                follow(follower, intakeRestOfBalls()),
+                waitMs(150),
+                follow(follower, dontPinch()),
+                waitMs(150),
+//                follow(follower, dontPinch1()),
+//                waitMs(150),
+//                follow(follower, intakeRestOfBalls()),
+//                waitMs(500),
                 intakeOff(),
-                follow(follower, path2()),
+                follow(follower, gardenThenShoot()),
                 waitMs(500),
                 shoot(),
-                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
                 waitMs(500),
-                follow(follower, path3()),
+                follow(follower, positionInFrontOfFlower()),
                 proboscisDown(),
+                waitMs(150),
+                intakeOn(),
                 waitMs(300),
-                follow(follower, path4()),
-                intake(),
-                follow(follower, path7()),
-                intake(),
-                follow(follower, path4()),
-                intake(),
-                follow(follower, path7()),
-                intake(),
-                follow(follower, path4()),
-                intake(),
-                follow(follower, path7()),
-                intake(),
-                follow(follower, path4()),
-                intake(),
-                waitMs(1000),
-                follow(follower,path5()),
+                follow(follower, intakeFlower()),
+                waitMs(150),
+                follow(follower, movingInAndOutAndInAndOut1()),
+                waitMs(150),
+                follow(follower, intakeFlower()),
+                waitMs(150),
+                follow(follower, movingInAndOutAndInAndOut2()),
+                waitMs(150),
+                follow(follower, movingInAndOutAndInAndOut1()),
+                waitMs(150),
+                follow(follower, movingInAndOutAndInAndOut2()),
+                waitMs(150),
+                follow(follower, movingInAndOutAndInAndOut1()),
+                waitMs(150),
+                follow(follower,movingInAndOut()),
                 proboscisUp(),
                 waitMs(500),
-                follow(follower, path6())
+                follow(follower, parkAfterIntaking())
 
         );
     }
@@ -205,7 +224,7 @@ public class Comp_2 extends OpMode {
 
         start = HelperFunctions.scalePose(start, start);
         startPose = HelperFunctions.scalePose(startPose,start);
-        garden = HelperFunctions.scalePose(garden, start);
+        garden1 = HelperFunctions.scalePose(garden1, start);
         shootAfterGarden = HelperFunctions.scalePose(shootAfterGarden, start);
         moveInFrontOfFlower = HelperFunctions.scalePose(moveInFrontOfFlower, start);
         moveInFrontOfFlowerControl1 = HelperFunctions.scalePose(moveInFrontOfFlowerControl1, start);
@@ -214,11 +233,13 @@ public class Comp_2 extends OpMode {
         park = HelperFunctions.scalePose(park, start);
         parkControlPoint1 = HelperFunctions.scalePose(parkControlPoint1, start);
         parkControlPoint2 = HelperFunctions.scalePose(parkControlPoint2, start);
+        movingInAndOutOfTheFlower = HelperFunctions.scalePose(movingInAndOutOfTheFlower, start);
+        garden2 = HelperFunctions.scalePose(garden2, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
             start = HelperFunctions.mirror(start);
             startPose = HelperFunctions.mirror(startPose);
-            garden = HelperFunctions.mirror(garden);
+            garden1 = HelperFunctions.mirror(garden1);
             shootAfterGarden = HelperFunctions.mirror(shootAfterGarden);
             moveInFrontOfFlower = HelperFunctions.mirror(moveInFrontOfFlower);
             moveInFrontOfFlowerControl1 = HelperFunctions.mirror(moveInFrontOfFlowerControl1);
@@ -227,6 +248,8 @@ public class Comp_2 extends OpMode {
             park = HelperFunctions.mirror(park);
             parkControlPoint1 = HelperFunctions.mirror(parkControlPoint1);
             parkControlPoint2 = HelperFunctions.mirror(parkControlPoint2);
+            movingInAndOutOfTheFlower = HelperFunctions.mirror(moveInFrontOfFlower);
+            garden2 = HelperFunctions.mirror(garden2);
         }
 
         robotContainer.init();

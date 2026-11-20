@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // Our Imports
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
+import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 @Autonomous
 @Configurable // Allows you to configure in panels
@@ -52,29 +53,35 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
     int pathNumber = 1;
 
     // Poses
-    private final Pose start = poseFactory.of(58.1466, 133.579, 90);
-    private final Pose path1 = poseFactory.of(46.519, 135.1037, 90);
-    private final Pose path1Control1 = poseFactory.of(57.8917, 104.2911, 0);
-    private final Pose path1Control2 = poseFactory.of(45.2134, 109.4294, 0);
-    private final Pose point2 = poseFactory.of(9.7577, 117.0937, 92.6627);
-    private final Pose point2Control1 = poseFactory.of(46.8488, 110.4464, 0);
-    private final Pose point2Control2 = poseFactory.of(56.481, 107.6408, 0);
-    private final Pose point2Control3 = poseFactory.of(22.5037, 139.4101, 0);
-    private final Pose point2Control4 = poseFactory.of(8.6227, 141.5, 0);
+    private Pose start = poseFactory.of(58.1466, 133.579, 90);
+    private Pose startPose = poseFactory.of(59, 9, 180);
+    private Pose shootAndIntake = poseFactory.of(46.519, 135.1037, 90);
+    private Pose shootAndIntakeControl1 = poseFactory.of(57.8917, 104.2911, 0);
+    private Pose shootAndIntakeControl2 = poseFactory.of(45.2134, 109.4294, 0);
+    private Pose park = poseFactory.of(9.7577, 117.0937, 92.6627);
+    private Pose parkControl1 = poseFactory.of(46.8488, 110.4464, 0);
+    private Pose parkControl2 = poseFactory.of(56.481, 107.6408, 0);
+    private Pose parkControl3 = poseFactory.of(22.5037, 139.4101, 0);
+    private Pose parkControl4 = poseFactory.of(8.6227, 141.5, 0);
+
+    public Path startPath() {
+        return Paths.line(start, startPose).constant(start);
+    }
 
     public Path path1() {
-        return Paths.curve(start, path1Control1, path1Control2, path1).constant(path1);
+        return Paths.curve(start, shootAndIntakeControl1, shootAndIntakeControl2, shootAndIntake).constant(shootAndIntake);
     }
 
     public Path path2() {
-        return Paths.curve(path1, point2Control1, point2Control2, point2Control3, point2Control4, point2).reverseTangent();
+        return Paths.curve(shootAndIntake, parkControl1, parkControl2, parkControl3, parkControl4, park).reverseTangent();
     }
 
     // Action Creation
     Command shoot() {
         return instant(() -> {
-            waitMs(4000);
-            robotContainer.flywheel.shootSequence();
+            robotContainer.intake.on();
+            robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.tick(), Constants.Flywheel.SPINUP_MS);
+            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.off(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
         });
     }
 
@@ -121,8 +128,9 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
     // Path methods
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
+                follow(follower, startPath()),
                 shoot(),
-                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
+                waitMs(5000),
                 intakeOn(),
                 proboscisDown(),
                 follow(follower, path1()),
@@ -140,10 +148,25 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
             throw new RuntimeException(e);
         }
 
+        start = HelperFunctions.scalePose(start, start);
+        startPose = HelperFunctions.scalePose(startPose, start);
+        shootAndIntake = HelperFunctions.scalePose(shootAndIntake, start);
+        park = HelperFunctions.scalePose(park, start);
+        parkControl1 = HelperFunctions.scalePose(parkControl1, start);
+        parkControl2 = HelperFunctions.scalePose(parkControl2, start);
+
+        if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
+            start = HelperFunctions.mirror(start);
+            startPose = HelperFunctions.mirror(startPose);
+            shootAndIntake = HelperFunctions.mirror(shootAndIntake);
+            park = HelperFunctions.mirror(park);
+            parkControl1 = HelperFunctions.mirror(parkControl1);
+            parkControl2 = HelperFunctions.mirror(parkControl2);
+        }
+
         robotContainer.init();
 
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry(); // creates a new instance of panels
-        robotContainer.init();
         Scheduler.reset(); // resets the command scheduler for the ivy follower
 
         follower = PedroPathingConstants.create(hardwareMap);
@@ -159,35 +182,49 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
     public void start() { // Runs when the start button is pressed on the driver station
         follower.setPose(start);
         robotContainer.start(this, false);
+        RobotContainer.HardwareDevices.turretMotor.setPower(0);
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
+        Status.flywheelToggle = true;
+
     }
 
     @Override
     public void loop() { // Runs constantly while the opmode is active
         follower.update(); // Updates that pathing follower to make the robot move in auto
+        robotContainer.positionProvider.updateGoalPose();
+        Pose scaledPose = HelperFunctions.scalePose(follower.pose(), start);
+        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, (scaledPose.x() - 72), (scaledPose.y() - 72), AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
+        robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
-        robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
-        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, follower.pose().x() - 1.5 - 72, follower.pose().y() - 20.5 - 72, AngleUnit.DEGREES, Math.toDegrees(follower.pose().heading()) - 180));
 
         // Log values to Panels and Driver Station
         panelsTelemetry.debug("Turret Target", robotContainer.turret.getTargetPosition());
         panelsTelemetry.debug("Turret Target Degrees", robotContainer.turret.getTargetPositionDegrees());
         panelsTelemetry.debug("Path Timer", pathTimer.milliseconds());
         panelsTelemetry.debug("Holding", holding);
+
         panelsTelemetry.debug("Path Number", pathNumber);
         panelsTelemetry.debug("X", follower.pose().x());
         panelsTelemetry.debug("Y", follower.pose().y());
         panelsTelemetry.debug("Heading", follower.pose().heading());
         panelsTelemetry.debug("Current Pose", Status.currentPose);
+        panelsTelemetry.debug("Goal Pose", Status.goalPose);
+        panelsTelemetry.debug("Goal Pose get X", Status.goalPose.getX(DistanceUnit.CM));
+        panelsTelemetry.debug("Goal Pose get Y", Status.goalPose.getY(DistanceUnit.CM));
+        panelsTelemetry.debug("Current Pose X", Status.currentX);
+        panelsTelemetry.debug("Current Pose Y", Status.currentY);
+        panelsTelemetry.debug("Current Heading", Status.currentHeading);
+        panelsTelemetry.debug("angle to face the goal", robotContainer.turret.angleToFaceGoal);
+
+        panelsTelemetry.addData("Follower Mode", follower.mode());
         panelsTelemetry.update(telemetry);
 
-        telemetry.addData("Follower Mode", follower.mode());
-        telemetry.update();
+
     }
 
     @Override
     public void stop() {
-        blackboard.put("Robot Pose", Status.currentPose);
+        blackboard.put("Robot Pose", new Pose2D(DistanceUnit.INCH, (follower.pose().x() - 72) / Constants.System.AUTO_X_SCALER, (follower.pose().y() - 72) / Constants.System.AUTO_Y_SCALER, AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
     }
 }
