@@ -54,60 +54,69 @@ public class Comp_2 extends OpMode {
 
 
     // Poses
-    private Pose start = poseFactory.of(61.5455, 9.0733, 180);
+    private Pose start = poseFactory.of(63, 6.5, 180);
     private Pose startPose = poseFactory.of(59, 9, 180);
-    private Pose point1 = poseFactory.of(-10, 9.1669, 180);
-    private Pose point2 = poseFactory.of(61.5455, 9.0733, 180);
-    private Pose point3 = poseFactory.of(22, 55, 85.9617);
-    private Pose point3Control1 = poseFactory.of(16.3645, 11.4094, 0);
-    private Pose point4 = poseFactory.of(12, 55, -177.5746);
-    private Pose point5 = poseFactory.of(22, 55, -177.5746);
-    private Pose point6 = poseFactory.of(10, 102, -90.6596);
-    private Pose point6Control1 = poseFactory.of(15.6, 60.6195, 0);
-    private Pose point6Control2 = poseFactory.of(9.2168, 60.3423, 0);
-    private Pose point7 = poseFactory.of(59, 60, 180);
+    private Pose garden = poseFactory.of(5, 7, 180);
+    private Pose shootAfterGarden = poseFactory.of(61.5455, 9.0733, 180);
+    private Pose moveInFrontOfFlower = poseFactory.of(22, 53, 85.9617);
+    private Pose moveInFrontOfFlowerControl1 = poseFactory.of(16.3645, 11.4094, 0);
+    private Pose intakeFromFlower = poseFactory.of(13, 53, -177.5746);
+    private Pose backAwayFromFlower = poseFactory.of(22, 55, -177.5746);
+    private Pose park = poseFactory.of(10, 105, -90.6596);
+    private Pose parkControlPoint1 = poseFactory.of(15.6, 60.6195, 0);
+    private Pose parkControlPoint2 = poseFactory.of(9.2168, 60.3423, 0);
+    private Pose moveingInAndOutOfTheFlower = poseFactory.of(16, 53, -177.5746);
+    private Pose testPoint7 = poseFactory.of(59, 60, 180);
 
     public Path startPath() {
         return Paths.line(start, startPose).constant(start);
     }
 
     public Path path1() {
-        return Paths.line(start, point1).linear(start, point1);
+        return Paths.line(start, garden).linear(start, garden);
     }
 
     public Path path2() {
-        return Paths.line(point1, point2).reverseTangent();
+        return Paths.line(garden, shootAfterGarden).reverseTangent();
     }
 
     public Path path3() {
-        return Paths.curve(point2, point3Control1, point3).tangent();
+        return Paths.curve(shootAfterGarden, moveInFrontOfFlowerControl1, moveInFrontOfFlower).tangent();
     }
 
     public Path path4() {
-        return Paths.line(point3, point4).tangent();
+        return Paths.line(moveInFrontOfFlower, intakeFromFlower).tangent();
     }
 
     public Path path5() {
-        return Paths.line(point4, point5).reverseTangent();
+        return Paths.line(intakeFromFlower, backAwayFromFlower).reverseTangent();
     }
 
     public Path path6() {
-        return Paths.curve(point5, point6Control1, point6Control2, point6).reverseTangent();
+        return Paths.curve(backAwayFromFlower, parkControlPoint1, parkControlPoint2, park).reverseTangent();
     }
+
     public Path path7() {
-        return Paths.line(startPose,point7).constant(Math.toRadians(180));
+        return Paths.line(intakeFromFlower, moveInFrontOfFlower).tangent();
+    }
+
+    public Path path8() {
+        return Paths.line(startPose, testPoint7).constant(Math.toRadians(180));
     }
 
     // Action Creation
     Command shoot() {
+
         return instant(() -> {
-            robotContainer.flywheel.shootSequence();
+            robotContainer.intake.on();
+            robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.tick(), Constants.Flywheel.SPINUP_MS);
+            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.off(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
         });
     }
 
     Command intakeOn() {
         return instant(() -> {
-            robotContainer.intake.on();
+            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.on(), 1000);
         });
     }
 
@@ -149,27 +158,39 @@ public class Comp_2 extends OpMode {
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
                 follow(follower, startPath()),
-//                shoot(),
-//                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
-//                intakeOn(),
-//                follow(follower, path1()),
-//                waitMs(500),
-//                intakeOff(),
-//                follow(follower, path2()),
-//                waitMs(500),
-//                shoot(),
-//                waitMs(500),
-//                follow(follower, path3()),
-//                proboscisDown(),
-//                waitMs(300),
-//                follow(follower, path4()),
-//                intake(),
-//                waitMs(1000),
-//                follow(follower,path5()),
-//                proboscisUp(),
-//                waitMs(500),
-//                follow(follower, path6())
-                follow(follower,path7())
+                shoot(),
+                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
+                intakeOn(),
+                follow(follower, path1()),
+                waitMs(500),
+                intakeOff(),
+                follow(follower, path2()),
+                waitMs(500),
+                shoot(),
+                waitMs(Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS + Constants.Tongue.POSITION_CHANGE_MS * 2),
+                waitMs(500),
+                follow(follower, path3()),
+                proboscisDown(),
+                waitMs(300),
+                follow(follower, path4()),
+                intake(),
+                follow(follower, path7()),
+                intake(),
+                follow(follower, path4()),
+                intake(),
+                follow(follower, path7()),
+                intake(),
+                follow(follower, path4()),
+                intake(),
+                follow(follower, path7()),
+                intake(),
+                follow(follower, path4()),
+                intake(),
+                waitMs(1000),
+                follow(follower,path5()),
+                proboscisUp(),
+                waitMs(500),
+                follow(follower, path6())
 
         );
     }
@@ -182,18 +203,30 @@ public class Comp_2 extends OpMode {
             throw new RuntimeException(e);
         }
 
+        start = HelperFunctions.scalePose(start, start);
+        startPose = HelperFunctions.scalePose(startPose,start);
+        garden = HelperFunctions.scalePose(garden, start);
+        shootAfterGarden = HelperFunctions.scalePose(shootAfterGarden, start);
+        moveInFrontOfFlower = HelperFunctions.scalePose(moveInFrontOfFlower, start);
+        moveInFrontOfFlowerControl1 = HelperFunctions.scalePose(moveInFrontOfFlowerControl1, start);
+        intakeFromFlower = HelperFunctions.scalePose(intakeFromFlower, start);
+        backAwayFromFlower = HelperFunctions.scalePose(backAwayFromFlower, start);
+        park = HelperFunctions.scalePose(park, start);
+        parkControlPoint1 = HelperFunctions.scalePose(parkControlPoint1, start);
+        parkControlPoint2 = HelperFunctions.scalePose(parkControlPoint2, start);
+
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
             start = HelperFunctions.mirror(start);
             startPose = HelperFunctions.mirror(startPose);
-            point1 = HelperFunctions.mirror(point1);
-            point2 = HelperFunctions.mirror(point2);
-            point3 = HelperFunctions.mirror(point3);
-            point3Control1 = HelperFunctions.mirror(point3Control1);
-            point4 = HelperFunctions.mirror(point4);
-            point5 = HelperFunctions.mirror(point5);
-            point6 = HelperFunctions.mirror(point6);
-            point6Control1 = HelperFunctions.mirror(point6Control1);
-            point6Control2 = HelperFunctions.mirror(point6Control2);
+            garden = HelperFunctions.mirror(garden);
+            shootAfterGarden = HelperFunctions.mirror(shootAfterGarden);
+            moveInFrontOfFlower = HelperFunctions.mirror(moveInFrontOfFlower);
+            moveInFrontOfFlowerControl1 = HelperFunctions.mirror(moveInFrontOfFlowerControl1);
+            intakeFromFlower = HelperFunctions.mirror(intakeFromFlower);
+            backAwayFromFlower = HelperFunctions.mirror(backAwayFromFlower);
+            park = HelperFunctions.mirror(park);
+            parkControlPoint1 = HelperFunctions.mirror(parkControlPoint1);
+            parkControlPoint2 = HelperFunctions.mirror(parkControlPoint2);
         }
 
         robotContainer.init();
@@ -216,13 +249,16 @@ public class Comp_2 extends OpMode {
         robotContainer.start(this, false);
         RobotContainer.HardwareDevices.turretMotor.setPower(0);
         schedule(autoRoutine()); // This will schedule the auto routine that you had previously created to run in sequence
+        Status.flywheelToggle = true;
+
     }
 
     @Override
     public void loop() { // Runs constantly while the opmode is active
         follower.update(); // Updates that pathing follower to make the robot move in auto
         robotContainer.positionProvider.updateGoalPose();
-        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, (follower.pose().y() - 72) * Constants.System.AUTO_X_SCALER, (follower.pose().x() - 72) * Constants.System.AUTO_Y_SCALER, AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
+        Pose scaledPose = HelperFunctions.scalePose(follower.pose(), start);
+        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, (scaledPose.x() - 72), (scaledPose.y() - 72), AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
@@ -254,6 +290,6 @@ public class Comp_2 extends OpMode {
 
     @Override
     public void stop() {
-        blackboard.put("Robot Pose", Status.currentPose);
+        blackboard.put("Robot Pose", new Pose2D(DistanceUnit.INCH, (follower.pose().x() - 72) / Constants.System.AUTO_X_SCALER, (follower.pose().y() - 72) / Constants.System.AUTO_Y_SCALER, AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
     }
 }

@@ -5,6 +5,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.main.Status;
 
@@ -24,6 +25,14 @@ public class HelperFunctions {
 
     public static Pose mirror(Pose point) {
         return new Pose(Math.abs(point.x() - 144), Math.abs(point.y() - 144), Math.PI - point.heading());
+    }
+
+    public static Pose scalePose(Pose pose, Pose startPose) {
+        double xDiff = (pose.x() - startPose.x()) * Constants.System.AUTO_X_SCALER;
+        double yDiff = (pose.y() - startPose.y()) * Constants.System.AUTO_Y_SCALER;
+        double scaledX = startPose.x() + xDiff;
+        double scaledY = startPose.y() + yDiff;
+        return new Pose(scaledX, scaledY, pose.heading());
     }
 
     public static double mirrorAngle90(double angle, boolean degrees){
