@@ -26,7 +26,7 @@ public class Constants {
 
         public static Pose2D
             ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
-            CORNER_RESET_POSE = new Pose2D(DistanceUnit.CM, - 166.5 / System.PINPOINT_Y_SCALER, - 159.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0),
+            CORNER_RESET_POSE = new Pose2D(DistanceUnit.CM, - 163.5 / System.PINPOINT_Y_SCALER, - 159.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0),
             FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
         public static double
             GRAVITY = 9.811,
@@ -191,7 +191,7 @@ public class Constants {
     public static class Flywheel {
         public static double
             GEAR_RATIO = 3.0/4.0,
-            KP = 0.005,
+            KP = 0.01,
             KI = 0.0,
             KD = 0.0,
             KF = 1.1,
@@ -199,12 +199,12 @@ public class Constants {
             DESIRED_MAX_HEIGHT = 0.0,
             POWER_VELOCITY_MULTIPLIER = 1;
         public static double[]
-            SPEED_TABLE = {0.49, 0.51, 0.52, 0.54, 0.56, 0.6, 0.62},
+            SPEED_TABLE = {0.485, 0.505, 0.515, 0.54, 0.56, 0.61, 0.63},
             SPEED_TABLE_DISTANCES = {90, 120, 135, 150, 185, 230, 250};
         public static int
             MAX_VELOCITY = (int) (6000 * GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60, // 2100
             SPINUP_MS = 2000,
-            SHOOT_MS = 1000;
+            SHOOT_MS = 1500;
     }
 
     @Configurable

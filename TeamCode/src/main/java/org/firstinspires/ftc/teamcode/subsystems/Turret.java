@@ -57,13 +57,13 @@ public class Turret extends RobotContainer.HardwareDevices {
         if (teleop) {
 
             if (robotContainer.operatorController.dpadLeft.wasJustPressed()) {
-                turretAngleOffset -= 1.5;
-                Status.turretZeroOffset -= 1.5;
+                turretAngleOffset -= 4;
+                Status.turretZeroOffset -= 4;
             }
 
             if (robotContainer.operatorController.dpadRight.wasJustPressed()) {
-                turretAngleOffset += 1.5;
-                Status.turretZeroOffset += 1.5;
+                turretAngleOffset += 4;
+                Status.turretZeroOffset += 4;
             }
 
             if (robotContainer.operatorController.dpadRight.isHeldFor(1.0) || robotContainer.operatorController.dpadLeft.isHeldFor(1.0)) {
