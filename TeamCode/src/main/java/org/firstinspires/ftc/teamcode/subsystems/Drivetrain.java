@@ -46,14 +46,20 @@ public class Drivetrain {
         if (robotContainer.driverController.circle.wasJustPressed() || robotContainer.operatorController.circle.wasJustPressed()) {
             RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.ORIGIN);
 //            RobotContainer.HardwareDevices.betterIMU.resetAngle();
+            robotContainer.driverController.rumble(200);
+            robotContainer.operatorController.rumble(200);
         } else if (robotContainer.driverController.triangle.wasJustPressed() || robotContainer.operatorController.triangle.wasJustPressed()) {
             Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.FLOWER_RESET_POSE : new Pose2D(DistanceUnit.CM, -Constants.Game.FLOWER_RESET_POSE.getX(DistanceUnit.CM), -Constants.Game.FLOWER_RESET_POSE.getY(DistanceUnit.CM), AngleUnit.DEGREES, 180 + Constants.Game.FLOWER_RESET_POSE.getHeading(AngleUnit.DEGREES));
             RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
+            robotContainer.driverController.rumble(200);
+            robotContainer.operatorController.rumble(200);
         } else if (robotContainer.driverController.square.wasJustPressed() || robotContainer.operatorController.ps.wasJustPressed()){
             Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.CORNER_RESET_POSE : new Pose2D(DistanceUnit.CM, -Constants.Game.CORNER_RESET_POSE.getX(DistanceUnit.CM), -Constants.Game.CORNER_RESET_POSE.getY(DistanceUnit.CM), AngleUnit.DEGREES, 180 + Constants.Game.CORNER_RESET_POSE.getHeading(AngleUnit.DEGREES));
             RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
+            robotContainer.driverController.rumble(200);
+            robotContainer.operatorController.rumble(200);
 
         }
     }
@@ -126,7 +132,7 @@ public class Drivetrain {
         if (Status.fieldOriented) {
             double rotX;
             double rotY;
-            if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
+            if (Status.alliance == Constants.Game.ALLIANCE.RED) {
                 rotX = x * Math.cos(-Math.toRadians(Status.currentHeading + 90)) - y * Math.sin(-Math.toRadians(Status.currentHeading + 90));
                 rotY = x * Math.sin(-Math.toRadians(Status.currentHeading + 90)) + y * Math.cos(-Math.toRadians(Status.currentHeading + 90));
             } else {

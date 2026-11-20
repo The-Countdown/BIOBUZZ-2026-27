@@ -576,20 +576,21 @@ public class RobotContainer {
         }
         // This line is required for the logViewer to work correctly
         // It also need to be at column zero and spelled exactly "Time Stamp"
-        addDataLog("Time Stamp", System.currentTimeMillis() - startTimeMs, true);
+            addDataLog("Time Stamp", System.currentTimeMillis() - startTimeMs, true);
         addBlankLine();
 
-        addCaptionLine("Match Info");
-            addDataLog("Alliance", Status.alliance, true);
-            addDataLog("Competition Mode: ", Status.competitionMode, false);
-            addDataLog("Logging to File: ", Status.loggingToFile, false);
+        addCaptionLine("Loop Times");
+            addDataLog("OpMode Avg Loop Time", (int) getRollingAverageLoopTime("teleOp") + " ms", true);
+            addDataLog("OpMode Loop Time", (int) CURRENT_LOOP_TIME_MS + " ms", true);
+//            addDataLog("Pinpoint Avg Loop Time", (int) localizationUpdater.CURRENT_LOOP_TIME_AVG_MS + " ms", false);
         addBlankLine();
 
-        if (Status.competitionMode) { // Stuff in competition mode.
-            addCaptionLine("Loop Times");
-                addDataLog("OpMode Avg Loop Time", (int) getRollingAverageLoopTime("teleOp") + " ms", true);
-                addDataLog("OpMode Loop Time", (int) CURRENT_LOOP_TIME_MS + " ms", true);
-                addDataLog("Pinpoint Avg Loop Time", (int) localizationUpdater.CURRENT_LOOP_TIME_AVG_MS + " ms", false);
+        if (Status.debugMode) { // Stuff in competition mode.
+
+            addCaptionLine("Match Info");
+                addDataLog("Alliance", Status.alliance, true);
+                addDataLog("Competition Mode: ", Status.competitionMode, false);
+                addDataLog("Logging to File: ", Status.loggingToFile, false);
             addBlankLine();
 
             addCaptionLine("Current Pull");
@@ -602,7 +603,7 @@ public class RobotContainer {
                 addDataLog("Robot Heading", Status.currentHeading, true);
             addBlankLine();
 
-        } else { // Stuff not in competition mode.
+        } else if (!Status.competitionMode){ // Stuff not in competition mode.
 
             // Get current and voltage for telemetry
                 controlHubVoltage = HardwareDevices.controlHub.getInputVoltage(VoltageUnit.VOLTS);
@@ -722,7 +723,7 @@ public class RobotContainer {
             displayEventTelemetry();
         }
         commitLoopData();
-        if (!Status.debugMode && !Status.competitionMode) { panelsTelemetry.update(telemetry); }
+        if (!Status.competitionMode) { panelsTelemetry.update(telemetry); }
         telemetry.update();
     }
 }
