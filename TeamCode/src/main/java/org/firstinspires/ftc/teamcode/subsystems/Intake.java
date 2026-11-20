@@ -20,16 +20,14 @@ public class Intake {
     public void update(boolean teleop) {
         if (teleop) {
             setPower((robotContainer.driverController.rightTriggerRaw() + robotContainer.operatorController.rightTriggerRaw()) - (robotContainer.driverController.leftTriggerRaw() + robotContainer.operatorController.leftTriggerRaw()) / 2.0);
-        } else {
-            setPower(power);
         }
     }
 
-    public void setPower(double power) {
-//        double current = getCurrent();
-//        this.power = current < 5 ? power : (power * 5) / current;
-        this.power = Status.tongueDown ? power : power/2;
-        intakeMotor.setPower(power);
+    public void setPower(double inputPower) {
+        double current = getCurrent();
+        power = current < 5 ? inputPower : (inputPower * 5) / current;
+        power = Status.tongueDown ? power : power/2;
+        intakeMotor.updateSetPower(power);
     }
 
     public void on() {
