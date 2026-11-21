@@ -51,12 +51,19 @@ public class PositionProvider {
 
     public void updateGoalPose(){
         // Update Goal Pose
-        double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? 1 : -1;
-        double yMultiplier = Math.signum(Status.currentY);
-        double xDiff = (Constants.Game.CELL_POSITION_X) * xMultiplier - Status.currentX;
-        double xShift = 0;//(Constants.Turret.GOAL_SHIFT * Math.signum(xDiff)) * Math.min(Math.abs(xDiff) / Constants.Turret.X_THRESHOLD, 1);
-        Status.goalPose = new Pose2D(DistanceUnit.CM, (Constants.Game.CELL_POSITION_X + xShift) * xMultiplier, Constants.Game.CELL_POSITION_Y * yMultiplier, AngleUnit.DEGREES, 0);
+            // X Values
+            double xMultiplier = Status.alliance == Constants.Game.ALLIANCE.BLUE ? 1 : -1;
+            double goalX = xMultiplier * Constants.Game.CELL_POSITION_X;
+            double xShift = Status.currentY < 0 ? -Constants.Turret.GOAL_SHIFT : 0;
+            if (Status.shootOnTheMove) xShift -= Status.currentVelocityX;
+    //        xShift += HelperFunctions.clamp((goalX - Status.currentX) / Constants.Turret.X_THRESHOLD, -1, 1) * Constants.Turret.GOAL_SHIFT_AMPLITUDE;
 
+            // Y Values
+            double goalY = Math.signum(Status.currentY) * Constants.Game.CELL_POSITION_Y ;
+            double yShift = 0;
+            if (Status.shootOnTheMove) yShift -= Status.currentVelocityY;
+
+        Status.goalPose = new Pose2D(DistanceUnit.CM, goalX + xShift, goalY + yShift, AngleUnit.DEGREES, 0);
     }
 
     public void update(){

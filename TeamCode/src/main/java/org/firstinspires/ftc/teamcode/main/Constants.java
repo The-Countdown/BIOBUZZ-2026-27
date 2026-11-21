@@ -26,13 +26,13 @@ public class Constants {
 
         public static Pose2D
             ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
-            CORNER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0),
+            CORNER_RESET_POSE = new Pose2D(DistanceUnit.CM, - 163.5 / System.PINPOINT_Y_SCALER, - 159.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0),
             FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
         public static double
             GRAVITY = 9.811,
-            GOAL_HEIGHT = 144.78,
-            CELL_POSITION_X = 38.5,
-            CELL_POSITION_Y = 48.5,
+            GOAL_HEIGHT = 111.65,
+            CELL_POSITION_X = 32.385, // (25.5 / 2) * 2.54
+            CELL_POSITION_Y = 47.194660597, // cos(30 * (pi / 180)) * (42.91 / 2) * 2.54
             GOAL_POSITION_VELOCITY_MULTIPLIER = 1;
     }
 
@@ -82,10 +82,10 @@ public class Constants {
     @Configurable
     public static class Control {
         public static double
-            JOYSTICK_SCALER_EXPONENT = 3.0,
+            JOYSTICK_SCALER_EXPONENT = 1.0,
             JOYSTICK_ROTATION_SCALER_EXPONENT = 4.0,
-            MAX_DRIVE_ACCELERATION = 4,
-            ROTATION_SCALER = 0.6;
+            MAX_DRIVE_ACCELERATION = 1,
+            ROTATION_SCALER = 0.5;
     }
 
     @Configurable
@@ -174,9 +174,10 @@ public class Constants {
             TOLERANCE_DEGREES = 3,
             GEAR_SLOP = 0.5,
             TOLERANCE_TICKS = (TOLERANCE_DEGREES - GEAR_SLOP) / DEGREES_PER_TICK,
-            GOAL_SHIFT = 25,
+            GOAL_SHIFT = 10,
+            GOAL_SHIFT_AMPLITUDE = 17.5,
             Y_THRESHOLD = 36 * 2.54,
-            X_THRESHOLD = 12 * 2.54;
+            X_THRESHOLD = 150;
         public static int
             ZERO_DEGREE_POSITION = 0,
             MAX_MOTOR = ZERO_DEGREE_POSITION + 300,
@@ -191,7 +192,7 @@ public class Constants {
     public static class Flywheel {
         public static double
             GEAR_RATIO = 3.0/4.0,
-            KP = 0.005,
+            KP = 0.01,
             KI = 0.0,
             KD = 0.0,
             KF = 1.1,
@@ -199,12 +200,12 @@ public class Constants {
             DESIRED_MAX_HEIGHT = 0.0,
             POWER_VELOCITY_MULTIPLIER = 1;
         public static double[]
-            SPEED_TABLE = {0.49, 0.51, 0.52, 0.54, 0.56, 0.6, 0.62},
+            SPEED_TABLE = {0.485, 0.505, 0.515, 0.54, 0.56, 0.61, 0.63},
             SPEED_TABLE_DISTANCES = {90, 120, 135, 150, 185, 230, 250};
         public static int
             MAX_VELOCITY = (int) (6000 * GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION) / 60, // 2100
             SPINUP_MS = 2000,
-            SHOOT_MS = 1000;
+            SHOOT_MS = 1500;
     }
 
     @Configurable

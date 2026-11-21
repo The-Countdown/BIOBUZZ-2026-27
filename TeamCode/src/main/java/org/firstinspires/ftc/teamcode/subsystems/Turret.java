@@ -57,14 +57,17 @@ public class Turret extends RobotContainer.HardwareDevices {
         if (teleop) {
 
             if (robotContainer.operatorController.dpadLeft.wasJustPressed()) {
-                turretAngleOffset -= 2;
+                turretAngleOffset -= 7;
+                Status.turretZeroOffset -= 7;
             }
 
             if (robotContainer.operatorController.dpadRight.wasJustPressed()) {
-                turretAngleOffset += 1.5;
+                turretAngleOffset += 7;
+                Status.turretZeroOffset += 7;
             }
 
             if (robotContainer.operatorController.dpadRight.isHeldFor(1.0) || robotContainer.operatorController.dpadLeft.isHeldFor(1.0)) {
+                Status.turretZeroOffset -= turretAngleOffset;
                 turretAngleOffset = 0;
             }
 
@@ -100,12 +103,12 @@ public class Turret extends RobotContainer.HardwareDevices {
 
     public void setTargetAngle(double angleInDegrees) {
 
-        targetPositionDegrees = HelperFunctions.normalizeAngle(angleInDegrees + turretAngleOffset);
+        targetPositionDegrees = HelperFunctions.normalizeAngle(angleInDegrees);
         targetPosition = angleToMotor(targetPositionDegrees);
 
-        double position = HelperFunctions.clamp(targetPosition, Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
+        double position = HelperFunctions.clamp(targetPosition, Constants.Turret.MIN_MOTOR , Constants.Turret.MAX_MOTOR );
 
-        turretPDFOutput = Status.shootOnTheMove ? turretPDF.calculate(position, currentPosition, goalOrientedVelocityRX) : turretPDF.calculate(position, currentPosition, 0);
+        turretPDFOutput = Status.shootOnTheMove ? turretPDF.calculate(position, currentPosition, Status.currentVelocityHeading) : turretPDF.calculate(position, currentPosition, 0);
 
         turretMotor.updateSetPower(turretPDFOutput);
     }
@@ -128,18 +131,11 @@ public class Turret extends RobotContainer.HardwareDevices {
 
     public void pointAtGoal() {
         if (Math.abs(Status.currentY) > 24 * 2.54) {
-        goalOrientedVelocityX = (Status.currentVelocityX * Math.cos(Math.toRadians(goalAngle))) - (Status.currentVelocityY * Math.sin(Math.toRadians(goalAngle)));
-        goalOrientedVelocityY = (Status.currentVelocityX * Math.sin(Math.toRadians(goalAngle))) + (Status.currentVelocityY * Math.cos(Math.toRadians(goalAngle)));
 
         double xDiff = (Status.goalPose.getX(DistanceUnit.CM) - Status.currentX);
-        if (Status.shootOnTheMove) { xDiff += goalOrientedVelocityX; }
-
         double yDiff = (Status.goalPose.getY(DistanceUnit.CM) - Status.currentY);
-        if (Status.shootOnTheMove) { yDiff += goalOrientedVelocityY; }
 
-        angleToFaceGoal = -(Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading;
-        angleToFaceGoal += xDiff > 0 ? 90 : -90;
-        goalOrientedVelocityRX =  ((angleToFaceGoal - lastAngleToFaceGoal) * 1000)/ robotContainer.CURRENT_LOOP_TIME_MS;
+        angleToFaceGoal = 90 * Math.signum(xDiff) -(Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading;
 
         setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
         } else {
