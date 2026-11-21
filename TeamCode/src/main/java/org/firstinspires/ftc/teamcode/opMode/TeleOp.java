@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
+import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "TeleOp")
 public class TeleOp extends OpMode {
@@ -22,7 +23,7 @@ public class TeleOp extends OpMode {
         robotContainer.init();
 
         Status.currentPose = (Pose2D) blackboard.getOrDefault("Robot Pose", new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0));
-        RobotContainer.HardwareDevices.pinpoint.setPosition(Status.currentPose);
+        RobotContainer.HardwareDevices.pinpoint.setPosition(HelperFunctions.audienceOriginToPinpoint(Status.currentPose));
 //        RobotContainer.HardwareDevices.betterIMU.resetAngle();
 //        RobotContainer.HardwareDevices.betterIMU.setAngleOffset(-Status.currentHeading);
     }

@@ -180,18 +180,18 @@ public class UpwardsOneTip extends OpMode {
         parkControlPoint2 = HelperFunctions.scalePose(parkControlPoint2, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
-            start = HelperFunctions.mirror(start);
-            startPose = HelperFunctions.mirror(startPose);
-            beforeGarden = HelperFunctions.mirror(beforeGarden);
-            garden = HelperFunctions.mirror(garden);
-            shootAfterGarden = HelperFunctions.mirror(shootAfterGarden);
-            moveInFrontOfFlower = HelperFunctions.mirror(moveInFrontOfFlower);
-            moveInFrontOfFlowerControl1 = HelperFunctions.mirror(moveInFrontOfFlowerControl1);
-            intakeFromFlower = HelperFunctions.mirror(intakeFromFlower);
-            backAwayFromFlower = HelperFunctions.mirror(backAwayFromFlower);
-            park = HelperFunctions.mirror(park);
-            parkControlPoint1 = HelperFunctions.mirror(parkControlPoint1);
-            parkControlPoint2 = HelperFunctions.mirror(parkControlPoint2);
+            start = HelperFunctions.mirrorAboutOrigin(start);
+            startPose = HelperFunctions.mirrorAboutOrigin(startPose);
+            beforeGarden = HelperFunctions.mirrorAboutOrigin(beforeGarden);
+            garden = HelperFunctions.mirrorAboutOrigin(garden);
+            shootAfterGarden = HelperFunctions.mirrorAboutOrigin(shootAfterGarden);
+            moveInFrontOfFlower = HelperFunctions.mirrorAboutOrigin(moveInFrontOfFlower);
+            moveInFrontOfFlowerControl1 = HelperFunctions.mirrorAboutOrigin(moveInFrontOfFlowerControl1);
+            intakeFromFlower = HelperFunctions.mirrorAboutOrigin(intakeFromFlower);
+            backAwayFromFlower = HelperFunctions.mirrorAboutOrigin(backAwayFromFlower);
+            park = HelperFunctions.mirrorAboutOrigin(park);
+            parkControlPoint1 = HelperFunctions.mirrorAboutOrigin(parkControlPoint1);
+            parkControlPoint2 = HelperFunctions.mirrorAboutOrigin(parkControlPoint2);
         }
 
         robotContainer.init();
@@ -222,7 +222,7 @@ public class UpwardsOneTip extends OpMode {
         follower.update(); // Updates that pathing follower to make the robot move in auto
         robotContainer.positionProvider.updateGoalPose();
         Pose scaledPose = HelperFunctions.scalePose(follower.pose(), start);
-        robotContainer.positionProvider.updateWithPose2D(new Pose2D(DistanceUnit.INCH, (scaledPose.x() - 72), (scaledPose.y() - 72), AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
+        robotContainer.positionProvider.updateWithPose2D(HelperFunctions.pedroPathingToAudienceOrigin(new Pose2D(DistanceUnit.INCH, scaledPose.x(), scaledPose.y(), AngleUnit.DEGREES, (follower.pose().heading()))));
         robotContainer.update(false); // This will update all subsystems of the robot that need functions running in loop such as tracking the goal
         Scheduler.execute(); // Checks which command should be running right now in the list of your commands that you configured in the start function
 
@@ -255,6 +255,6 @@ public class UpwardsOneTip extends OpMode {
     @Override
     public void stop() {
         Pose scaledPose = HelperFunctions.scalePose(follower.pose(), start);
-        blackboard.put("Robot Pose", new Pose2D(DistanceUnit.INCH, (scaledPose.x() - 72), (scaledPose.y() - 72), AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(Math.toDegrees(follower.pose().heading()) + 90)));
+        blackboard.put("Robot Pose", HelperFunctions.pedroPathingToAudienceOrigin(new Pose2D(DistanceUnit.INCH, scaledPose.x(), scaledPose.y(), AngleUnit.RADIANS, scaledPose.heading())));
     }
 }

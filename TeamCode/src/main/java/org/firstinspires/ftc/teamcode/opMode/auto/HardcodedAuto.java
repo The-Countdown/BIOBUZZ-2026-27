@@ -63,9 +63,9 @@ public class HardcodedAuto extends OpMode {
         pathTimer.reset();
         while (pathTimer.milliseconds() < time) {
             RobotContainer.HardwareDevices.leftFront.setPower(-power);
-            RobotContainer.HardwareDevices.leftBack.setPower(-power);
+            RobotContainer.HardwareDevices.leftBack.setPower(power);
             RobotContainer.HardwareDevices.rightFront.setPower(power);
-            RobotContainer.HardwareDevices.rightBack.setPower(power);
+            RobotContainer.HardwareDevices.rightBack.setPower(-power);
         }
     }
 

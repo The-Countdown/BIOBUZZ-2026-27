@@ -1,29 +1,32 @@
 package org.firstinspires.ftc.teamcode.util;
 
 import com.pedropathing.math.Pose;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.main.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 public class HelperFunctions {
-
-    public static double mirror(double xVal) {
-        return Math.abs(xVal - 72) + xVal;
+    public static Pose2D pinpointToAudienceOrigin(Pose2D pose){
+        return new Pose2D(DistanceUnit.CM, -pose.getY(DistanceUnit.CM), pose.getX(DistanceUnit.CM), AngleUnit.DEGREES, pose.getHeading(AngleUnit.DEGREES));
     }
 
-    /**
-     * @param pose Pose3d to convert to Pose2d
-     * @return Pose2d
-     */
-    public static Pose2D to2D(Pose3D pose) {
-        return new Pose2D(DistanceUnit.CM, pose.getPosition().x * 100, pose.getPosition().y * 100, AngleUnit.DEGREES,pose.getOrientation().getYaw(AngleUnit.DEGREES));
+    public static Pose2D audienceOriginToPinpoint(Pose2D pose){
+        return new Pose2D(DistanceUnit.CM, pose.getY(DistanceUnit.CM), -pose.getX(DistanceUnit.CM), AngleUnit.DEGREES, pose.getHeading(AngleUnit.DEGREES));
     }
 
-    public static Pose mirror(Pose point) {
+    public static Pose2D pedroPathingToAudienceOrigin(Pose2D pose){
+        return new Pose2D(DistanceUnit.CM, pose.getX(DistanceUnit.CM) - 91.44, pose.getY(DistanceUnit.CM) - 91.44, AngleUnit.DEGREES, -HelperFunctions.normalizeAngle(pose.getHeading(AngleUnit.DEGREES) + 90));
+    }
+
+    public static Pose2D audienceOriginToPedroPathing(Pose2D pose){
+        return new Pose2D(DistanceUnit.CM, pose.getX(DistanceUnit.CM) + 91.44, pose.getY(DistanceUnit.CM) + 91.44, AngleUnit.DEGREES, pose.getHeading(AngleUnit.RADIANS) - (Math.PI / 2));
+    }
+
+    public static Pose mirrorAboutOrigin(Pose point) {
         return new Pose(Math.abs(point.x() - 144), Math.abs(point.y() - 144), Math.PI - point.heading());
     }
 
@@ -33,21 +36,6 @@ public class HelperFunctions {
         double scaledX = startPose.x() + xDiff;
         double scaledY = startPose.y() + yDiff;
         return new Pose(scaledX, scaledY, pose.heading());
-    }
-
-    public static double mirrorAngle90(double angle, boolean degrees){
-        return degrees ? 180 - angle : Math.PI - angle;
-    }
-
-    public static double mirrorAngle0(double angle){
-        return -angle;
-    }
-
-    public static Pose2D mirror90(Pose2D pos, DistanceUnit distUnit, AngleUnit angUnit) {
-        return angUnit == AngleUnit.DEGREES ? new Pose2D (distUnit, -pos.getX(distUnit), pos.getY(distUnit), angUnit, 180 - pos.getHeading(AngleUnit.DEGREES)) : new Pose2D (distUnit, -pos.getX(distUnit), pos.getY(distUnit), angUnit, Math.PI - pos.getHeading(AngleUnit.RADIANS));
-    }
-    public static Pose2D mirror0(Pose2D pos, DistanceUnit distUnit, AngleUnit angUnit) {
-        return angUnit == AngleUnit.DEGREES ? new Pose2D (distUnit, -pos.getX(distUnit), pos.getY(distUnit), angUnit, 180 - pos.getHeading(AngleUnit.DEGREES)) : new Pose2D (distUnit, -pos.getX(distUnit), pos.getY(distUnit), angUnit, Math.PI - pos.getHeading(AngleUnit.RADIANS));
     }
 
     /**
