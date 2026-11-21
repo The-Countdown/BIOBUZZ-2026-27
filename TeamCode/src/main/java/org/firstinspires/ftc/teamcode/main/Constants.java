@@ -30,9 +30,9 @@ public class Constants {
             FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
         public static double
             GRAVITY = 9.811,
-            GOAL_HEIGHT = 144.78,
-            CELL_POSITION_X = 38.5,
-            CELL_POSITION_Y = 48.5,
+            GOAL_HEIGHT = 111.65,
+            CELL_POSITION_X = 32.385, // (25.5 / 2) * 2.54
+            CELL_POSITION_Y = 47.194660597, // cos(30 * (pi / 180)) * (42.91 / 2) * 2.54
             GOAL_POSITION_VELOCITY_MULTIPLIER = 1;
     }
 
@@ -175,8 +175,9 @@ public class Constants {
             GEAR_SLOP = 0.5,
             TOLERANCE_TICKS = (TOLERANCE_DEGREES - GEAR_SLOP) / DEGREES_PER_TICK,
             GOAL_SHIFT = 10,
+            GOAL_SHIFT_AMPLITUDE = 17.5,
             Y_THRESHOLD = 36 * 2.54,
-            X_THRESHOLD = 24 * 2.54;
+            X_THRESHOLD = 150;
         public static int
             ZERO_DEGREE_POSITION = 0,
             MAX_MOTOR = ZERO_DEGREE_POSITION + 300,
