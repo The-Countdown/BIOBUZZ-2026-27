@@ -26,8 +26,12 @@ public class HelperFunctions {
         return new Pose2D(DistanceUnit.CM, pose.getX(DistanceUnit.CM) + 91.44, pose.getY(DistanceUnit.CM) + 91.44, AngleUnit.DEGREES, pose.getHeading(AngleUnit.RADIANS) - (Math.PI / 2));
     }
 
-    public static Pose mirrorAboutOrigin(Pose point) {
+    public static Pose mirrorPoseAboutOrigin(Pose point) {
         return new Pose(Math.abs(point.x() - 144), Math.abs(point.y() - 144), Math.PI - point.heading());
+    }
+
+    public static Pose2D mirrorPose2DAboutOrigin(Pose2D pose) {
+        return new Pose2D(DistanceUnit.CM, -pose.getX(DistanceUnit.CM), -pose.getY(DistanceUnit.CM), AngleUnit.DEGREES, HelperFunctions.normalizeAngle(180 - pose.getHeading(AngleUnit.DEGREES)));
     }
 
     public static Pose scalePose(Pose pose, Pose startPose) {

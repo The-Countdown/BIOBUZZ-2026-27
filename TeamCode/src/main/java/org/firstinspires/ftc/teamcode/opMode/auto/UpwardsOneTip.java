@@ -180,18 +180,18 @@ public class UpwardsOneTip extends OpMode {
         parkControlPoint2 = HelperFunctions.scalePose(parkControlPoint2, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
-            start = HelperFunctions.mirrorAboutOrigin(start);
-            startPose = HelperFunctions.mirrorAboutOrigin(startPose);
-            beforeGarden = HelperFunctions.mirrorAboutOrigin(beforeGarden);
-            garden = HelperFunctions.mirrorAboutOrigin(garden);
-            shootAfterGarden = HelperFunctions.mirrorAboutOrigin(shootAfterGarden);
-            moveInFrontOfFlower = HelperFunctions.mirrorAboutOrigin(moveInFrontOfFlower);
-            moveInFrontOfFlowerControl1 = HelperFunctions.mirrorAboutOrigin(moveInFrontOfFlowerControl1);
-            intakeFromFlower = HelperFunctions.mirrorAboutOrigin(intakeFromFlower);
-            backAwayFromFlower = HelperFunctions.mirrorAboutOrigin(backAwayFromFlower);
-            park = HelperFunctions.mirrorAboutOrigin(park);
-            parkControlPoint1 = HelperFunctions.mirrorAboutOrigin(parkControlPoint1);
-            parkControlPoint2 = HelperFunctions.mirrorAboutOrigin(parkControlPoint2);
+            start = HelperFunctions.mirrorPoseAboutOrigin(start);
+            startPose = HelperFunctions.mirrorPoseAboutOrigin(startPose);
+            beforeGarden = HelperFunctions.mirrorPoseAboutOrigin(beforeGarden);
+            garden = HelperFunctions.mirrorPoseAboutOrigin(garden);
+            shootAfterGarden = HelperFunctions.mirrorPoseAboutOrigin(shootAfterGarden);
+            moveInFrontOfFlower = HelperFunctions.mirrorPoseAboutOrigin(moveInFrontOfFlower);
+            moveInFrontOfFlowerControl1 = HelperFunctions.mirrorPoseAboutOrigin(moveInFrontOfFlowerControl1);
+            intakeFromFlower = HelperFunctions.mirrorPoseAboutOrigin(intakeFromFlower);
+            backAwayFromFlower = HelperFunctions.mirrorPoseAboutOrigin(backAwayFromFlower);
+            park = HelperFunctions.mirrorPoseAboutOrigin(park);
+            parkControlPoint1 = HelperFunctions.mirrorPoseAboutOrigin(parkControlPoint1);
+            parkControlPoint2 = HelperFunctions.mirrorPoseAboutOrigin(parkControlPoint2);
         }
 
         robotContainer.init();

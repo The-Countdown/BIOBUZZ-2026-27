@@ -66,7 +66,7 @@ public class Turret extends RobotContainer.HardwareDevices {
                 Status.turretZeroOffset += 7;
             }
 
-            if (robotContainer.operatorController.dpadRight.isHeldFor(1.0) || robotContainer.operatorController.dpadLeft.isHeldFor(1.0)) {
+            if (robotContainer.operatorController.dpadRight.isHeldFor(0.5) || robotContainer.operatorController.dpadLeft.isHeldFor(0.5)) {
                 Status.turretZeroOffset -= turretAngleOffset;
                 turretAngleOffset = 0;
             }
@@ -77,15 +77,15 @@ public class Turret extends RobotContainer.HardwareDevices {
 //                robotContainer.turret.hood.setPos(targetHoodPos);
 //            }
 
-            if (robotContainer.operatorController.triangle.isHeldFor(1.0)){
+            if (robotContainer.operatorController.dpadRight.isHeldFor(1.5) || robotContainer.operatorController.dpadLeft.isHeldFor(1.5)){
                 Status.manualControl = !Status.manualControl;
             }
 
             // Turret turn - Right stick X
              if (Status.manualControl && robotContainer.operatorController.rightStickX() != 0) {
                  // Manual turret turning
-                 manualTurretPos -= robotContainer.operatorController.rightStickX() != 0 ? (Constants.Turret.SPEED_FACTOR * robotContainer.CURRENT_LOOP_TIME_MS) * Math.pow(robotContainer.operatorController.rightStickX(), 3) : 0;
-                 manualTurretPos = HelperFunctions.clamp(manualTurretPos, Constants.Turret.MIN_MOTOR, Constants.Turret.MAX_MOTOR);
+                 manualTurretPos -= robotContainer.operatorController.rightStickX() != 0 ? (Constants.Turret.SPEED_FACTOR * robotContainer.CURRENT_LOOP_TIME_MS) * robotContainer.operatorController.rightStickX() : 0;
+                 manualTurretPos = HelperFunctions.clamp(manualTurretPos, Constants.Turret.MIN_ANGLE, Constants.Turret.MIN_ANGLE);
                  robotContainer.turret.setTargetAngle(manualTurretPos);
              } else if (!Status.manualControl) {
                  robotContainer.turret.pointAtGoal();

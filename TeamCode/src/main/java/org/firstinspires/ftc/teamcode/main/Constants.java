@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.util.HelperFunctions;
 
 import java.util.HashMap;
 
@@ -26,14 +27,13 @@ public class Constants {
 
         public static Pose2D
             ORIGIN = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0),
-            CORNER_RESET_POSE = new Pose2D(DistanceUnit.CM, - 163.5 / System.PINPOINT_Y_SCALER, - 159.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0),
-            FLOWER_RESET_POSE = new Pose2D(DistanceUnit.CM, 33 / System.PINPOINT_Y_SCALER,- 161.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 180);
+            CORNER_RESET_POSE = HelperFunctions.audienceOriginToPinpoint(new Pose2D(DistanceUnit.CM,163.5 / System.PINPOINT_Y_SCALER, -159.5 / System.PINPOINT_X_SCALER, AngleUnit.DEGREES, 0)),
+            FLOWER_RESET_POSE = HelperFunctions.audienceOriginToPinpoint(new Pose2D(DistanceUnit.CM,161.5 / System.PINPOINT_X_SCALER, 33 / System.PINPOINT_Y_SCALER, AngleUnit.DEGREES, 180));
         public static double
             GRAVITY = 9.811,
             GOAL_HEIGHT = 111.65,
             CELL_POSITION_X = 32.385, // (25.5 / 2) * 2.54
-            CELL_POSITION_Y = 47.194660597, // cos(30 * (pi / 180)) * (42.91 / 2) * 2.54
-            GOAL_POSITION_VELOCITY_MULTIPLIER = 1;
+            CELL_POSITION_Y = 47.194660597; // cos(30 * (pi / 180)) * (42.91 / 2) * 2.54
     }
 
     @Configurable
@@ -166,7 +166,7 @@ public class Constants {
             DEGREES_PER_TICK = (360.0 / (GEAR_RATIO * Robot.MOTOR_TICKS_PER_REVOLUTION)), //135 / 224
             MAX_ANGLE = 180,
             MIN_ANGLE = -180,
-            SPEED_FACTOR = 0.0003,
+            SPEED_FACTOR = 0.9,
             KP = 0.02,
             KI = 0.0,
             KD = 1.0,

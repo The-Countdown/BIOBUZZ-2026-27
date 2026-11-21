@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.appcompat.widget.ThemedSpinnerAdapter;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -49,13 +51,13 @@ public class Drivetrain {
             robotContainer.driverController.rumble(200);
             robotContainer.operatorController.rumble(200);
         } else if (robotContainer.driverController.triangle.wasJustPressed() || robotContainer.operatorController.triangle.wasJustPressed()) {
-            Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.FLOWER_RESET_POSE : new Pose2D(DistanceUnit.CM, -Constants.Game.FLOWER_RESET_POSE.getX(DistanceUnit.CM), -Constants.Game.FLOWER_RESET_POSE.getY(DistanceUnit.CM), AngleUnit.DEGREES, 180 + Constants.Game.FLOWER_RESET_POSE.getHeading(AngleUnit.DEGREES));
+            Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.FLOWER_RESET_POSE : HelperFunctions.mirrorPose2DAboutOrigin(Constants.Game.FLOWER_RESET_POSE);
             RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
             robotContainer.driverController.rumble(200);
             robotContainer.operatorController.rumble(200);
         } else if (robotContainer.driverController.square.wasJustPressed() || robotContainer.operatorController.ps.wasJustPressed()){
-            Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.CORNER_RESET_POSE : new Pose2D(DistanceUnit.CM, -Constants.Game.CORNER_RESET_POSE.getX(DistanceUnit.CM), -Constants.Game.CORNER_RESET_POSE.getY(DistanceUnit.CM), AngleUnit.DEGREES, 180 + Constants.Game.CORNER_RESET_POSE.getHeading(AngleUnit.DEGREES));
+            Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.CORNER_RESET_POSE : HelperFunctions.mirrorPose2DAboutOrigin(Constants.Game.CORNER_RESET_POSE);
             RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
             robotContainer.driverController.rumble(200);
