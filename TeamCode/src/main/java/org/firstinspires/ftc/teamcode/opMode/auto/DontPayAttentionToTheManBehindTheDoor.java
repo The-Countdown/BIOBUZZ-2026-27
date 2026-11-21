@@ -56,8 +56,11 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
     private Pose start = poseFactory.of(58.1466, 133.579, 90);
     private Pose startPose = poseFactory.of(59, 9, 180);
     private Pose shootAndIntake = poseFactory.of(46.519, 135.1037, 90);
-    private Pose shootAndIntakeControl1 = poseFactory.of(57.8917, 104.2911, 0);
+    private Pose shootAndIntakeControl1 = poseFactory.of(57.8917, 104.2911, 90);
     private Pose shootAndIntakeControl2 = poseFactory.of(45.2134, 109.4294, 0);
+    private  Pose moveFarAwayFromTheFlower = poseFactory.of(46.519, 132, 90);
+    private  Pose moveAwayFromTheFlower = poseFactory.of(46.519, 134, 90);
+    private Pose moveInTheFlowerAfterShootAndIntake = poseFactory.of(46.519, 135.1037, 90);
     private Pose park = poseFactory.of(9.7577, 117.0937, 92.6627);
     private Pose parkControl1 = poseFactory.of(46.8488, 110.4464, 0);
     private Pose parkControl2 = poseFactory.of(56.481, 107.6408, 0);
@@ -68,49 +71,31 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
         return Paths.line(start, startPose).constant(start);
     }
 
-    public Path path1() {
+    public Path initallyShoot() {
         return Paths.curve(start, shootAndIntakeControl1, shootAndIntakeControl2, shootAndIntake).constant(shootAndIntake);
     }
 
-    public Path path2() {
-        return Paths.curve(shootAndIntake, parkControl1, parkControl2, parkControl3, parkControl4, park).reverseTangent();
+    public Path parkInTheZone() {
+        return Paths.curve(moveAwayFromTheFlower, parkControl1, parkControl2, parkControl3, parkControl4, park).reverseTangent();
+    }
+    
+    public Path outAndIn() {
+        return Paths.line(shootAndIntake, moveAwayFromTheFlower).reverseTangent();
+    }
+    
+    public Path inAndOut() {
+        return Paths.line(moveAwayFromTheFlower, moveInTheFlowerAfterShootAndIntake).tangent();
+    }
+
+    public Path outOfTheFlower() {
+        return Paths.line(shootAndIntake, moveAwayFromTheFlower).reverseTangent();
     }
 
     // Action Creation
     Command shoot() {
         return instant(() -> {
-            robotContainer.intake.on();
             robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.tick(), Constants.Flywheel.SPINUP_MS);
-            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.off(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
         });
-    }
-
-    Command intakeOn() {
-        return instant(() -> {
-            robotContainer.intake.on();
-        });
-    }
-
-    Command intakeOff() {
-        return instant(() -> {
-            waitMs(1000);
-            robotContainer.intake.off();
-        });
-    }
-
-    Command intake() {
-        return sequential(
-                instant(() -> {
-                    robotContainer.intake.on();
-                    robotContainer.tongue.down();
-                }),
-
-                waitMs(1500),
-
-                instant(() -> {
-                    robotContainer.intake.off();
-                })
-        );
     }
 
     Command proboscisDown() {
@@ -125,18 +110,51 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
         });
     }
 
+    Command intakeOn() {
+        return instant(() -> {
+            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.on(), 1000);
+        });
+    }
+
+    Command intakeOff() {
+        return instant(() -> {
+            waitMs(1000);
+            robotContainer.intake.off();
+        });
+    }
+
+    Command startSequence() {
+        return instant(() -> {
+            robotContainer.proboscis.up();
+            robotContainer.wings.up();
+            robotContainer.tongue.down();
+            robotContainer.intake.on();
+            Status.flywheelToggle = true;
+        });
+    }
+
+
     // Path methods
     private Command autoRoutine() {
         return sequential( // list of *commands* to run in a row when executed
+                startSequence(),
+                waitMs(6000),
                 follow(follower, startPath()),
                 shoot(),
-                waitMs(5000),
-                intakeOn(),
+                waitMs(500),
                 proboscisDown(),
-                follow(follower, path1()),
                 intakeOff(),
-                proboscisUp(),
-                follow(follower, path2())
+                follow(follower, initallyShoot()),
+                waitMs(200),
+                intakeOn(),
+                waitMs(200),
+                shoot(),
+                waitMs(500),
+                follow(follower, outAndIn()),
+                waitMs(300),
+                follow(follower,inAndOut()),
+                follow(follower, parkInTheZone()),
+                proboscisUp()
         );
     }
 
@@ -154,6 +172,9 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
         park = HelperFunctions.scalePose(park, start);
         parkControl1 = HelperFunctions.scalePose(parkControl1, start);
         parkControl2 = HelperFunctions.scalePose(parkControl2, start);
+        moveFarAwayFromTheFlower = HelperFunctions.scalePose(moveFarAwayFromTheFlower, start);
+        moveAwayFromTheFlower = HelperFunctions.scalePose(moveAwayFromTheFlower, start);
+        moveInTheFlowerAfterShootAndIntake = HelperFunctions.scalePose(moveInTheFlowerAfterShootAndIntake, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
             start = HelperFunctions.mirror(start);
@@ -162,6 +183,9 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
             park = HelperFunctions.mirror(park);
             parkControl1 = HelperFunctions.mirror(parkControl1);
             parkControl2 = HelperFunctions.mirror(parkControl2);
+            moveFarAwayFromTheFlower = HelperFunctions.mirror(moveFarAwayFromTheFlower);
+            moveAwayFromTheFlower = HelperFunctions.mirror(moveAwayFromTheFlower);
+            moveInTheFlowerAfterShootAndIntake = HelperFunctions.mirror(moveInTheFlowerAfterShootAndIntake);
         }
 
         robotContainer.init();
