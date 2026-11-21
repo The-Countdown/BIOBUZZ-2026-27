@@ -48,20 +48,20 @@ public class Drivetrain {
         if (robotContainer.driverController.circle.wasJustPressed() || robotContainer.operatorController.circle.wasJustPressed()) {
             RobotContainer.HardwareDevices.pinpoint.setPosition(Constants.Game.ORIGIN);
 //            RobotContainer.HardwareDevices.betterIMU.resetAngle();
-            robotContainer.driverController.rumble(200);
-            robotContainer.operatorController.rumble(200);
+            robotContainer.driverController.rumble(350);
+            robotContainer.operatorController.rumble(350);
         } else if (robotContainer.driverController.triangle.wasJustPressed() || robotContainer.operatorController.triangle.wasJustPressed()) {
             Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.FLOWER_RESET_POSE : HelperFunctions.mirrorPose2DAboutOrigin(Constants.Game.FLOWER_RESET_POSE);
             RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
-            robotContainer.driverController.rumble(200);
-            robotContainer.operatorController.rumble(200);
+            robotContainer.driverController.rumble(350);
+            robotContainer.operatorController.rumble(350);
         } else if (robotContainer.driverController.square.wasJustPressed() || robotContainer.operatorController.ps.wasJustPressed()){
             Pose2D resetPose = Status.alliance == Constants.Game.ALLIANCE.BLUE ? Constants.Game.CORNER_RESET_POSE : HelperFunctions.mirrorPose2DAboutOrigin(Constants.Game.CORNER_RESET_POSE);
             RobotContainer.HardwareDevices.pinpoint.setPosition(resetPose);
 //            RobotContainer.HardwareDevices.betterIMU.setAngle(resetPose.getHeading(AngleUnit.DEGREES));
-            robotContainer.driverController.rumble(200);
-            robotContainer.operatorController.rumble(200);
+            robotContainer.driverController.rumble(350);
+            robotContainer.operatorController.rumble(350);
 
         }
     }
