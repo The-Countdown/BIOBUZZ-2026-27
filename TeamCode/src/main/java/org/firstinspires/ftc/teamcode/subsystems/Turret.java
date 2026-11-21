@@ -135,8 +135,7 @@ public class Turret extends RobotContainer.HardwareDevices {
         double xDiff = (Status.goalPose.getX(DistanceUnit.CM) - Status.currentX);
         double yDiff = (Status.goalPose.getY(DistanceUnit.CM) - Status.currentY);
 
-        angleToFaceGoal = -(Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading;
-        angleToFaceGoal += xDiff > 0 ? 90 : -90;
+        angleToFaceGoal = 90 * Math.signum(xDiff) -(Math.atan(yDiff/xDiff) * (180 / Math.PI)) + Status.currentHeading;
 
         setTargetAngle(HelperFunctions.normalizeAngle(angleToFaceGoal));
         } else {
