@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 
-import org.firstinspires.ftc.teamcode.hardware.BetterDcMotor;
 import org.firstinspires.ftc.teamcode.main.Constants;
-import org.firstinspires.ftc.teamcode.main.RobotContainer;
 import org.firstinspires.ftc.teamcode.main.Status;
 
 public class TurretPDF {
@@ -13,13 +11,12 @@ public class TurretPDF {
     private double lastError;
     private double p;
     private double i;
-    private double s;
     private double ff;
+    private double vff;
     private double d;
     private double pid;
     private double dt;
     private double errorDiff;
-    private double ffMultiplier;
     private double lastTime;
     private double lastTargetPower;
     public TelemetryManager panelsTelemetry;
@@ -27,8 +24,6 @@ public class TurretPDF {
     public TurretPDF() {
         this.lastTargetPower = 0;
         this.lastTime = 0;
-        this.ffMultiplier = 0;
-
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
     }
 
@@ -36,7 +31,7 @@ public class TurretPDF {
      * Calculates the PDF output for the servo.
      * @return The calculated PDF output.
      */
-    public double calculate(double target, double currentPosition, double goalOrientedRX) {
+    public double calculate(double target, double currentPosition, double headingVelocity) {
         if (Math.abs(target - currentPosition) < Constants.Turret.TOLERANCE_TICKS) {
             lastTargetPower = 0;
 //            if (Status.debugMode){ panelsTelemetry.addLine("Returned within tolerance"); panelsTelemetry.update(); }
@@ -45,7 +40,6 @@ public class TurretPDF {
 
         double error = target - currentPosition;
         dt = System.currentTimeMillis() - lastTime;
-        goalOrientedRX /= dt;
         errorDiff = (error - lastError) / dt; // differance between the errors scaled by time
 
             p = Constants.Turret.KP * error; // proportional to error
@@ -54,7 +48,9 @@ public class TurretPDF {
 
             d = Constants.Turret.KD * errorDiff; // this slows the acceleration down
 
-            ff = Constants.Turret.KF * Math.signum(error) + (goalOrientedRX / Constants.Turret.GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // 1. flat addition to the power 2. extra velocity in ticks per second for the motor
+            ff = Constants.Turret.KF * Math.signum(error); // flat addition to the power
+
+            vff = (headingVelocity / Constants.Turret.GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // extra velocity in ticks per second for the motor
 
 
         pid = (p + i + d) + ff;
