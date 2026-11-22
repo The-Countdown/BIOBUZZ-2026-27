@@ -177,15 +177,15 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
         moveInTheFlowerAfterShootAndIntake = HelperFunctions.scalePose(moveInTheFlowerAfterShootAndIntake, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
-            start = HelperFunctions.mirror(start);
-            startPose = HelperFunctions.mirror(startPose);
-            shootAndIntake = HelperFunctions.mirror(shootAndIntake);
-            park = HelperFunctions.mirror(park);
-            parkControl1 = HelperFunctions.mirror(parkControl1);
-            parkControl2 = HelperFunctions.mirror(parkControl2);
-            moveFarAwayFromTheFlower = HelperFunctions.mirror(moveFarAwayFromTheFlower);
-            moveAwayFromTheFlower = HelperFunctions.mirror(moveAwayFromTheFlower);
-            moveInTheFlowerAfterShootAndIntake = HelperFunctions.mirror(moveInTheFlowerAfterShootAndIntake);
+            start = HelperFunctions.mirrorPoseAboutOrigin(start);
+            startPose = HelperFunctions.mirrorPoseAboutOrigin(startPose);
+            shootAndIntake = HelperFunctions.mirrorPoseAboutOrigin(shootAndIntake);
+            park = HelperFunctions.mirrorPoseAboutOrigin(park);
+            parkControl1 = HelperFunctions.mirrorPoseAboutOrigin(parkControl1);
+            parkControl2 = HelperFunctions.mirrorPoseAboutOrigin(parkControl2);
+            moveFarAwayFromTheFlower = HelperFunctions.mirrorPoseAboutOrigin(moveFarAwayFromTheFlower);
+            moveAwayFromTheFlower = HelperFunctions.mirrorPoseAboutOrigin(moveAwayFromTheFlower);
+            moveInTheFlowerAfterShootAndIntake = HelperFunctions.mirrorPoseAboutOrigin(moveInTheFlowerAfterShootAndIntake);
         }
 
         robotContainer.init();

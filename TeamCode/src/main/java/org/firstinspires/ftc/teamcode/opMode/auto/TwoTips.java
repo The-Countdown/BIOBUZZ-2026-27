@@ -237,19 +237,19 @@ public class TwoTips extends OpMode {
         garden2 = HelperFunctions.scalePose(garden2, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
-            start = HelperFunctions.mirror(start);
-            startPose = HelperFunctions.mirror(startPose);
-            garden1 = HelperFunctions.mirror(garden1);
-            shootAfterGarden = HelperFunctions.mirror(shootAfterGarden);
-            moveInFrontOfFlower = HelperFunctions.mirror(moveInFrontOfFlower);
-            moveInFrontOfFlowerControl1 = HelperFunctions.mirror(moveInFrontOfFlowerControl1);
-            intakeFromFlower = HelperFunctions.mirror(intakeFromFlower);
-            backAwayFromFlower = HelperFunctions.mirror(backAwayFromFlower);
-            park = HelperFunctions.mirror(park);
-            parkControlPoint1 = HelperFunctions.mirror(parkControlPoint1);
-            parkControlPoint2 = HelperFunctions.mirror(parkControlPoint2);
-            movingInAndOutOfTheFlower = HelperFunctions.mirror(moveInFrontOfFlower);
-            garden2 = HelperFunctions.mirror(garden2);
+            start = HelperFunctions.mirrorPoseAboutOrigin(start);
+            startPose = HelperFunctions.mirrorPoseAboutOrigin(startPose);
+            garden1 = HelperFunctions.mirrorPoseAboutOrigin(garden1);
+            shootAfterGarden = HelperFunctions.mirrorPoseAboutOrigin(shootAfterGarden);
+            moveInFrontOfFlower = HelperFunctions.mirrorPoseAboutOrigin(moveInFrontOfFlower);
+            moveInFrontOfFlowerControl1 = HelperFunctions.mirrorPoseAboutOrigin(moveInFrontOfFlowerControl1);
+            intakeFromFlower = HelperFunctions.mirrorPoseAboutOrigin(intakeFromFlower);
+            backAwayFromFlower = HelperFunctions.mirrorPoseAboutOrigin(backAwayFromFlower);
+            park = HelperFunctions.mirrorPoseAboutOrigin(park);
+            parkControlPoint1 = HelperFunctions.mirrorPoseAboutOrigin(parkControlPoint1);
+            parkControlPoint2 = HelperFunctions.mirrorPoseAboutOrigin(parkControlPoint2);
+            movingInAndOutOfTheFlower = HelperFunctions.mirrorPoseAboutOrigin(moveInFrontOfFlower);
+            garden2 = HelperFunctions.mirrorPoseAboutOrigin(garden2);
         }
 
         robotContainer.init();

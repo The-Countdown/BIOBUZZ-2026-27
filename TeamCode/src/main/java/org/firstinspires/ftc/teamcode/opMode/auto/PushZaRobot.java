@@ -140,10 +140,10 @@ public class PushZaRobot extends OpMode {
         pushTeamMateControl1 = HelperFunctions.scalePose(pushTeamMateControl1, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
-            start = HelperFunctions.mirror(start);
-            moveAwayFromTheWall = HelperFunctions.mirror(moveAwayFromTheWall);
-            pushTeamMate = HelperFunctions.mirror(pushTeamMate);
-            pushTeamMateControl1 = HelperFunctions.mirror(pushTeamMateControl1);
+            start = HelperFunctions.mirrorPoseAboutOrigin(start);
+            moveAwayFromTheWall = HelperFunctions.mirrorPoseAboutOrigin(moveAwayFromTheWall);
+            pushTeamMate = HelperFunctions.mirrorPoseAboutOrigin(pushTeamMate);
+            pushTeamMateControl1 = HelperFunctions.mirrorPoseAboutOrigin(pushTeamMateControl1);
 
         }
 
