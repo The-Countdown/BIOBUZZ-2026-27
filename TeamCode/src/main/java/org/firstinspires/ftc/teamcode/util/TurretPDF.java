@@ -18,11 +18,11 @@ public class TurretPDF {
     private double dt;
     private double errorDiff;
     private double lastTime;
-    private double lastTargetPower;
+    private double lastTargetVelocity;
     public TelemetryManager panelsTelemetry;
 
     public TurretPDF() {
-        this.lastTargetPower = 0;
+        this.lastTargetVelocity = 0;
         this.lastTime = 0;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
     }
@@ -33,7 +33,7 @@ public class TurretPDF {
      */
     public double calculate(double target, double currentPosition, double headingVelocity) {
         if (Math.abs(target - currentPosition) < Constants.Turret.TOLERANCE_TICKS) {
-            lastTargetPower = 0;
+            lastTargetVelocity = 0;
 //            if (Status.debugMode){ panelsTelemetry.addLine("Returned within tolerance"); panelsTelemetry.update(); }
             return 0;
         }
@@ -53,14 +53,14 @@ public class TurretPDF {
             vff = (headingVelocity / Constants.Turret.GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // extra velocity in ticks per second for the motor
 
 
-        pid = (p + i + d) + ff;
+        pid = ((p + i + d) + ff) * 100 * Constants.Robot.MOTOR_TICKS_PER_REVOLUTION + vff;
 
-        lastTargetPower = pid;
+        lastTargetVelocity = pid;
 
-        lastTargetPower = HelperFunctions.clamp(lastTargetPower, -1, 1);
+        lastTargetVelocity = HelperFunctions.clamp(lastTargetVelocity, -100 * Constants.Robot.MOTOR_TICKS_PER_REVOLUTION, 100 * Constants.Robot.MOTOR_TICKS_PER_REVOLUTION);
 
          if (Status.debugMode){
-//            panelsTelemetry.addData("Power", lastTargetPower);
+//            panelsTelemetry.addData("Velocity", lastTargetVelocity);
 //            panelsTelemetry.addData("P", p);
 //            panelsTelemetry.addData("I", i);
 //            panelsTelemetry.addData("D", d);
@@ -76,6 +76,6 @@ public class TurretPDF {
 
         lastError = error;
         lastTime += dt;
-        return lastTargetPower;
+        return lastTargetVelocity;
     }
 }

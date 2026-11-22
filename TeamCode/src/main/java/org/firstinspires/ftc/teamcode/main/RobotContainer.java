@@ -222,6 +222,7 @@ public class RobotContainer {
         flywheelMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelMotors.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         HardwareDevices.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        HardwareDevices.turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         positionProvider = new PositionProvider();
 
         turret = new Turret(this, HardwareDevices.hoodServo, HardwareDevices.turretMotor);

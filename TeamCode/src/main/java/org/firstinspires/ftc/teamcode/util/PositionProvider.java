@@ -60,7 +60,8 @@ public class PositionProvider {
 
             // Y Values
             double goalY = Math.signum(Status.currentY) * Constants.Game.CELL_POSITION_Y ;
-            double yShift = Math.signum(Status.currentX) * 0;
+            double yMultiplier = Math.abs(Math.signum(goalY - Status.currentY) + Math.signum(Status.currentY)) / 2;
+            double yShift = yMultiplier * (Status.currentY - goalY * Math.signum(Status.currentY));
             if (Status.shootOnTheMove) yShift -= Status.currentVelocityY;
 
         Status.goalPose = new Pose2D(DistanceUnit.CM, goalX + xShift, goalY + yShift, AngleUnit.DEGREES, 0);
