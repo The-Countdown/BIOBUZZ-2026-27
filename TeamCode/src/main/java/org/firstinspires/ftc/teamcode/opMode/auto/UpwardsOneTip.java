@@ -16,9 +16,9 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.follower.*;
-        import com.pedropathing.api.PoseFactory;
+import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
-        import com.pedropathing.paths.*;
+import com.pedropathing.paths.*;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -106,9 +106,9 @@ public class UpwardsOneTip extends OpMode {
     }
 
     Command proboscisDown() {
-          return instant(() -> {
-              robotContainer.proboscis.down();
-          });
+        return instant(() -> {
+            robotContainer.proboscis.down();
+        });
     }
 
     Command proboscisUp() {
