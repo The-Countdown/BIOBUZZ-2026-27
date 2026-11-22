@@ -50,10 +50,10 @@ public class TurretPDF {
 
             ff = Constants.Turret.KF * Math.signum(error); // flat addition to the power
 
-            vff = (headingVelocity / Constants.Turret.GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)); // extra velocity in ticks per second for the motor
+            vff = ((headingVelocity / Constants.Turret.GEAR_RATIO) * (Constants.Robot.MOTOR_TICKS_PER_REVOLUTION / (2 * Math.PI)) / (100 * Constants.Robot.MOTOR_TICKS_PER_REVOLUTION)); // extra velocity in ticks per second for the motor
 
 
-        pid = (p + i + d) + ff;
+        pid = (p + i + d) + ff + vff;
 
         lastTargetPower = pid;
 
