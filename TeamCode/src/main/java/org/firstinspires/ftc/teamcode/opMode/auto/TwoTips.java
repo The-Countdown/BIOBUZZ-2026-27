@@ -16,11 +16,11 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.follower.*;
-        import com.pedropathing.api.PoseFactory;
+import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
-        import com.pedropathing.paths.*;
+import com.pedropathing.paths.*;
 
-        import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.main.Constants;
@@ -67,8 +67,6 @@ public class TwoTips extends OpMode {
     private Pose parkControlPoint1 = poseFactory.of(15.6, 60.6195, 0);
     private Pose parkControlPoint2 = poseFactory.of(9.2168, 60.3423, 0);
     private Pose movingInAndOutOfTheFlower = poseFactory.of(16, 50, -177.5746);
-    private Pose testPoint7 = poseFactory.of(59, 60, 180);
-
     public Path startPath() {
         return Paths.line(start, startPose).constant(start);
     }
@@ -101,16 +99,8 @@ public class TwoTips extends OpMode {
         return Paths.line(intakeFromFlower, movingInAndOutOfTheFlower).reverseTangent();
     }
 
-    public Path path8() {
-        return Paths.line(startPose, testPoint7).constant(Math.toRadians(180));
-    }
-    
     public Path intakeRestOfBalls() {
         return Paths.line(garden2, garden1).tangent();
-    }
-
-    public Path dontPinch1() {
-        return Paths.line(garden1, garden2).reverseTangent();
     }
 
     public Path movingInAndOutAndInAndOut2() {

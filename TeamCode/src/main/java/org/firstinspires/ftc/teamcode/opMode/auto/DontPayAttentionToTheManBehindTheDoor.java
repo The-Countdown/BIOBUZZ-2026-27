@@ -15,6 +15,8 @@ import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
+import androidx.appcompat.widget.ThemedSpinnerAdapter;
+
 import com.pedropathing.follower.*;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.*;
@@ -169,9 +171,13 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
         start = HelperFunctions.scalePose(start, start);
         startPose = HelperFunctions.scalePose(startPose, start);
         shootAndIntake = HelperFunctions.scalePose(shootAndIntake, start);
+        shootAndIntakeControl1 = HelperFunctions.scalePose(shootAndIntakeControl1, start);
+        shootAndIntakeControl2 = HelperFunctions.scalePose(shootAndIntakeControl2, start);
         park = HelperFunctions.scalePose(park, start);
         parkControl1 = HelperFunctions.scalePose(parkControl1, start);
         parkControl2 = HelperFunctions.scalePose(parkControl2, start);
+        parkControl3 =  HelperFunctions.scalePose(parkControl3, start);
+        parkControl4 = HelperFunctions.scalePose(parkControl4, start);
         moveFarAwayFromTheFlower = HelperFunctions.scalePose(moveFarAwayFromTheFlower, start);
         moveAwayFromTheFlower = HelperFunctions.scalePose(moveAwayFromTheFlower, start);
         moveInTheFlowerAfterShootAndIntake = HelperFunctions.scalePose(moveInTheFlowerAfterShootAndIntake, start);
@@ -181,8 +187,12 @@ public class DontPayAttentionToTheManBehindTheDoor extends OpMode {
             startPose = HelperFunctions.mirrorPoseAboutOrigin(startPose);
             shootAndIntake = HelperFunctions.mirrorPoseAboutOrigin(shootAndIntake);
             park = HelperFunctions.mirrorPoseAboutOrigin(park);
+            shootAndIntakeControl1 = HelperFunctions.mirrorPoseAboutOrigin(shootAndIntakeControl1);
+            shootAndIntakeControl2 = HelperFunctions.mirrorPoseAboutOrigin(shootAndIntakeControl2);
             parkControl1 = HelperFunctions.mirrorPoseAboutOrigin(parkControl1);
             parkControl2 = HelperFunctions.mirrorPoseAboutOrigin(parkControl2);
+            parkControl3 = HelperFunctions.mirrorPoseAboutOrigin(parkControl3);
+            parkControl4 = HelperFunctions.mirrorPoseAboutOrigin(parkControl4);
             moveFarAwayFromTheFlower = HelperFunctions.mirrorPoseAboutOrigin(moveFarAwayFromTheFlower);
             moveAwayFromTheFlower = HelperFunctions.mirrorPoseAboutOrigin(moveAwayFromTheFlower);
             moveInTheFlowerAfterShootAndIntake = HelperFunctions.mirrorPoseAboutOrigin(moveInTheFlowerAfterShootAndIntake);
