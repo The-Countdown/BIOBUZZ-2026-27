@@ -68,11 +68,11 @@ public class Constants {
             PINPOINT_Y_OFFSET_MM = -2.0,
             BETTER_IMU_PER_ROTATION_OFFSET = 3.1,
             PINPOINT_PER_ROTATION_OFFSET = 0.8,
-            PINPOINT_X_SCALER = ((120.0 * 2.54) / 457.0),
-            PINPOINT_Y_SCALER = ((120.0 * 2.54) / 460.0),
-            AUTO_Y_SCALER = ((51)/34.5),
-            AUTO_X_SCALER = (53)/(53-15.5);
-        public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
+            PINPOINT_X_SCALER = 1, // ((120.0 * 2.54) / 457.0), // 0.6669584245076586
+            PINPOINT_Y_SCALER = 1, // ((120.0 * 2.54) / 460.0), // 0.662608695652174
+            AUTO_Y_SCALER = 1, // (51/34.5), // 1 / 0.6764705882352942
+            AUTO_X_SCALER = 1; // (53/37.5); // 1 / 0.7075471698113207
+        public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD;
         public static final GoBildaPinpointDriver.EncoderDirection
             PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.FORWARD,
             PINPOINT_Y_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.REVERSED;
