@@ -54,67 +54,17 @@ public class PushZaRobot extends OpMode {
 
 
     // Poses
-    private  Pose start = poseFactory.of(8.7737, 59.1618, 90);
-    private  Pose moveAwayFromTheWall = poseFactory.of(22.548, 59.2554, 270);
-    private  Pose pushTeamMate = poseFactory.of(9.0939, 97.1311, 270);
-    private  Pose pushTeamMateControl1 = poseFactory.of(7.8226, 58.0276, 0);
+    private Pose start = poseFactory.of(8.7737, 59.1618, 270);
+    private Pose moveAwayFromTheWall = poseFactory.of(23, 59.1618, 270);
+    private Pose pushTeamMate = poseFactory.of(13, 97.1311, 270);
+    private Pose pushTeamMateControl1 = poseFactory.of(13.0104, 73.4119, 270);
 
     public Path moveAwayFromTheWall() {
         return Paths.line(start, moveAwayFromTheWall).constant(moveAwayFromTheWall);
     }
 
     public Path pushTeamMate() {
-        return Paths.curve(moveAwayFromTheWall, pushTeamMateControl1, pushTeamMate).constant(pushTeamMate);
-    }
-
-    // Action Creation
-    Command shoot() {
-
-        return instant(() -> {
-            robotContainer.intake.on();
-            robotContainer.delayedActionManager.schedule(() -> robotContainer.tongue.tick(), Constants.Flywheel.SPINUP_MS);
-            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.off(), Constants.Flywheel.SPINUP_MS + Constants.Flywheel.SHOOT_MS);
-        });
-    }
-
-    Command intakeOn() {
-        return instant(() -> {
-            robotContainer.delayedActionManager.schedule(() -> robotContainer.intake.on(), 1000);
-        });
-    }
-
-    Command intakeOff() {
-        return instant(() -> {
-            waitMs(1000);
-            robotContainer.intake.off();
-        });
-    }
-
-    Command intake() {
-        return sequential(
-                instant(() -> {
-                    robotContainer.intake.on();
-                    robotContainer.tongue.down();
-                }),
-
-                waitMs(1500),
-
-                instant(() -> {
-                    robotContainer.intake.off();
-                })
-        );
-    }
-
-    Command proboscisDown() {
-        return instant(() -> {
-            robotContainer.proboscis.down();
-        });
-    }
-
-    Command proboscisUp() {
-        return instant(() -> {
-            robotContainer.proboscis.up();
-        });
+        return Paths.curve(moveAwayFromTheWall, pushTeamMateControl1, pushTeamMate).reverseTangent();
     }
 
     // Path methods
