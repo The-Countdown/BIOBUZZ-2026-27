@@ -63,9 +63,16 @@ public class TwoTips extends OpMode {
     private Pose moveInFrontOfFlowerControl1 = poseFactory.of(16, 11, 0);
     private Pose intakeFromFlower = poseFactory.of(13, 50, -180);
     private Pose backAwayFromFlower = poseFactory.of(17, 50, -180);
-    private Pose park = poseFactory.of(10, 105, -90);
-    private Pose parkControlPoint1 = poseFactory.of(15.6, 60, 0);
-    private Pose parkControlPoint2 = poseFactory.of(9, 60, 0);
+    private Pose point10 = poseFactory.of(47.3009, 127.2382, 90);
+    private Pose point10Control1 = poseFactory.of(19.0379, 141.5, 0);
+    private Pose point10Control2 = poseFactory.of(48.0717, 86.3854, 0);
+    private Pose point11 = poseFactory.of(47.3476, 131.4899, -90.6298);
+    private Pose point12 = poseFactory.of(47.3, 126.7, -90.5693);
+    private Pose point13 = poseFactory.of(47.35, 131.6644, -90.577);
+    private Pose point14 = poseFactory.of(47.3451, 113.7524, 89.9843);
+    private Pose park = poseFactory.of(9.8787, 111.7182, 3.1078);
+
+
 
     public Path startPath() {
         return Paths.line(start, startPose).constant(start);
@@ -94,6 +101,25 @@ public class TwoTips extends OpMode {
         return Paths.line(intakeFromFlower, backAwayFromFlower).reverseTangent();
     }
 
+    public Path goToTopFlower() {
+        return Paths.curve(backAwayFromFlower, point10Control1, point10Control2, point10).constant(point10);
+    }
+
+    public Path moveInTheFlowerNumber2() {
+        return Paths.line(point10, point11).reverseTangent();
+    }
+
+    public Path jiggleInAndOutOfTheFlower1() {
+        return Paths.line(point11, point12).tangent();
+    }
+
+    public Path thePathThatPutsTheProboscisDown() {
+        return Paths.line(point12, point13).reverseTangent();
+    }
+
+    public Path parkPath() {
+        return Paths.line(point14, park).reverseTangent();
+    }
 
     // Action Creation
     Command shoot() {
@@ -148,7 +174,18 @@ public class TwoTips extends OpMode {
                 follow(follower, intakeFromFlower()),
                 waitMs(1000),
                 follow(follower, backUpFromFlower()),
-                proboscisUp()
+                waitMs(500),
+                follow(follower, goToTopFlower()),
+                shoot(),
+                follow(follower, moveInTheFlowerNumber2()),
+                follow(follower, jiggleInAndOutOfTheFlower1()),
+                follow(follower, moveInTheFlowerNumber2()),
+                waitMs(800),
+                follow(follower, thePathThatPutsTheProboscisDown()),
+                follow(follower, parkPath())
+
+
+
 
         );
     }
@@ -170,9 +207,14 @@ public class TwoTips extends OpMode {
         moveInFrontOfFlowerControl1 = HelperFunctions.scalePose(moveInFrontOfFlowerControl1, start);
         intakeFromFlower = HelperFunctions.scalePose(intakeFromFlower, start);
         backAwayFromFlower = HelperFunctions.scalePose(backAwayFromFlower, start);
+        point10 = HelperFunctions.scalePose(point10, start);
+        point10Control1 = HelperFunctions.scalePose(point10Control1, start);
+        point10Control2 = HelperFunctions.scalePose(point10Control2, start);
+        point11 = HelperFunctions.scalePose(point11, start);
+        point12 = HelperFunctions.scalePose(point12, start);
+        point13 = HelperFunctions.scalePose(point13, start);
+        point14 = HelperFunctions.scalePose(point14, start);
         park = HelperFunctions.scalePose(park, start);
-        parkControlPoint1 = HelperFunctions.scalePose(parkControlPoint1, start);
-        parkControlPoint2 = HelperFunctions.scalePose(parkControlPoint2, start);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
             start = HelperFunctions.mirrorPoseAboutOrigin(start);
@@ -184,9 +226,14 @@ public class TwoTips extends OpMode {
             moveInFrontOfFlowerControl1 = HelperFunctions.mirrorPoseAboutOrigin(moveInFrontOfFlowerControl1);
             intakeFromFlower = HelperFunctions.mirrorPoseAboutOrigin(intakeFromFlower);
             backAwayFromFlower = HelperFunctions.mirrorPoseAboutOrigin(backAwayFromFlower);
+            point10 = HelperFunctions.mirrorPoseAboutOrigin(point10);
+            point10Control1 = HelperFunctions.mirrorPoseAboutOrigin(point10Control1);
+            point10Control2 = HelperFunctions.mirrorPoseAboutOrigin(point10Control2);
+            point11 = HelperFunctions.mirrorPoseAboutOrigin(point11);
+            point12 = HelperFunctions.mirrorPoseAboutOrigin(point12);
+            point13 = HelperFunctions.mirrorPoseAboutOrigin(point13);
+            point14 = HelperFunctions.mirrorPoseAboutOrigin(point14);
             park = HelperFunctions.mirrorPoseAboutOrigin(park);
-            parkControlPoint1 = HelperFunctions.mirrorPoseAboutOrigin(parkControlPoint1);
-            parkControlPoint2 = HelperFunctions.mirrorPoseAboutOrigin(parkControlPoint2);
         }
 
         robotContainer.init();
