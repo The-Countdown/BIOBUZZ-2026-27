@@ -70,8 +70,8 @@ public class Constants {
             PINPOINT_PER_ROTATION_OFFSET = 0.8,
             PINPOINT_X_SCALER = 1, // ((120.0 * 2.54) / 457.0), // 0.6669584245076586
             PINPOINT_Y_SCALER = 1, // ((120.0 * 2.54) / 460.0), // 0.662608695652174
-            AUTO_Y_SCALER = 1, // (51/34.5), // 1 / 0.6764705882352942
-            AUTO_X_SCALER = 1; // (53/37.5); // 1 / 0.7075471698113207
+            AUTO_Y_SCALER = (123/81), // (51/34.5), // 1 / 0.6764705882352942
+            AUTO_X_SCALER = (111.5/73.5); // (53/37.5); // 1 / 0.7075471698113207
         public static final GoBildaPinpointDriver.GoBildaOdometryPods PINPOINT_ODOM_POD = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD;
         public static final GoBildaPinpointDriver.EncoderDirection
             PINPOINT_X_ENCODER_DIRECTION = GoBildaPinpointDriver.EncoderDirection.FORWARD,

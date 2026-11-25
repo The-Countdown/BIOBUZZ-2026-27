@@ -54,9 +54,10 @@ public class TestAuto extends OpMode {
 
     // Poses
     private Pose start = poseFactory.of(31.1346, 8.1789, 90);
-    private Pose verticalPoint = poseFactory.of(31.3135, 133.4937, 89.9182);
-    private Pose start2 = poseFactory.of(8.7737, 31.0765, 90);
-    private Pose horizontalPoint = poseFactory.of(131.4905, 30.6334, -0.2069);
+    private Pose verticalPoint = poseFactory.of(31.3135, 118.8249, 89.9074);
+    private Pose start2 = poseFactory.of(8.9526, 31.4343, 0);
+    private Pose horizontalPoint = poseFactory.of(130.775, 30.9912, -0.2084);
+
 
     public Path horizontalTest() {
         return Paths.line(start2, horizontalPoint).tangent();
@@ -113,13 +114,13 @@ public class TestAuto extends OpMode {
 
         start = HelperFunctions.scalePose(start, start);
         verticalPoint = HelperFunctions.scalePose(verticalPoint, start);
-        start2 = HelperFunctions.scalePose(start2, start2);
+//        start2 = HelperFunctions.scalePose(start2, start2);
         horizontalPoint = HelperFunctions.scalePose(horizontalPoint, start2);
 
         if (Status.alliance == Constants.Game.ALLIANCE.BLUE) {
             start = HelperFunctions.mirrorPoseAboutOrigin(start);
             verticalPoint = HelperFunctions.mirrorPoseAboutOrigin(verticalPoint);
-            start2 = HelperFunctions.mirrorPoseAboutOrigin(start2);
+//            start2 = HelperFunctions.mirrorPoseAboutOrigin(start2);
             horizontalPoint = HelperFunctions.mirrorPoseAboutOrigin(horizontalPoint);
 
         }
